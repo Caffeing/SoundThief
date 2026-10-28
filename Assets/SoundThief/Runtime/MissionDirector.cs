@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,74 +10,68 @@ namespace SoundThief
         public SoundWorld World;
         public ThiefPlayer player;
         public Material projectileMaterial;
-        public bool isGuild;
-        public GuildPractice practice;
-        public const string StageScene = "ManorPrototype";
-        static bool enterAccepted;
-        bool acceptedOnEntry;
+        public StageDefinition stage;
+        public bool startsAccepted;
         public bool Accepted { get; private set; }
         public bool Completed { get; private set; }
         public bool Paused { get; private set; }
         public bool ContractVisible, DoorOpened, Extracted, Injected;
-        public string Message { get; private set; } = "저택의 인장을 회수하고 입구로 돌아오세요.";
-        public bool CanAct => (isGuild || Accepted) && !Completed && !Paused && !restarting;
+        public string Message { get; private set; } = "목표물을 회수한 뒤 출구로 돌아오세요.";
+        public bool CanAct => Accepted && !Completed && !Paused && !restarting;
+        public string Title => stage ? stage.title : "의뢰";
+        public string Briefing => stage ? stage.briefing : "목표물을 회수한 뒤 출구로 돌아오세요.";
+        public event Action Started, Succeeded, Failed;
         bool restarting;
-        void Awake()
+        void Awake() { Time.timeScale = 1; SetCursor(false); }
+        void Start()
         {
-            Time.timeScale = 1;
-            acceptedOnEntry = !isGuild && enterAccepted;
-            enterAccepted = false;
-            Accepted = acceptedOnEntry;
-            SetCursor(isGuild || Accepted);
-            if (isGuild) Notify("길드에 오신 것을 환영합니다. 테이블 의뢰 게시판 [F] · 뒤쪽 연습장은 자유롭게 이용하세요.");
+            Message = Briefing;
+            if (stage ? stage.startImmediately : startsAccepted) Accept();
         }
         public void Accept()
         {
-            if (Accepted || Completed || Paused || restarting || (player && player.IsStunned)) return;
-            Accepted = true; ContractVisible = false;
-            Notify(isGuild ? "의뢰를 수락했습니다. 연습은 선택사항입니다. 출구 문에서 F로 출발하세요." : "의뢰 수락. 인장을 회수하고 입구로 돌아오세요.");
-            SetCursor(true);
-        }
-        public bool Depart()
-        {
-            if (!isGuild || !CanAct || player.IsStunned) return false;
-            if (!Accepted) { Notify("게시판에서 의뢰를 먼저 수락하세요. 연습 완료는 필요하지 않습니다."); return false; }
-            restarting = true; enterAccepted = true;
-            SceneManager.LoadScene(StageScene);
-            return true;
+            if (Accepted || Completed || Paused || restarting) return;
+            Accepted = true; Notify(Briefing); SetCursor(true); Started?.Invoke();
         }
         public void Notify(string text) => Message = text;
         public void TogglePause()
         {
-            if ((!isGuild && !Accepted) || Completed || restarting) return;
+            if (!Accepted || Completed) return;
             Paused = !Paused; Time.timeScale = Paused ? 0 : 1; SetCursor(!Paused);
+        }
+        public bool HasObjectives
+        {
+            get
+            {
+                if (!player) return false;
+                if (!stage) return player.HasTreasure;
+                if (stage.requiredItemIds == null) return false;
+                foreach (var id in stage.requiredItemIds)
+                    if (!player.Inventory.Contains(id)) return false;
+                return true;
+            }
         }
         public void Complete()
         {
-            if (isGuild || !player.HasTreasure || !CanAct) return;
+            if (!HasObjectives || !CanAct) return;
             Completed = true; Time.timeScale = 0; SetCursor(false);
-            Notify("의뢰 완료 — 인장을 회수하고 무사히 탈출했습니다.");
+            Notify(Title + " — 목표를 달성하고 탈출했습니다."); Succeeded?.Invoke();
         }
         public void Caught()
         {
-            if (isGuild || !CanAct) return;
-            Notify("경비와 접촉했습니다. 의뢰를 처음부터 다시 시작합니다.");
-            Restart();
+            if (!CanAct) return;
+            Notify("경비와 접촉했습니다. 의뢰를 처음부터 다시 시작합니다."); Failed?.Invoke(); Restart();
         }
         public void Restart()
         {
             if (restarting) return;
-            enterAccepted = !isGuild && acceptedOnEntry;
+            var scene = gameObject.scene;
+            if (string.IsNullOrEmpty(scene.path)) { Notify("재시작하려면 스테이지 씬을 먼저 저장하세요."); return; }
             restarting = true; Time.timeScale = 1; SetCursor(false);
-            SceneManager.LoadScene(gameObject.scene.name);
+            SceneManager.LoadScene(scene.path);
         }
-        public void RecordExtraction() { if (isGuild) practice?.RecordExtraction(); else Extracted = true; }
-        public void RecordInjection() { if (isGuild) practice?.RecordInjection(); else Injected = true; }
-        public void RecordThrow() { if (isGuild) practice?.RecordThrow(); }
-        public string Objective => isGuild ? (!Accepted ? "테이블 의뢰 게시판에서 수락 [F]" : "출구 문에서 출발 [F] · 뒤쪽 연습은 선택")
-            : !Accepted ? "의뢰: 푸른 저택의 인장" : player.HasTreasure ? "입구로 돌아가 F로 탈출"
-            : !player.HasKey ? "받침대의 열쇠 획득 [F]" : !Extracted ? "열쇠 ↔ 자물쇠 소리 추출 [E]"
-            : !DoorOpened ? "문을 조용히 열기 [F]" : !Injected ? "청록색 공명체에 소리 주입 [Q]" : "저택 안쪽의 가문 인장 획득 [F]";
+        public string Objective => !Accepted ? Title : HasObjectives ? (stage ? stage.exitText : "출구에서 F로 탈출")
+            : stage ? stage.objectiveText : "목표물을 회수하세요.";
         static void SetCursor(bool locked) { Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None; Cursor.visible = !locked; }
         void OnDestroy() { Time.timeScale = 1; SetCursor(false); }
     }

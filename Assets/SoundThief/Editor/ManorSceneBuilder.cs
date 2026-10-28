@@ -40,6 +40,7 @@ namespace SoundThief.Editor
             if (!rules) { rules = ScriptableObject.CreateInstance<SoundRules>(); AssetDatabase.CreateAsset(rules, "Assets/SoundThief/Generated/PrototypeRules.asset"); }
             var systems = new GameObject("Contract Systems");
             var mission = systems.AddComponent<MissionDirector>(); var world = systems.AddComponent<SoundWorld>();
+            mission.startsAccepted = true;
             mission.rules = world.rules = rules; mission.World = world; mission.projectileMaterial = cyan;
 
             // Entry vestibule z 0..6; main hall z 6..22. A side aisle provides a safe return route.

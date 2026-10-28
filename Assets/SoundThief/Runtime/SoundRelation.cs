@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SoundThief
 {
-    public enum InteractionKind { Key, Door, Resonator, Treasure, Exit, ContractBoard, GuildExit, PracticeReset }
+    public enum InteractionKind { Key, Door, Resonator, Treasure, Exit, Collectible }
 
     public sealed class SoundRelation : MonoBehaviour
     {

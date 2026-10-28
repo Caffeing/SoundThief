@@ -3,12 +3,16 @@ using UnityEngine.InputSystem;
 
 namespace SoundThief
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(CharacterController), typeof(StageInventory))]
     public sealed class ThiefPlayer : MonoBehaviour
     {
         public MissionDirector Mission;
         public Camera view;
-        public bool HasKey, HasTreasure;
+        StageInventory inventory;
+        public StageInventory Inventory => inventory ? inventory : (inventory = GetComponent<StageInventory>() ?? gameObject.AddComponent<StageInventory>());
+        // Compatibility aliases for the original manor scene. New stages use item IDs.
+        public bool HasKey { get => Inventory.Contains("key"); set { if (value) Inventory.Add("key", "열쇠"); else Inventory.Remove("key"); } }
+        public bool HasTreasure { get => Inventory.Contains("objective"); set { if (value) Inventory.Add("objective", "목표물"); else Inventory.Remove("objective"); } }
         public SoundCharge Held { get; private set; }
         public ThiefInteractable Target { get; private set; }
         public bool IsStunned => Time.time < stunUntil;
@@ -64,14 +68,13 @@ namespace SoundThief
             if (restart) { Mission.Restart(); return; }
             if (pause) Mission.TogglePause();
             if (contract) Mission.ContractVisible = !Mission.ContractVisible;
-            if (!Mission.Accepted && !Mission.isGuild)
+            if (!Mission.Accepted)
             {
                 Target = null; connection.enabled = false;
                 if (accept || interact) Mission.Accept();
                 return;
             }
-            if (!Mission.CanAct) { Target = null; connection.enabled = false; return; }
-            if (accept && Mission.isGuild && Mission.ContractVisible) Mission.Accept();
+            if (!Mission.CanAct) return;
             // Deadline stays in game time; explicit pause is the only time freeze.
             if (Held != null && Held.Remaining <= 0) ExpireHeld();
             if (IsStunned) { Target = null; connection.enabled = false; return; }
@@ -112,10 +115,10 @@ namespace SoundThief
         public bool TryExtract()
         {
             if (IsStunned || !Mission.CanAct || Held != null || !Target || !Target.relation) return false;
-            if (Target.kind == InteractionKind.Door && !HasKey) { Mission.Notify("먼저 열쇠를 챙겨야 관계를 연결할 수 있습니다."); return false; }
+            if (Target.kind == InteractionKind.Door && !Target.CanUnlock(this)) { Mission.Notify("문에 필요한 아이템을 먼저 찾아야 관계를 연결할 수 있습니다."); return false; }
             Held = Target.relation.Extract(Mission.rules);
             if (Held == null) { Mission.Notify("이 관계의 소리가 아직 돌아오지 않았습니다."); return false; }
-            Mission.RecordExtraction();
+            Mission.Extracted = true;
             Mission.Notify("소리를 들고 있습니다. 느린 보폭과 남은 시간을 확인하세요.");
             return true;
         }
@@ -123,12 +126,13 @@ namespace SoundThief
         {
             if (IsStunned || !Mission.CanAct || Held == null || !Target || !Target.emitter) return false;
             if (!Target.emitter.Inject(Held, Mission.World)) { Mission.Notify("이미 소리가 출력 중인 대상입니다."); return false; }
-            Held = null; Mission.RecordInjection();
-            Mission.Notify("소리를 주입했습니다. 경비의 반응을 관찰하고 인장을 찾으세요.");
+            Held = null; Mission.Injected = true;
+            Mission.Notify("소리를 주입했습니다. 출력이 끝나면 원래 관계의 소리가 돌아옵니다.");
             return true;
         }
         public bool TryThrow()
         {
+            if (!Mission || !Mission.rules || !Mission.rules.throwingEnabled) return false;
             if (IsStunned || !Mission.CanAct || Held == null) return false;
             var projectile = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             projectile.name = "Thrown sound"; projectile.transform.localScale = Vector3.one * 0.18f;
@@ -142,7 +146,6 @@ namespace SoundThief
             Physics.IgnoreCollision(projectile.GetComponent<Collider>(), controller);
             projectile.AddComponent<SoundProjectile>().Init(Held, Mission.World);
             Held = null;
-            Mission.RecordThrow();
             Mission.Notify("소리를 던졌습니다. 착지하거나 남은 시간이 끝나면 폭발합니다.");
             return true;
         }
@@ -154,11 +157,6 @@ namespace SoundThief
             Mission.Notify("보유 시간 초과! 잠시 기절했습니다. 원래 소리는 복구되었습니다.");
         }
         public void Stun(float seconds) { stunUntil = Time.time + seconds; Target = null; if (connection) connection.enabled = false; }
-        public void ResetPracticeState()
-        {
-            Held?.Finish(); Held = null; stunUntil = 0;
-            Target = null; if (connection) connection.enabled = false;
-        }
         void OnDestroy() { Held?.Finish(); if (lineMaterial) Destroy(lineMaterial); }
     }
 }
