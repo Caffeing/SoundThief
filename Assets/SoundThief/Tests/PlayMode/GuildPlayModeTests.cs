@@ -15,6 +15,7 @@ namespace SoundThief.Tests
         MissionDirector mission;
         ThiefPlayer player;
         PlayModeInputScope input;
+        SoundRules testRules, originalRules;
         static readonly GuardState[] ResetStates = { GuardState.Sleeping, GuardState.InvestigatingSound, GuardState.Chasing,
             GuardState.LastSeen, GuardState.Alert, GuardState.Returning, GuardState.Stunned, GuardState.Panic };
         void MovePlayer(Vector3 position)
@@ -33,6 +34,8 @@ namespace SoundThief.Tests
             yield return SceneManager.LoadSceneAsync("Guild"); yield return null;
             mission = Object.FindFirstObjectByType<MissionDirector>(); player = mission.player;
             player.enabled = false;
+            originalRules = mission.rules; testRules = Object.Instantiate(originalRules); testRules.throwingEnabled = true;
+            mission.rules = mission.World.rules = testRules;
             foreach (var guard in mission.World.Guards) guard.enabled = false;
         }
         [UnityTearDown]
@@ -43,6 +46,8 @@ namespace SoundThief.Tests
                 InputSystem.QueueStateEvent(Keyboard.current, new KeyboardState()); InputSystem.Update();
             }
             Time.timeScale = 1; Cursor.lockState = CursorLockMode.None;
+            if (mission && mission.World && mission.rules == testRules) mission.rules = mission.World.rules = originalRules;
+            if (testRules) Object.Destroy(testRules);
             input.Dispose();
             yield return null;
         }
@@ -216,6 +221,42 @@ namespace SoundThief.Tests
             Assert.That(stage.Accepted && stage.CanAct, Is.True);
             Assert.That(stage.player.HasKey || stage.player.HasTreasure || stage.Extracted || stage.Injected || stage.DoorOpened, Is.False);
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo(MissionDirector.StageScene));
+        }
+        [UnityTest]
+        public IEnumerator SerializedGuildKindsAreNotCollectibleAndPracticeIsOptional()
+        {
+            Assert.That((int)InteractionKind.Collectible, Is.EqualTo(5), "Shared prefab serialization must remain stable.");
+            Assert.That(Find(InteractionKind.ContractBoard).name, Is.EqualTo("Contract board"));
+            Assert.That(Find(InteractionKind.GuildExit).name, Is.EqualTo("Departure door"));
+            Assert.That(Find(InteractionKind.PracticeReset).name, Is.EqualTo("Practice reset"));
+            Assert.That(mission.HasObjectives, Is.False);
+            Assert.That(player.Inventory.Items, Is.Empty);
+            yield return null;
+        }
+        [UnityTest]
+        public IEnumerator GuildRestartClearsPracticeButRetainsAcceptedContract()
+        {
+            mission.Accept();
+            Aim(Resonator(0), Resonator(0).transform.position - Vector3.forward * 1.5f - Vector3.up * 1.15f);
+            Assert.That(player.TryExtract(), Is.True); var charge = player.Held;
+            mission.Restart(); yield return null;
+            Assert.That(mission.Accepted && mission.CanAct, Is.True);
+            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("Guild"));
+            Assert.That(player.Held, Is.Null); Assert.That(charge.Finished, Is.True);
+            Assert.That(mission.practice.Extracted || mission.practice.Injected, Is.False);
+        }
+        [UnityTest]
+        public IEnumerator DisabledThrowRemainsDisabledInGuildAndDoesNotBlockPracticeGuidance()
+        {
+            testRules.throwingEnabled = false;
+            Aim(Resonator(0), Resonator(0).transform.position - Vector3.forward * 1.5f - Vector3.up * 1.15f);
+            Assert.That(player.TryExtract(), Is.True); var charge = player.Held;
+            mission.practice.RecordInjection();
+            Assert.That(player.TryThrow(), Is.False);
+            Assert.That(player.Held, Is.SameAs(charge)); Assert.That(charge.Finished, Is.False);
+            Assert.That(mission.practice.Guidance, Does.Not.Contain("좌클릭"));
+            Assert.That(Object.FindObjectsByType<SoundProjectile>(FindObjectsSortMode.None), Is.Empty);
+            yield return null;
         }
     }
 }

@@ -34,8 +34,9 @@ namespace SoundThief
         public bool Thrown { get; private set; }
         public string Guidance => !Extracted ? "선택 연습 · 공명체 조준 → E 추출 · 운반 중 느린 이동과 타이머 확인"
             : !Injected ? "선택 연습 · 다른 공명체에 Q 주입 · 등급이 0이 되면 원래 관계 복구"
-            : !Thrown ? "선택 연습 · 다시 추출한 뒤 좌클릭 투척 · 벽은 소리만 통과, 기절은 차단"
-            : "기본 연습 완료 · 반복 연습 또는 출구로 출발 · 초기화 받침대 [F]";
+            : mission.rules && mission.rules.throwingEnabled && !Thrown ? "선택 연습 · 다시 추출한 뒤 좌클릭 투척 · 벽은 소리만 통과, 기절은 차단"
+            : "기본 연습 완료 · 반복 연습 또는 출구로 출발 · 초기화 받침대 [F]"
+            + (mission.rules && !mission.rules.throwingEnabled ? " · 투척은 현재 개발 보류" : "");
         public void RecordExtraction() => Extracted = true;
         public void RecordInjection() => Injected = true;
         public void RecordThrow() => Thrown = true;

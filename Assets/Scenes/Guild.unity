@@ -575,10 +575,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273702b42de7efd44aba0602a7d3efef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.ThiefInteractable
-  kind: 7
+  kind: 8
   displayName: "\uC5F0\uC2B5 \uCD08\uAE30\uD654 \xB7 \uC758\uB8B0 \uC218\uB77D \uC720\uC9C0"
   relation: {fileID: 0}
   emitter: {fileID: 0}
+  itemId: 
+  requiresKey: 1
+  requiredItemId: key
+  openAngle: -100
 --- !u!23 &244396326
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2085,6 +2089,10 @@ MonoBehaviour:
   displayName: "\uC5F0\uC2B5 \uACF5\uBA85\uCCB4 3"
   relation: {fileID: 895396391}
   emitter: {fileID: 895396390}
+  itemId: 
+  requiresKey: 1
+  requiredItemId: key
+  openAngle: -100
 --- !u!23 &895396393
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2401,7 +2409,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: THROWING RANGE / WATCH THE GUARD
+  m_text: SOUND PRACTICE / WATCH THE GUARD
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3150,10 +3158,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273702b42de7efd44aba0602a7d3efef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.ThiefInteractable
-  kind: 6
+  kind: 7
   displayName: "\uAE38\uB4DC \uCD9C\uAD6C \xB7 \uC2A4\uD14C\uC774\uC9C0 1 \uCD9C\uBC1C"
   relation: {fileID: 0}
   emitter: {fileID: 0}
+  itemId: 
+  requiresKey: 1
+  requiredItemId: key
+  openAngle: -100
 --- !u!23 &1150858998
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3243,6 +3255,7 @@ GameObject:
   - component: {fileID: 1188242219}
   - component: {fileID: 1188242220}
   - component: {fileID: 1188242218}
+  - component: {fileID: 1188242221}
   m_Layer: 0
   m_Name: Thief
   m_TagString: Untagged
@@ -3264,8 +3277,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.ThiefPlayer
   Mission: {fileID: 1834094706}
   view: {fileID: 1674323355}
-  HasKey: 0
-  HasTreasure: 0
 --- !u!4 &1188242219
 Transform:
   m_ObjectHideFlags: 0
@@ -3307,6 +3318,18 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &1188242221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188242217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d50f203b23b669447aec43323ecf21a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.StageInventory
 --- !u!1 &1229257368
 GameObject:
   m_ObjectHideFlags: 0
@@ -3611,6 +3634,10 @@ MonoBehaviour:
   displayName: "\uC5F0\uC2B5 \uACF5\uBA85\uCCB4 1"
   relation: {fileID: 1245569277}
   emitter: {fileID: 1245569276}
+  itemId: 
+  requiresKey: 1
+  requiredItemId: key
+  openAngle: -100
 --- !u!23 &1245569279
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4040,6 +4067,10 @@ MonoBehaviour:
   displayName: "\uC5F0\uC2B5 \uACF5\uBA85\uCCB4 2"
   relation: {fileID: 1373014620}
   emitter: {fileID: 1373014619}
+  itemId: 
+  requiresKey: 1
+  requiredItemId: key
+  openAngle: -100
 --- !u!23 &1373014622
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5802,8 +5833,11 @@ MonoBehaviour:
   World: {fileID: 1834094708}
   player: {fileID: 1188242218}
   projectileMaterial: {fileID: 2100000, guid: 505e01fdbfac88e41b3f2bd36f77b58a, type: 2}
+  stage: {fileID: 11400000, guid: c92014185617133468e1f210c31c834f, type: 2}
+  startsAccepted: 0
   isGuild: 1
   practice: {fileID: 1834094707}
+  destinationScenePath: Assets/Scenes/ManorPrototype.unity
   ContractVisible: 0
   DoorOpened: 0
   Extracted: 0
@@ -5899,11 +5933,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273702b42de7efd44aba0602a7d3efef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.ThiefInteractable
-  kind: 5
+  kind: 6
   displayName: "\uC758\uB8B0 \uAC8C\uC2DC\uD310 \xB7 \uD478\uB978 \uC800\uD0DD\uC758
     \uC778\uC7A5 [\uC218\uB77D]"
   relation: {fileID: 0}
   emitter: {fileID: 0}
+  itemId: 
+  requiresKey: 1
+  requiredItemId: key
+  openAngle: -100
 --- !u!23 &1895042347
 MeshRenderer:
   m_ObjectHideFlags: 0
