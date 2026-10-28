@@ -55,7 +55,7 @@ namespace SoundThief
         {
             if (!agent || !world.player.Mission.CanAct) return;
             // Contact ends a contract in every guard state, including sleep/stun/panic.
-            if (Vector3.Distance(transform.position, world.player.transform.position) < 0.85f)
+            if (!world.player.Mission.isGuild && Vector3.Distance(transform.position, world.player.transform.position) < 0.85f)
             { world.player.Mission.Caught(); return; }
             if (statusLabel)
             {
@@ -94,6 +94,14 @@ namespace SoundThief
         {
             if (State == GuardState.Panic || State == GuardState.Stunned) return false;
             Stop(); State = GuardState.Stunned; stateUntil = Time.time + world.rules.guardStun; return true;
+        }
+        public void ResetPractice()
+        {
+            if (!world.player.Mission.isGuild) return;
+            Stop(); if (agent && agent.isOnNavMesh) agent.Warp(home);
+            transform.rotation = homeRotation; State = GuardState.Sleeping;
+            wakeStimulus = 0; ReactingGrade = 0; listening = null;
+            stateUntil = soundUntil = lastStimulus = 0;
         }
         void EnterAlert() { Stop(); State = GuardState.Alert; stateUntil = Time.time + world.rules.alertSeconds; ReactingGrade = 0; listening = null; }
         void Go(GuardState state, Vector3 position)

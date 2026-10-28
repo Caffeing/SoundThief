@@ -16,6 +16,14 @@ namespace SoundThief
             if (!mission.CanAct || player.IsStunned || Acquired) return;
             switch (kind)
             {
+                case InteractionKind.ContractBoard:
+                    if (mission.Accepted) mission.Notify("수락한 의뢰: 푸른 저택의 인장. 출구 문에서 F로 출발하세요.");
+                    else mission.Accept();
+                    break;
+                case InteractionKind.GuildExit:
+                    mission.Depart(); break;
+                case InteractionKind.PracticeReset:
+                    mission.practice?.ResetPractice(); break;
                 case InteractionKind.Key:
                     player.HasKey = true; Acquired = true;
                     mission.Notify("열쇠를 얻었습니다. 문을 조준하고 E로 관계의 소리를 추출하세요.");
@@ -27,7 +35,7 @@ namespace SoundThief
                     transform.localRotation = Quaternion.Euler(0, IsOpen ? -100 : 0, 0);
                     var obstacle = GetComponent<UnityEngine.AI.NavMeshObstacle>();
                     if (obstacle) obstacle.enabled = !IsOpen;
-                    if (IsOpen) mission.DoorOpened = true;
+                    if (IsOpen && !mission.isGuild) mission.DoorOpened = true;
                     mission.Notify(relation.IsMuted ? "무음으로 문을 열었습니다. 청록색 공명체에 Q로 주입하세요." : "금속음이 울렸습니다. 잠든 경비에게도 소리가 들립니다.");
                     break;
                 case InteractionKind.Resonator:

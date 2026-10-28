@@ -29,12 +29,14 @@ namespace SoundThief
             if (tones.TryGetValue(grade, out var clip))
             {
                 var soundObject = new GameObject("Positional sound"); soundObject.transform.position = position;
+                soundObject.transform.SetParent(transform, true);
                 var feedback = soundObject.AddComponent<AudioSource>();
                 feedback.spatialBlend = 1; feedback.minDistance = 1; feedback.maxDistance = rules.hearingPerGrade * grade;
                 feedback.PlayOneShot(clip);
                 Destroy(soundObject, clip.length + 0.1f);
             }
             var ring = new GameObject("Sound pulse").AddComponent<SoundRing>();
+            ring.transform.SetParent(transform, true);
             ring.Init(position, grade, false);
         }
         public void Blast(Vector3 position, int grade, bool stunPlayer)
@@ -47,7 +49,13 @@ namespace SoundThief
                     guard.Stun();
             if (stunPlayer) player.Stun(rules.playerStun);
             var ring = new GameObject("Blast").AddComponent<SoundRing>();
+            ring.transform.SetParent(transform, true);
             ring.Init(position, grade, true);
+        }
+        public void ResetFeedback()
+        {
+            foreach (Transform effect in transform) Destroy(effect.gameObject);
+            BlastCount = 0; LastBlastPosition = Vector3.zero;
         }
         // Only level geometry (layer 8) blocks sight and shock. Hearing deliberately ignores it.
         public static bool Blocked(Vector3 from, Vector3 to) => Physics.Linecast(from, to, 1 << 8, QueryTriggerInteraction.Ignore);

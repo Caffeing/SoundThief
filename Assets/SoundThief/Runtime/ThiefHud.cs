@@ -46,7 +46,7 @@ namespace SoundThief
             var player = mission.player;
             objective.text = mission.Objective;
             inventory.text = "아이템  |  열쇠 " + (player.HasKey ? "보유" : "—") + "     가문 인장 " + (player.HasTreasure ? "보유" : "—");
-            message.text = mission.Message;
+            message.text = mission.isGuild && mission.practice ? mission.Message + "\n" + mission.practice.Guidance : mission.Message;
             var charge = player.Held;
             held.text = player.IsStunned ? "기절 — 이동과 능력을 사용할 수 없습니다" : charge == null ? "빈손  /  소리 관계를 찾아보세요"
                 : "운반 · 강제 웅크리기   등급 " + charge.Grade + "   " + charge.Remaining.ToString("0.0") + "초";
@@ -58,10 +58,10 @@ namespace SoundThief
                 prompt.text += "\n" + target.relation.Label + " · 등급 " + target.relation.grade + (target.relation.IsMuted ? " · 무음 / 복구 대기" : " · [E] 추출");
             if (target && target.emitter)
                 prompt.text += target.emitter.Active ? "\n주입 출력 · 등급 " + target.emitter.CurrentGrade : charge != null ? "\n[Q] 소리 주입" : "";
-            modal.SetActive(!mission.Accepted || mission.Paused || mission.Completed || mission.ContractVisible);
+            modal.SetActive((!mission.isGuild && !mission.Accepted) || mission.Paused || mission.Completed || mission.ContractVisible);
             contractText.text = mission.Completed ? "의뢰 완료\n\n푸른 저택의 인장을 회수하고 탈출했습니다.\n\n[R] 의뢰 처음부터 다시 하기"
                 : mission.Paused ? "일시정지\n\n소리 보유 시간과 경비 행동이 멈췄습니다.\n\n[Esc] 계속    [R] 전체 재시작"
-                : "의뢰 01 — 푸른 저택의 인장\n\n열쇠와 자물쇠 사이의 소리를 훔쳐\n잠든 경비를 지나 저택에 잠입하세요.\n가문의 인장을 챙긴 후 입구로 돌아오세요.\n\n" + (!mission.Accepted ? "[Enter / F] 의뢰 수락" : "[Tab] 닫기 · 의뢰창을 열어도 시간은 흐릅니다");
+                : "의뢰 01 — 푸른 저택의 인장\n\n열쇠와 자물쇠 사이의 소리를 훔쳐\n잠든 경비를 지나 저택에 잠입하세요.\n가문의 인장을 챙긴 후 입구로 돌아오세요.\n\n" + (mission.isGuild ? (!mission.Accepted ? "[Enter] 수락 · [Tab] 닫기\n연습은 선택 · 수락 후 출구 문 [F]" : "의뢰 수락됨 · 출구 문 [F]로 출발\n[Tab] 닫기 · 연습 완료는 필요하지 않습니다") : !mission.Accepted ? "[Enter / F] 의뢰 수락" : "[Tab] 닫기 · 의뢰창을 열어도 시간은 흐릅니다");
         }
         static RectTransform Panel(string name, Transform parent, Vector2 min, Vector2 max)
         {
