@@ -7,6 +7,28 @@ namespace SoundThief
     {
         public MissionDirector mission;
         public Transform practiceRoot;
+        public BoxCollider practiceArea;
+        bool wasInside;
+        public bool IsPlayerInside => !practiceArea || Contains(mission.player.transform.position);
+        public bool Contains(Vector3 position)
+        {
+            if (!practiceArea) return false;
+            Vector3 local = practiceArea.transform.InverseTransformPoint(position) - practiceArea.center;
+            Vector3 half = practiceArea.size * 0.5f;
+            return Mathf.Abs(local.x) <= half.x && Mathf.Abs(local.y) <= half.y && Mathf.Abs(local.z) <= half.z;
+        }
+        void LateUpdate()
+        {
+            if (!mission || !mission.isGuild || !practiceArea) return;
+            bool inside = IsPlayerInside;
+            if (wasInside && !inside)
+            {
+                // Leaving is a world transition, so it also resets a stunned player.
+                ResetState();
+                mission.Notify("로비로 돌아왔습니다. 연습장과 연습 경비를 초기화했습니다.");
+            }
+            wasInside = inside;
+        }
         public bool Extracted { get; private set; }
         public bool Injected { get; private set; }
         public bool Thrown { get; private set; }
@@ -20,6 +42,11 @@ namespace SoundThief
         public void ResetPractice()
         {
             if (!mission.isGuild || !mission.CanAct || mission.player.IsStunned) return;
+            ResetState();
+            mission.Notify("연습장을 초기화했습니다. 수락한 의뢰는 유지됩니다.");
+        }
+        void ResetState()
+        {
             mission.player.ResetPracticeState();
             foreach (var projectile in FindObjectsByType<SoundProjectile>(FindObjectsSortMode.None))
                 if (projectile.World == mission.World) projectile.Cancel();
@@ -28,7 +55,6 @@ namespace SoundThief
             foreach (var guard in practiceRoot.GetComponentsInChildren<GuardAgent>(true)) guard.ResetPractice();
             mission.World.ResetFeedback();
             Extracted = Injected = Thrown = false;
-            mission.Notify("연습장을 초기화했습니다. 수락한 의뢰는 유지됩니다.");
         }
     }
 }

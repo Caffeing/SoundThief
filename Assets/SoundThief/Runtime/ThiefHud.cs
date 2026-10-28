@@ -46,7 +46,7 @@ namespace SoundThief
             var player = mission.player;
             objective.text = mission.Objective;
             inventory.text = "아이템  |  열쇠 " + (player.HasKey ? "보유" : "—") + "     가문 인장 " + (player.HasTreasure ? "보유" : "—");
-            message.text = mission.isGuild && mission.practice ? mission.Message + "\n" + mission.practice.Guidance : mission.Message;
+            message.text = mission.isGuild && mission.practice && mission.practice.IsPlayerInside ? mission.Message + "\n" + mission.practice.Guidance : mission.Message;
             var charge = player.Held;
             held.text = player.IsStunned ? "기절 — 이동과 능력을 사용할 수 없습니다" : charge == null ? "빈손  /  소리 관계를 찾아보세요"
                 : "운반 · 강제 웅크리기   등급 " + charge.Grade + "   " + charge.Remaining.ToString("0.0") + "초";

@@ -114,6 +114,7 @@ namespace SoundThief.Editor
                 sun.transform.rotation = Quaternion.Euler(55, -35, 0); sun.color = new Color(0.7f, 0.8f, 1); sun.intensity = 1.2f;
                 RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat; RenderSettings.ambientLight = new Color(0.4f, 0.44f, 0.5f);
                 EditorSceneManager.SaveScene(scene, ScenePath);
+                GuildRearLayout.Apply();
                 var scenes = new List<EditorBuildSettingsScene> { new EditorBuildSettingsScene(ScenePath, true) };
                 foreach (var entry in EditorBuildSettings.scenes) if (entry.path != ScenePath) scenes.Add(entry);
                 EditorBuildSettings.scenes = scenes.ToArray(); AssetDatabase.SaveAssets();

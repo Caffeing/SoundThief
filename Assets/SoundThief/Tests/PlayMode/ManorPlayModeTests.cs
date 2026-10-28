@@ -14,6 +14,7 @@ namespace SoundThief.Tests
         ThiefPlayer player;
         GuardAgent guard;
         SoundRules rules;
+        PlayModeInputScope input;
         ThiefInteractable Door => Find(InteractionKind.Door);
         ThiefInteractable Resonator(int index) => Object.FindObjectsByType<ThiefInteractable>(FindObjectsSortMode.None)
             .Where(i => i.kind == InteractionKind.Resonator).OrderBy(i => i.name).ElementAt(index);
@@ -22,6 +23,7 @@ namespace SoundThief.Tests
         [UnitySetUp]
         public IEnumerator SetUp()
         {
+            input = new PlayModeInputScope();
             Time.timeScale = 1;
             yield return SceneManager.LoadSceneAsync("ManorPrototype");
             yield return null;
@@ -35,6 +37,7 @@ namespace SoundThief.Tests
         {
             Time.timeScale = 1; Cursor.lockState = CursorLockMode.None;
             if (rules) Object.Destroy(rules);
+            input.Dispose();
             yield return null;
         }
         void Aim(ThiefInteractable target, Vector3 position)

@@ -28,7 +28,7 @@ namespace SoundThief
             enterAccepted = false;
             Accepted = acceptedOnEntry;
             SetCursor(isGuild || Accepted);
-            if (isGuild) Notify("길드에 오신 것을 환영합니다. 의뢰 게시판 [F] · 왼쪽 연습장은 자유롭게 이용하세요.");
+            if (isGuild) Notify("길드에 오신 것을 환영합니다. 테이블 의뢰 게시판 [F] · 뒤쪽 연습장은 자유롭게 이용하세요.");
         }
         public void Accept()
         {
@@ -73,7 +73,7 @@ namespace SoundThief
         public void RecordExtraction() { if (isGuild) practice?.RecordExtraction(); else Extracted = true; }
         public void RecordInjection() { if (isGuild) practice?.RecordInjection(); else Injected = true; }
         public void RecordThrow() { if (isGuild) practice?.RecordThrow(); }
-        public string Objective => isGuild ? (!Accepted ? "의뢰 게시판에서 수락 [F]" : "출구 문에서 출발 [F] · 왼쪽 연습은 선택")
+        public string Objective => isGuild ? (!Accepted ? "테이블 의뢰 게시판에서 수락 [F]" : "출구 문에서 출발 [F] · 뒤쪽 연습은 선택")
             : !Accepted ? "의뢰: 푸른 저택의 인장" : player.HasTreasure ? "입구로 돌아가 F로 탈출"
             : !player.HasKey ? "받침대의 열쇠 획득 [F]" : !Extracted ? "열쇠 ↔ 자물쇠 소리 추출 [E]"
             : !DoorOpened ? "문을 조용히 열기 [F]" : !Injected ? "청록색 공명체에 소리 주입 [Q]" : "저택 안쪽의 가문 인장 획득 [F]";
