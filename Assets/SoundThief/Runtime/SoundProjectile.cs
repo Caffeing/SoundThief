@@ -18,6 +18,7 @@ namespace SoundThief
             world.Blast(transform.position, charge.Grade, false);
             Destroy(gameObject);
         }
+        public void Cancel() { charge?.Finish(); charge = null; Destroy(gameObject); }
         void OnDestroy() { charge?.Finish(); }
     }
 

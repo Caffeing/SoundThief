@@ -106,6 +106,8 @@ namespace SoundThief.Tests
         [UnityTest]
         public IEnumerator ThrowKeepsDeadlineAndExplodesOnceInAir()
         {
+            // Retained implementation regression; production rules keep this feature off.
+            rules.throwingEnabled = true;
             rules.holdSeconds[1] = 0.15f; ExtractDoor();
             var charge = player.Held;
             var controller = player.GetComponent<CharacterController>(); controller.enabled = false;
@@ -131,6 +133,24 @@ namespace SoundThief.Tests
             yield return new WaitForSeconds(0.5f);
             Assert.That(charge.Remaining, Is.GreaterThan(10));
             Assert.That(charge.Finished, Is.True); Assert.That(mission.World.BlastCount, Is.EqualTo(1));
+        }
+        [UnityTest]
+        public IEnumerator DeferredThrowKeepsHeldSoundAndIsNotAdvertised()
+        {
+            Assert.That(rules.throwingEnabled, Is.False);
+            ExtractDoor(); var held = player.Held; float deadline = held.Deadline;
+            Assert.That(player.TryThrow(), Is.False);
+            Assert.That(player.Held, Is.SameAs(held)); Assert.That(held.Deadline, Is.EqualTo(deadline));
+            player.enabled = true;
+            UnityEngine.InputSystem.InputSystem.QueueStateEvent(UnityEngine.InputSystem.Mouse.current,
+                new UnityEngine.InputSystem.LowLevel.MouseState().WithButton(UnityEngine.InputSystem.LowLevel.MouseButton.Left));
+            UnityEngine.InputSystem.InputSystem.Update();
+            yield return null;
+            UnityEngine.InputSystem.InputSystem.QueueStateEvent(UnityEngine.InputSystem.Mouse.current,new UnityEngine.InputSystem.LowLevel.MouseState());
+            UnityEngine.InputSystem.InputSystem.Update();
+            Assert.That(player.Held, Is.SameAs(held)); Assert.That(Door.relation.IsMuted, Is.True);
+            Assert.That(Object.FindObjectsByType<SoundProjectile>(FindObjectsSortMode.None), Is.Empty);
+            Assert.That(Object.FindObjectsByType<TMPro.TextMeshProUGUI>(FindObjectsSortMode.None).Any(t=>t.text.Contains("좌클릭 투척")), Is.False);
         }
         [UnityTest]
         public IEnumerator HeldTimeoutStunsAndRestoresWithoutFailing()
@@ -218,7 +238,8 @@ namespace SoundThief.Tests
             Find(InteractionKind.Exit).Interact(player); Assert.That(mission.Completed, Is.True);
             mission.Restart(); yield return null; yield return null;
             mission = Object.FindFirstObjectByType<MissionDirector>(); player = mission.player;
-            Assert.That(mission.Accepted || player.HasKey || player.HasTreasure || Door.IsOpen || Door.relation.IsMuted, Is.False);
+            Assert.That(mission.Accepted, Is.True, "Stage restarts retain the accepted contract.");
+            Assert.That(player.HasKey || player.HasTreasure || Door.IsOpen || Door.relation.IsMuted, Is.False);
             Assert.That(Object.FindObjectsByType<SoundProjectile>(FindObjectsSortMode.None), Is.Empty);
         }
         [UnityTest]
@@ -228,7 +249,8 @@ namespace SoundThief.Tests
             guard.GetComponent<UnityEngine.AI.NavMeshAgent>().Warp(player.transform.position);
             yield return null; yield return null;
             mission = Object.FindFirstObjectByType<MissionDirector>();
-            Assert.That(mission.Accepted || mission.player.HasKey || Door.relation.IsMuted, Is.False);
+            Assert.That(mission.Accepted, Is.True);
+            Assert.That(mission.player.HasKey || Door.relation.IsMuted, Is.False);
         }
     }
 }

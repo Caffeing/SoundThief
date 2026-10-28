@@ -31,21 +31,21 @@ namespace SoundThief
             timer = bar.GetComponent<UnityEngine.UI.Image>(); timer.color = new Color(0.15f, 0.95f, 0.78f);
             inventory = Text(bottom, "", 19, new Vector2(0.035f, 0.04f), new Vector2(0.97f, 0.30f));
             var controls = Panel("Controls", transform, new Vector2(0.68f, 0.03f), new Vector2(0.975f, 0.20f));
-            Text(controls, "WASD 이동 · 마우스 시점\nF 상호작용 · E 추출 · Q 주입\n좌클릭 투척 · Ctrl 웅크리기\nTab 의뢰 · Esc 정지 · R 재시작", 18, new Vector2(0.05f, 0.08f), new Vector2(0.96f, 0.93f));
+            Text(controls, "WASD 이동 · 마우스 시점\nF 상호작용 · E 추출 · Q 주입\n" + (mission.rules.throwingEnabled ? "좌클릭 투척 · " : "") + "Ctrl 웅크리기\nTab 의뢰 · Esc 정지 · R 재시작", 18, new Vector2(0.05f, 0.08f), new Vector2(0.96f, 0.93f));
             var cross = Text(transform, "+", 27, new Vector2(0.48f, 0.48f), new Vector2(0.52f, 0.52f)); cross.alignment = TextAlignmentOptions.Center;
             prompt = Text(transform, "", 22, new Vector2(0.22f, 0.30f), new Vector2(0.78f, 0.44f)); prompt.alignment = TextAlignmentOptions.Center;
             message = Text(transform, "", 19, new Vector2(0.16f, 0.21f), new Vector2(0.84f, 0.28f)); message.alignment = TextAlignmentOptions.Center;
             modal = Panel("Contract panel", transform, new Vector2(0.21f, 0.27f), new Vector2(0.79f, 0.77f)).gameObject;
             contractText = Text(modal.transform, "", 26, new Vector2(0.08f, 0.08f), new Vector2(0.92f, 0.92f));
             foreach (var guard in FindObjectsByType<GuardAgent>(FindObjectsSortMode.None))
-                if (guard.statusLabel) guard.statusLabel.font = font;
+                if (guard.gameObject.scene == gameObject.scene && guard.statusLabel) guard.statusLabel.font = font;
         }
         void Update()
         {
             if (!mission || !objective) return;
             var player = mission.player;
             objective.text = mission.Objective;
-            inventory.text = "아이템  |  열쇠 " + (player.HasKey ? "보유" : "—") + "     가문 인장 " + (player.HasTreasure ? "보유" : "—");
+            inventory.text = "아이템  |  " + (player.Inventory.Items.Count == 0 ? "없음" : string.Join(" · ", System.Linq.Enumerable.Select(player.Inventory.Items, item => item.label)));
             message.text = mission.Message;
             var charge = player.Held;
             held.text = player.IsStunned ? "기절 — 이동과 능력을 사용할 수 없습니다" : charge == null ? "빈손  /  소리 관계를 찾아보세요"
@@ -59,9 +59,9 @@ namespace SoundThief
             if (target && target.emitter)
                 prompt.text += target.emitter.Active ? "\n주입 출력 · 등급 " + target.emitter.CurrentGrade : charge != null ? "\n[Q] 소리 주입" : "";
             modal.SetActive(!mission.Accepted || mission.Paused || mission.Completed || mission.ContractVisible);
-            contractText.text = mission.Completed ? "의뢰 완료\n\n푸른 저택의 인장을 회수하고 탈출했습니다.\n\n[R] 의뢰 처음부터 다시 하기"
+            contractText.text = mission.Completed ? "의뢰 완료\n\n" + mission.Title + "\n목표물을 회수하고 탈출했습니다.\n\n[R] 의뢰 처음부터 다시 하기"
                 : mission.Paused ? "일시정지\n\n소리 보유 시간과 경비 행동이 멈췄습니다.\n\n[Esc] 계속    [R] 전체 재시작"
-                : "의뢰 01 — 푸른 저택의 인장\n\n열쇠와 자물쇠 사이의 소리를 훔쳐\n잠든 경비를 지나 저택에 잠입하세요.\n가문의 인장을 챙긴 후 입구로 돌아오세요.\n\n" + (!mission.Accepted ? "[Enter / F] 의뢰 수락" : "[Tab] 닫기 · 의뢰창을 열어도 시간은 흐릅니다");
+                : mission.Title + "\n\n" + mission.Briefing + "\n\n" + (!mission.Accepted ? "[Enter / F] 의뢰 시작" : "[Tab] 닫기 · 의뢰창을 열어도 시간은 흐릅니다");
         }
         static RectTransform Panel(string name, Transform parent, Vector2 min, Vector2 max)
         {

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,42 +10,68 @@ namespace SoundThief
         public SoundWorld World;
         public ThiefPlayer player;
         public Material projectileMaterial;
+        public StageDefinition stage;
+        public bool startsAccepted;
         public bool Accepted { get; private set; }
         public bool Completed { get; private set; }
         public bool Paused { get; private set; }
         public bool ContractVisible, DoorOpened, Extracted, Injected;
-        public string Message { get; private set; } = "저택의 인장을 회수하고 입구로 돌아오세요.";
+        public string Message { get; private set; } = "목표물을 회수한 뒤 출구로 돌아오세요.";
         public bool CanAct => Accepted && !Completed && !Paused && !restarting;
+        public string Title => stage ? stage.title : "의뢰";
+        public string Briefing => stage ? stage.briefing : "목표물을 회수한 뒤 출구로 돌아오세요.";
+        public event Action Started, Succeeded, Failed;
         bool restarting;
         void Awake() { Time.timeScale = 1; SetCursor(false); }
-        public void Accept() { Accepted = true; Notify("의뢰 수락. 왼쪽 받침대에서 열쇠를 얻으세요."); SetCursor(true); }
+        void Start()
+        {
+            Message = Briefing;
+            if (stage ? stage.startImmediately : startsAccepted) Accept();
+        }
+        public void Accept()
+        {
+            if (Accepted || Completed || Paused || restarting) return;
+            Accepted = true; Notify(Briefing); SetCursor(true); Started?.Invoke();
+        }
         public void Notify(string text) => Message = text;
         public void TogglePause()
         {
             if (!Accepted || Completed) return;
             Paused = !Paused; Time.timeScale = Paused ? 0 : 1; SetCursor(!Paused);
         }
+        public bool HasObjectives
+        {
+            get
+            {
+                if (!player) return false;
+                if (!stage) return player.HasTreasure;
+                if (stage.requiredItemIds == null) return false;
+                foreach (var id in stage.requiredItemIds)
+                    if (!player.Inventory.Contains(id)) return false;
+                return true;
+            }
+        }
         public void Complete()
         {
-            if (!player.HasTreasure || !CanAct) return;
+            if (!HasObjectives || !CanAct) return;
             Completed = true; Time.timeScale = 0; SetCursor(false);
-            Notify("의뢰 완료 — 인장을 회수하고 무사히 탈출했습니다.");
+            Notify(Title + " — 목표를 달성하고 탈출했습니다."); Succeeded?.Invoke();
         }
         public void Caught()
         {
             if (!CanAct) return;
-            Notify("경비와 접촉했습니다. 의뢰를 처음부터 다시 시작합니다.");
-            Restart();
+            Notify("경비와 접촉했습니다. 의뢰를 처음부터 다시 시작합니다."); Failed?.Invoke(); Restart();
         }
         public void Restart()
         {
             if (restarting) return;
+            var scene = gameObject.scene;
+            if (string.IsNullOrEmpty(scene.path)) { Notify("재시작하려면 스테이지 씬을 먼저 저장하세요."); return; }
             restarting = true; Time.timeScale = 1; SetCursor(false);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadScene(scene.path);
         }
-        public string Objective => !Accepted ? "의뢰: 푸른 저택의 인장" : player.HasTreasure ? "입구로 돌아가 F로 탈출"
-            : !player.HasKey ? "받침대의 열쇠 획득 [F]" : !Extracted ? "열쇠 ↔ 자물쇠 소리 추출 [E]"
-            : !DoorOpened ? "문을 조용히 열기 [F]" : !Injected ? "청록색 공명체에 소리 주입 [Q]" : "저택 안쪽의 가문 인장 획득 [F]";
+        public string Objective => !Accepted ? Title : HasObjectives ? (stage ? stage.exitText : "출구에서 F로 탈출")
+            : stage ? stage.objectiveText : "목표물을 회수하세요.";
         static void SetCursor(bool locked) { Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None; Cursor.visible = !locked; }
         void OnDestroy() { Time.timeScale = 1; SetCursor(false); }
     }

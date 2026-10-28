@@ -5,6 +5,8 @@ namespace SoundThief
     [CreateAssetMenu(menuName = "Sound Thief/Sound Rules")]
     public sealed class SoundRules : ScriptableObject
     {
+        [Tooltip("투척은 개발 보류 중입니다. 재개 결정 전에는 끈 상태를 유지합니다.")]
+        public bool throwingEnabled = false;
         public float[] holdSeconds = { 24f, 18f, 12f };
         public float walkSpeed = 4f, carrySpeed = 1.5f, interactDistance = 2.8f;
         public float injectionHold = 4f, decayStep = 2f, pulseInterval = 0.7f;

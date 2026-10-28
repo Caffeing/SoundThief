@@ -22,7 +22,8 @@ namespace SoundThief
             if (CurrentGrade <= 0) { charge.Finish(); CurrentGrade = 0; return; }
             if (Time.time >= nextPulse) { nextPulse = Time.time + world.rules.pulseInterval; world.Pulse(transform.position, CurrentGrade, this); }
         }
-        void OnDestroy() { charge?.Finish(); }
+        public void ResetOutput() { charge?.Finish(); charge = null; CurrentGrade = 0; }
+        void OnDestroy() { ResetOutput(); }
     }
 
 }

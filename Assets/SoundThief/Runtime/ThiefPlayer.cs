@@ -3,12 +3,16 @@ using UnityEngine.InputSystem;
 
 namespace SoundThief
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(CharacterController), typeof(StageInventory))]
     public sealed class ThiefPlayer : MonoBehaviour
     {
         public MissionDirector Mission;
         public Camera view;
-        public bool HasKey, HasTreasure;
+        StageInventory inventory;
+        public StageInventory Inventory => inventory ? inventory : (inventory = GetComponent<StageInventory>() ?? gameObject.AddComponent<StageInventory>());
+        // Compatibility aliases for the original manor scene. New stages use item IDs.
+        public bool HasKey { get => Inventory.Contains("key"); set { if (value) Inventory.Add("key", "열쇠"); else Inventory.Remove("key"); } }
+        public bool HasTreasure { get => Inventory.Contains("objective"); set { if (value) Inventory.Add("objective", "목표물"); else Inventory.Remove("objective"); } }
         public SoundCharge Held { get; private set; }
         public ThiefInteractable Target { get; private set; }
         public bool IsStunned => Time.time < stunUntil;
@@ -111,7 +115,7 @@ namespace SoundThief
         public bool TryExtract()
         {
             if (IsStunned || !Mission.CanAct || Held != null || !Target || !Target.relation) return false;
-            if (Target.kind == InteractionKind.Door && !HasKey) { Mission.Notify("먼저 열쇠를 챙겨야 관계를 연결할 수 있습니다."); return false; }
+            if (Target.kind == InteractionKind.Door && !Target.CanUnlock(this)) { Mission.Notify("문에 필요한 아이템을 먼저 찾아야 관계를 연결할 수 있습니다."); return false; }
             Held = Target.relation.Extract(Mission.rules);
             if (Held == null) { Mission.Notify("이 관계의 소리가 아직 돌아오지 않았습니다."); return false; }
             Mission.Extracted = true;
@@ -123,11 +127,12 @@ namespace SoundThief
             if (IsStunned || !Mission.CanAct || Held == null || !Target || !Target.emitter) return false;
             if (!Target.emitter.Inject(Held, Mission.World)) { Mission.Notify("이미 소리가 출력 중인 대상입니다."); return false; }
             Held = null; Mission.Injected = true;
-            Mission.Notify("소리를 주입했습니다. 경비의 반응을 관찰하고 인장을 찾으세요.");
+            Mission.Notify("소리를 주입했습니다. 출력이 끝나면 원래 관계의 소리가 돌아옵니다.");
             return true;
         }
         public bool TryThrow()
         {
+            if (!Mission || !Mission.rules || !Mission.rules.throwingEnabled) return false;
             if (IsStunned || !Mission.CanAct || Held == null) return false;
             var projectile = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             projectile.name = "Thrown sound"; projectile.transform.localScale = Vector3.one * 0.18f;
