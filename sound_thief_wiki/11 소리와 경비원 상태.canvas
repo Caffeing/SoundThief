@@ -1,0 +1,28 @@
+{
+	"nodes":[
+		{"id":"intro","type":"text","text":"## 소리와 경비원 상태\n\n최신 사용자 설정 기준. 미정 분기는 확정 상태처럼 표시하지 않는다.\n\n[[02 소리 능력과 조작]] · [[03 사물과 경비원]]","x":0,"y":-280,"width":1300,"height":180,"color":"6"},
+		{"id":"carry","type":"text","text":"## 추출·운반\n\n원래 관계 무음·보유 등급 유지.\n느린 이동·등급별 제한 시간.\n사용 전 다른 소리 추출 불가.","x":2720,"y":1540,"width":420,"height":280,"color":"3"},
+		{"id":"airburst","type":"text","text":"## 투척 후 제한 시간 만료\n\n공중 투척물의 현재 위치에서 폭발.\n플레이어 현재 위치로 되돌리지 않음.\n원래 관계 복구·착지 재폭발 없음.","x":-630,"y":2200,"width":420,"height":280,"color":"1"},
+		{"id":"burst","type":"text","text":"## 들고 있을 때 시간 초과\n\n플레이어 현재 위치 소음·자기 기절.\n원래 관계 즉시 복구.\n던진 소리는 공중 투척물 위치에서 만료 폭발.","x":800,"y":2340,"width":420,"height":280,"color":"1"},
+		{"id":"inject","type":"text","text":"## 오브젝트 주입\n\n다른 대상에 동시 주입 허용.\n같은 대상 재생 중 겹침 금지.\n대상 파괴 없음·출력 감쇠 0에 관계 복구.","x":2720,"y":2480,"width":420,"height":280,"color":"3"},
+		{"id":"ready","type":"text","text":"## 새 추출과 이전 관계 복구 분리\n\n투척 직후 새 소리 추출 가능.\n이전 관계는 투척물이 폭발한 뒤 복구.\n주입은 감쇠 등급 0에서 복구.","x":-420,"y":1680,"width":420,"height":280,"color":"3"},
+		{"id":"normal","type":"text","text":"## 정상 관계·발생 전 추출\n\n상호작용 거리에서 매개체 시각적 연결.\n관계의 모든 상호작용 소리 억제.\n물리 기능 유지.","x":650,"y":1540,"width":420,"height":280,"color":"6"},
+		{"id":"guard","type":"text","text":"## 기절 회복 후 패닉\n\n강제 ? 동안 모든 자극·기절 공격 무시.\n패닉 해제 후 기절 공격 적용 재개.\n경비병 접촉 즉시 의뢰 실패.\n\n[[03 사물과 경비원]]","x":1220,"y":680,"width":420,"height":280,"color":"6"},
+		{"id":"release","type":"text","text":"## 투척 중\n\n투척 즉시 이동 제한 해제·새 추출 가능.\n제한 시간은 계속 진행.\n착지 시 또는 공중 만료 시 투척물 위치 폭발.\n폭발 후 원래 관계 복구.","x":-840,"y":600,"width":420,"height":280,"color":"2"}
+	],
+	"edges":[
+		{"id":"e0","fromNode":"normal","fromSide":"right","toNode":"carry","toSide":"left","label":"추출"},
+		{"id":"e1","fromNode":"carry","fromSide":"right","toNode":"inject","toSide":"left","label":"주입"},
+		{"id":"e2","fromNode":"inject","fromSide":"right","toNode":"normal","toSide":"left","label":"출력 등급 0"},
+		{"id":"e3","fromNode":"carry","fromSide":"bottom","toNode":"release","toSide":"top","label":"투척 사용"},
+		{"id":"e4","fromNode":"release","fromSide":"bottom","toNode":"normal","toSide":"top","label":"착지 또는 시간 만료 폭발 후 관계 복구"},
+		{"id":"e5","fromNode":"carry","fromSide":"bottom","toNode":"burst","toSide":"top","label":"제한 시간 초과"},
+		{"id":"e6","fromNode":"inject","fromSide":"bottom","toNode":"guard","toSide":"top","label":"현재 출력 등급·거리"},
+		{"id":"e7","fromNode":"release","fromSide":"bottom","toNode":"guard","toSide":"top","label":"소리 상호작용"},
+		{"id":"e8","fromNode":"inject","fromSide":"bottom","toNode":"ready","toSide":"top","label":"주입 후 즉시"},
+		{"id":"e10","fromNode":"burst","fromSide":"left","toNode":"normal","toSide":"bottom","label":"원래 관계 즉시 복구"},
+		{"id":"e11","fromNode":"release","fromSide":"bottom","toNode":"airburst","toSide":"left","label":"착지 전 제한 시간 만료"},
+		{"id":"e12","fromNode":"airburst","fromSide":"top","toNode":"normal","toSide":"bottom","label":"관계 복구"},
+		{"id":"e9","fromNode":"release","fromSide":"bottom","toNode":"ready","toSide":"left","label":"방출 후"}
+	]
+}

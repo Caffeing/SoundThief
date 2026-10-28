@@ -1,0 +1,18 @@
+{
+	"nodes":[
+		{"id":"intro","type":"text","text":"## 소리 도둑 · 최신 통합 지도\n\n소리 등급 = 소리 크기. 경비 등 상호작용과 보유 제한에 같은 등급 사용.\n\n[[00 소리 도둑 시작하기]]","x":0,"y":-440,"width":1300,"height":180,"color":"6"},
+		{"id":"world","type":"text","text":"## 의뢰와 성장\n\n의뢰 1개 ↔ 스테이지 1개.\n수락 → 수행 → 목표 달성·완료.\n튜토리얼도 의뢰 수행.\n재시작은 해당 의뢰 전체 초기화.\n\n[[04 임무와 구역 구성]]","x":-280,"y":-140,"width":420,"height":280,"color":"6"},
+		{"id":"relation","type":"text","text":"## 발생 전 추출\n\n상호작용 거리 안에서 두 매개체 시각적 연결.\n관계의 모든 상호작용 소리 무음.\n사용 전 추가 추출 불가, 사용 후 가능.\n\n[[02 소리 능력과 조작]]","x":260,"y":-80,"width":420,"height":280,"color":"3"},
+		{"id":"carry","type":"text","text":"## 운반·자폭\n\n등급 유지·느린 이동·등급별 제한 시간.\n초과 시 현재 플레이어 위치 자폭.\n소음·자기 기절·원래 관계 즉시 복구.\n기절 중 이동·상호작용 봉인. HP 없음.","x":940,"y":-140,"width":420,"height":280,"color":"1"},
+		{"id":"stage","type":"text","text":"## 튜토리얼 의뢰\n\n물건 절도 후 탈출로 성공.\n경비병과 접촉 즉시 실패·의뢰 전체 초기화.\n맵은 제작하면서 결정.\n\n[[06 튜토리얼 스테이지]]","x":1300,"y":350,"width":420,"height":280,"color":"2"},
+		{"id":"use","type":"text","text":"## 주입·투척 방출\n\n투척 즉시 이동 제한 해제·재추출 허용.\n착지 폭발 후 원래 관계 복구.\n투척 후에도 제한 시간 진행.\n먼저 만료되면 공중 투척물 위치에서 폭발.\n같은 대상 출력 겹침 금지.","x":-280,"y":320,"width":420,"height":280,"color":"3"},
+		{"id":"guard","type":"text","text":"## 경비 AI와 패닉\n\n!! 추적 → ! 마지막 목격 위치 → ? 경계.\n기절 회복 후 패닉 강제 ?.\n모든 자극·기절 공격에도 ? 고정.\n패닉 종료 후 기절 적용 재개.\n\n[[03 사물과 경비원]]","x":470,"y":400,"width":420,"height":280,"color":"6"}
+	],
+	"edges":[
+		{"id":"e0","fromNode":"world","fromSide":"right","toNode":"relation","toSide":"left","label":"의뢰 수행"},
+		{"id":"e1","fromNode":"relation","fromSide":"right","toNode":"carry","toSide":"left","label":"추출"},
+		{"id":"e3","fromNode":"use","fromSide":"bottom","toNode":"guard","toSide":"top","label":"출력 등급·거리로 반응"},
+		{"id":"e4","fromNode":"guard","fromSide":"bottom","toNode":"stage","toSide":"top","label":"상태를 읽어 잠입"},
+		{"id":"e2","fromNode":"carry","fromSide":"right","toNode":"use","toSide":"left","label":"선택"}
+	]
+}
