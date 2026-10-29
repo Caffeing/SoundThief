@@ -53,6 +53,8 @@ namespace SoundThief
         void Awake()
         {
             controller = GetComponent<CharacterController>();
+            // Preserve deltaTime-scaled movement even when each frame moves less than 1 mm.
+            controller.minMoveDistance = 0;
             connection = gameObject.AddComponent<LineRenderer>(); connection.positionCount = 2;
             connection.widthMultiplier = 0.018f;
             lineMaterial = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
@@ -103,8 +105,16 @@ namespace SoundThief
         void FindTarget()
         {
             Target = null;
-            if (Physics.Raycast(view.transform.position, view.transform.forward, out var hit, Mission.rules.interactDistance, ~0, QueryTriggerInteraction.Ignore))
+            // Ignore only this rig; retain the nearest external wall/object as an occluder.
+            var hits = Physics.RaycastAll(view.transform.position, view.transform.forward,
+                Mission.rules.interactDistance, ~0, QueryTriggerInteraction.Ignore);
+            float nearest = float.PositiveInfinity;
+            foreach (var hit in hits)
+            {
+                if (hit.collider.transform.IsChildOf(transform) || hit.distance >= nearest) continue;
+                nearest = hit.distance;
                 Target = hit.collider.GetComponentInParent<ThiefInteractable>();
+            }
             connection.enabled = Target && Target.relation;
             if (connection.enabled)
             {

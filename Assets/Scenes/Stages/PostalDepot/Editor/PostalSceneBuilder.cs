@@ -72,38 +72,42 @@ namespace SoundThief.PostalDepot.Editor
                 Wall("Service partition middle",2,7,0.3f,6);
                 Wall("Service partition north",2,13,0.3f,2);
                 Box("Reception counter",new Vector3(-5,0.55f,2.6f),new Vector3(4,1.1f,0.9f),wood);
-                Box("Sorting worktable",new Vector3(-4.7f,0.55f,9.2f),new Vector3(3,1.1f,1.2f),wood);
+                Box("Sorting worktable",new Vector3(-4.7f,0.55f,10f),new Vector3(3,1.1f,1.2f),wood);
                 Box("Sorting divider",new Vector3(-1,0.85f,10.8f),new Vector3(1,1.7f,3),wood);
                 Box("Loading pallets",new Vector3(5.6f,0.6f,6.5f),new Vector3(2.8f,1.2f,3),wood);
                 for(int i=0;i<3;i++)
                 {
                     float x=-5+i*4;
-                    Box("Dispatch shelf "+(char)('A'+i),new Vector3(x,0.55f,18.5f),new Vector3(2.6f,1.1f,1.2f),wood);
-                    Sign("BAY "+(char)('A'+i),new Vector3(x,2.2f,19.3f),0,0.65f);
-                    for(int j=0;j<3;j++) Box("Parcel "+i+"-"+j,new Vector3(x-0.8f+j*0.8f,1.3f,18.7f),new Vector3(0.55f,0.4f,0.5f),cream);
+                    Box("Dispatch shelf "+(char)('A'+i),new Vector3(x,0.55f,i==1?20.6f:18.5f),new Vector3(2.6f,1.1f,1.2f),wood);
+                    Sign("BAY "+(char)('A'+i),new Vector3(x,2.2f,i==1?20.7f:19.3f),0,0.65f);
+                    for(int j=0;j<3;j++) Box("Parcel "+i+"-"+j,new Vector3(x-0.8f+j*0.8f,1.3f,i==1?20.8f:18.7f),new Vector3(0.55f,0.4f,0.5f),cream);
                 }
+                // B bay has one approach: lure the sleeping clerk out before reaching the letter.
+                Wall("Dispatch lure screen",-4.5f,16.8f,5f,0.3f);
+                Wall("B bay left partition",-1.85f,19.1f,0.3f,3.8f);
+                Wall("B bay right partition",-0.15f,19.1f,0.3f,3.8f);
                 var systems = Spawn("StageSystems","Postal stage systems",Vector3.zero);
                 var player = Spawn("PlayerRig","Postal player",new Vector3(-4,0.05f,-4)).GetComponent<ThiefPlayer>();
                 context=systems.GetComponent<StageContext>(); context.player=player;
                 var definition=ScriptableObject.CreateInstance<StageDefinition>();
                 definition.stageId="gganwoor-postal-depot"; definition.title="아직 보내지 마세요!";
-                definition.briefing="홧김에 보낸 편지를 되찾아 주세요. 접수대의 직원 열쇠를 찾고, 분류 작업실에서 분류표를 확인한 뒤 B구역의 붉은 봉인 편지를 회수해 앞마당으로 돌아오세요. 실제 제한 시간은 없습니다.";
+                definition.briefing="홧김에 보낸 편지를 되찾아 주세요. 접수대의 직원 열쇠를 찾고, 분류 작업실의 분류표로 목적지를 확인해 주세요. 편지 앞의 졸고 있는 직원을 소리로 유인한 뒤 회수해 앞마당으로 돌아오세요. 실제 제한 시간은 없습니다.";
                 definition.requiredItemIds=new[]{PostalBriefing.ManifestId,PostalBriefing.LetterId};
                 definition.objectiveText="분류표를 확인하고 붉은 봉인 편지를 회수하세요.";
                 definition.exitText="앞마당의 초록 출구에서 F로 탈출하세요.";
                 AssetDatabase.CreateAsset(definition,Folder+"/PostalDepot Definition.asset");
                 context.definition=definition;
                 Item("Key","Staff key",new Vector3(-5,1.3f,2.6f),"직원 열쇠","postal_staff_key");
-                Item("Collectible","Route manifest",new Vector3(-4.7f,1.28f,9.1f),"분류표 확인 · B구역 / 붉은 봉인",PostalBriefing.ManifestId,new Vector3(0.6f,0.06f,0.4f),gold);
-                Item("Collectible","Letter B",new Vector3(-1,1.3f,18.1f),"붉은 봉인 편지",PostalBriefing.LetterId,new Vector3(0.55f,0.12f,0.35f),red);
+                Item("Collectible","Route manifest",new Vector3(-4.7f,1.28f,9.9f),"분류표 확인 · B구역 / 붉은 봉인",PostalBriefing.ManifestId,new Vector3(0.6f,0.06f,0.4f),gold);
+                Item("Collectible","Letter B",new Vector3(-1,1.3f,20.35f),"붉은 봉인 편지",PostalBriefing.LetterId,new Vector3(0.55f,0.12f,0.35f),red);
                 var door=Spawn("Door","Sorting room bell door",new Vector3(-4,0,6)).GetComponent<ThiefInteractable>();
-                door.requiredItemId="postal_staff_key"; door.displayName="분류실 문 · 문과 종 [F]";
+                door.requiredItemId="postal_staff_key"; door.displayName="분류실 문 · 문과 종";
                 door.relation.firstMedium="출입문";door.relation.secondMedium="종";door.relation.grade=2;
                 DoorMaterial(door);
                 Resonator("Sorting stamp",new Vector3(-6.5f,1.1f,11.7f),"작업대 · 손 / 날짜 도장",2);
                 Resonator("Service receiver",new Vector3(4,1.0f,10.8f),"하역 종 · 주입 대상",1);
-                Resonator("Dispatch receiver",new Vector3(5.4f,1,16),"빈 우편함 · 주입 대상",1);
-                Resonator("Dispatch source",new Vector3(-6.5f,1,16.2f),"분류 손잡이 · 소리 원천",2);
+                Resonator("Dispatch receiver",new Vector3(-2.7f,1,16.4f),"빈 우편함 · 주입 대상",1);
+                Resonator("Dispatch source",new Vector3(-6.5f,1,16.2f),"분류 손잡이 · 소리 원천",1);
                 var exit=Spawn("Exit","Yard exit",new Vector3(-4,0.15f,-5.7f)).GetComponent<ThiefInteractable>();
                 exit.displayName="분류소 밖으로 탈출";
                 foreach(var renderer in exit.GetComponentsInChildren<Renderer>()) {renderer.sharedMaterial=teal;PrefabUtility.RecordPrefabInstancePropertyModifications(renderer);}
@@ -111,8 +115,8 @@ namespace SoundThief.PostalDepot.Editor
                 surface.collectObjects=CollectObjects.Children;surface.useGeometry=NavMeshCollectGeometry.PhysicsColliders;surface.layerMask=1<<8;
                 surface.BuildNavMesh();
                 AssetDatabase.CreateAsset(surface.navMeshData,Folder+"/PostalDepot NavMesh.asset");
-                Spawn("Guard","Sorting guard",new Vector3(-5,0,11));
-                Spawn("Guard","Dispatch guard",new Vector3(0,0,16.5f));
+                Spawn("Guard","Sorting guard",new Vector3(-7,0,8));
+                Spawn("Guard","Dispatch guard",new Vector3(-1,0,18.2f));
                 context.Bind(); SoundThief.Editor.StageAuthoring.RecordContext(context);
                 foreach(var item in SceneManager.GetActiveScene().GetRootGameObjects().SelectMany(o=>o.GetComponentsInChildren<ThiefInteractable>(true)))
                 {PrefabUtility.RecordPrefabInstancePropertyModifications(item);if(item.relation)PrefabUtility.RecordPrefabInstancePropertyModifications(item.relation);}

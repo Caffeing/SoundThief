@@ -58,6 +58,31 @@ namespace SoundThief.PostalDepot.Tests
             Assert.That(Player.transform.position.z,Is.LessThan(-0.2f));
             yield return null;
         }
+        [UnityTest] public IEnumerator StandingPlayerCanTargetLowExitAfterMoving()
+        {
+            Move(new Vector3(-3.74f,0.08f,-4.2f));
+            Player.GetComponent<CharacterController>().Move(Vector3.forward*0.27f);
+            Player.view.transform.localPosition=new Vector3(0,1.65f,0);
+            Physics.SyncTransforms();
+            Player.view.transform.LookAt(Named("Yard exit").GetComponentInChildren<Collider>().bounds.center);
+            typeof(ThiefPlayer).GetMethod("FindTarget",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(Player,null);
+            Assert.That(Player.Target,Is.SameAs(Named("Yard exit")));
+            yield return null;
+        }
+        [UnityTest] public IEnumerator ExternalWallStillBlocksInteraction()
+        {
+            Move(new Vector3(-4,0.08f,-4));
+            Player.view.transform.localPosition=new Vector3(0,1.65f,0);
+            var exit=Named("Yard exit");
+            var obstacle=GameObject.CreatePrimitive(PrimitiveType.Cube);
+            obstacle.transform.position=Vector3.Lerp(Player.view.transform.position,exit.GetComponentInChildren<Collider>().bounds.center,0.5f);
+            obstacle.transform.localScale=Vector3.one*0.4f;
+            Physics.SyncTransforms();
+            Player.view.transform.LookAt(exit.GetComponentInChildren<Collider>().bounds.center);
+            typeof(ThiefPlayer).GetMethod("FindTarget",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(Player,null);
+            Assert.That(Player.Target,Is.Null,"Ignoring the rig must not allow interaction through walls.");
+            Object.Destroy(obstacle);yield return null;
+        }
         [UnityTest] public IEnumerator RouteClueAndLetterAreBothRequiredForEscape()
         {
             var exit=Named("Yard exit");exit.Interact(Player);Assert.That(Mission.Completed,Is.False);

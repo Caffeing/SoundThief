@@ -78,6 +78,33 @@ namespace SoundThief.Tests
             Assert.That(player.transform.position.z, Is.GreaterThan(start + 0.1f));
         }
         [UnityTest]
+        public IEnumerator SubMillimetreFrameStepsStillMoveThePlayer()
+        {
+            float previousCaptureDelta = Time.captureDeltaTime;
+            var keyboard = UnityEngine.InputSystem.Keyboard.current;
+            try
+            {
+                Time.captureDeltaTime = 0.0001f;
+                player.enabled = true;
+                yield return null;
+                yield return null;
+                float start = player.transform.position.z;
+                UnityEngine.InputSystem.InputSystem.QueueStateEvent(keyboard,
+                    new UnityEngine.InputSystem.LowLevel.KeyboardState(UnityEngine.InputSystem.Key.W));
+                UnityEngine.InputSystem.InputSystem.Update();
+                for (int frame = 0; frame < 40; frame++) yield return null;
+                Assert.That(player.transform.position.z - start, Is.GreaterThan(0.01f),
+                    "Valid movement must survive frame steps smaller than the controller's legacy 1 mm threshold.");
+            }
+            finally
+            {
+                UnityEngine.InputSystem.InputSystem.QueueStateEvent(keyboard,
+                    new UnityEngine.InputSystem.LowLevel.KeyboardState());
+                UnityEngine.InputSystem.InputSystem.Update();
+                Time.captureDeltaTime = previousCaptureDelta;
+            }
+        }
+        [UnityTest]
         public IEnumerator ExtractionMutesWholeRelationAndBlocksSecondCharge()
         {
             ExtractDoor(); var charge = player.Held;
