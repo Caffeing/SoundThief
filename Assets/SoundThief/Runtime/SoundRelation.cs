@@ -8,6 +8,7 @@ namespace SoundThief
     {
         public string firstMedium = "손", secondMedium = "금속";
         [Range(1, 3)] public int grade = 2;
+        public AudioClip soundClip;
         public bool IsMuted { get; private set; }
         public string Label => firstMedium + " ↔ " + secondMedium;
         public SoundCharge Extract(SoundRules rules)
@@ -19,7 +20,7 @@ namespace SoundThief
         public void Restore() => IsMuted = false;
         public void MakeNoise(SoundWorld world)
         {
-            if (!IsMuted) world.Pulse(transform.position, grade, null);
+            if (!IsMuted) world.Pulse(transform.position, grade, null, soundClip);
         }
     }
 

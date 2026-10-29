@@ -57,7 +57,7 @@ namespace SoundThief
             if (target && target.relation)
                 prompt.text += "\n" + target.relation.Label + " · 등급 " + target.relation.grade + (target.relation.IsMuted ? " · 무음 / 복구 대기" : " · [E] 추출");
             if (target && target.emitter)
-                prompt.text += target.emitter.Active ? "\n주입 출력 · 등급 " + target.emitter.CurrentGrade : charge != null ? "\n[Q] 소리 주입" : "";
+                prompt.text += target.emitter.Pending ? "\n주입 대기 · 3초 후 출력" : target.emitter.Active ? "\n주입 출력 · 등급 " + target.emitter.CurrentGrade : charge != null ? "\n[Q] 소리 주입" : "";
             modal.SetActive(!mission.Accepted || mission.Paused || mission.Completed || mission.ContractVisible);
             contractText.text = mission.Completed ? "의뢰 완료\n\n" + mission.Title + "\n목표물을 회수하고 탈출했습니다.\n\n[R] 의뢰 처음부터 다시 하기"
                 : mission.Paused ? "일시정지\n\n소리 보유 시간과 경비 행동이 멈췄습니다.\n\n[Esc] 계속    [R] 전체 재시작"

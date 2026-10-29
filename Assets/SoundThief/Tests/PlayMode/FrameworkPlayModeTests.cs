@@ -56,7 +56,7 @@ namespace SoundThief.Tests
             Assert.That(errors.Any(e=>e.Contains("StageContext")),Is.True);
             Assert.That(errors.Any(e=>e.Contains("missing")),Is.True);
             Assert.That(errors.Any(e=>e.Contains("중복")),Is.True);
-            Assert.That(errors.Any(e=>e.Contains("HUD")),Is.True);
+            Assert.That(errors.Any(e=>e.Contains("게임 화면")),Is.True);
             Object.Destroy(duplicate.gameObject);Object.Destroy(clone);context.definition=original;yield return null;
         }
         [UnityTest] public IEnumerator DoorRespectsAuthoredRotationAndInventoryRejectsDuplicateIds()

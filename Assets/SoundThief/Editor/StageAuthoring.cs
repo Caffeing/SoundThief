@@ -81,7 +81,7 @@ namespace SoundThief.Editor
             });
             foreach(var item in manor.GetRootGameObjects().SelectMany(o=>o.GetComponentsInChildren<ThiefInteractable>(true)))
             {
-                string name=item.kind==InteractionKind.Key?"Key":item.kind==InteractionKind.Door?"Door":item.kind==InteractionKind.Treasure?"Collectible":item.kind==InteractionKind.Exit?"Exit":"Resonator";
+                string name=item.kind==InteractionKind.Key?"현관 열쇠":item.kind==InteractionKind.Door?"Door":item.kind==InteractionKind.Treasure?"Collectible":item.kind==InteractionKind.Exit?"Exit":"Resonator";
                 SavePrefab(item.gameObject,name,o=> { var i=o.GetComponent<ThiefInteractable>(); if(name=="Collectible") {i.kind=InteractionKind.Collectible;i.itemId="objective";} });
             }
             var guard=manor.GetRootGameObjects().SelectMany(o=>o.GetComponentsInChildren<GuardAgent>(true)).First();
@@ -106,7 +106,7 @@ namespace SoundThief.Editor
             EditorUtility.SetDirty(context.definition);
             var floor=GameObject.CreatePrimitive(PrimitiveType.Cube);floor.name="Geometry - floor";floor.layer=8;floor.transform.position=new Vector3(0,-0.25f,5);floor.transform.localScale=new Vector3(14,0.5f,20);
             for(int i=0;i<2;i++) {var item=Spawn("Collectible",new Vector3(i==0?-2:2,1,8+i*3)).GetComponent<ThiefInteractable>();item.itemId=i==0?"relic_a":"relic_b";item.displayName=i==0?"붉은 유물":"푸른 유물";PrefabUtility.RecordPrefabInstancePropertyModifications(item);}
-            var key=Spawn("Key",new Vector3(-2,1,2)).GetComponent<ThiefInteractable>();key.itemId="copper_key";key.displayName="구리 열쇠";
+            var key=Spawn("현관 열쇠",new Vector3(-2,1,2)).GetComponent<ThiefInteractable>();key.itemId="copper_key";key.displayName="구리 열쇠";
             PrefabUtility.RecordPrefabInstancePropertyModifications(key);
             var door=Spawn("Door",new Vector3(-1,0,5)).GetComponent<ThiefInteractable>();door.requiredItemId="copper_key";door.displayName="구리 열쇠 문";
             PrefabUtility.RecordPrefabInstancePropertyModifications(door);

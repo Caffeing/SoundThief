@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-30",
+  "scene": "Assets/Scenes/ManorPrototype.unity",
+  "tests": {
+    "summary": {
+      "total": 38,
+      "passed": 38,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0
+    },
+    "durationSeconds": 186.51,
+    "resultFile": "stage1-stealth-test-results.json"
+  },
+  "liveBefore": {
+    "playing": true,
+    "frame": 1,
+    "time": 0.0
+  },
+  "liveAfter": {
+    "playing": true,
+    "frame": 2034,
+    "time": 42.2531281,
+    "guard": [
+      {
+        "name": "Study guard",
+        "state": "Patrolling",
+        "position": "(-12.40, 0.08, 17.12)"
+      }
+    ]
+  },
+  "visualReview": {
+    "playing": true,
+    "paused": true,
+    "frame": 2459,
+    "time": 42.2531281,
+    "helmets": [
+      {
+        "name": "Dining guard",
+        "headTop": 1.69064057,
+        "capBottom": 1.4980495,
+        "capTop": 1.75897384
+      },
+      {
+        "name": "Sleeping guard",
+        "headTop": 1.69064057,
+        "capBottom": 1.4980495,
+        "capTop": 1.75897384
+      },
+      {
+        "name": "Study guard",
+        "headTop": 1.669544,
+        "capBottom": 1.445413,
+        "capTop": 1.76374424
+      }
+    ],
+    "soundObjects": 15,
+    "visibleVision": 1
+  },
+  "captureMethod": "Runtime review camera after confirming advancing frames and simulation time; paused only for close visual inspection. Not a manual keyboard completion.",
+  "images": [
+    "Images/stage1-readability-outline.png",
+    "Images/stage1-readability-vision.png",
+    "Images/stage1-readability-helmet.png",
+    "Images/stage1-readability-study.png"
+  ],
+  "finalConsole": {
+    "entries": [],
+    "cursor": 4738,
+    "session": "c7d8f06a86544a2f9e3f6edc6f58ed91",
+    "returned": 0,
+    "dropped": false,
+    "reset": false,
+    "counts": {
+      "error": 0,
+      "warn": 0,
+      "log": 0
+    },
+    "groundTruth": {
+      "sampledUtc": "2026-10-29T18:33:01.7954838Z",
+      "ageMs": 103,
+      "compilationFailed": false,
+      "compiling": false,
+      "consoleErrors": 0,
+      "consoleWarnings": 0,
+      "consoleLogs": 0,
+      "seeded": true
+    }
+  }
+}
