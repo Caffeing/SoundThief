@@ -58,6 +58,10 @@ namespace SoundThief
             foreach (var source in GetComponentsInChildren<AudioSource>()) { source.Stop(); Destroy(source.gameObject); }
             foreach (var ring in GetComponentsInChildren<SoundRing>()) Destroy(ring.gameObject);
         }
+        public void ResetFeedback()
+        {
+            ClearFeedback(); BlastCount = 0; LastBlastPosition = Vector3.zero;
+        }
         void OnDestroy() { foreach (var clip in tones.Values) if (clip) Destroy(clip); }
     }
 

@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace SoundThief
 {
-    public enum InteractionKind { Key, Door, Resonator, Treasure, Exit, Collectible }
+    // Serialized values 0..5 belong to the shared stage prefabs. Do not reorder.
+    public enum InteractionKind { Key = 0, Door = 1, Resonator = 2, Treasure = 3, Exit = 4, Collectible = 5, ContractBoard = 6, GuildExit = 7, PracticeReset = 8 }
 
     public sealed class SoundRelation : MonoBehaviour
     {

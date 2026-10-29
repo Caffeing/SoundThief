@@ -19,14 +19,17 @@ namespace SoundThief
         Vector3 home;
         Quaternion homeRotation;
         float wakeStimulus, stateUntil, soundUntil, lastStimulus;
+        bool PracticeInactive => world && world.player && world.player.Mission.isGuild
+            && world.player.Mission.practice && !world.player.Mission.practice.IsPlayerInside;
         void Start()
         {
             agent = GetComponent<NavMeshAgent>(); agent.speed = world.rules.guardSpeed;
             agent.angularSpeed = 180; agent.stoppingDistance = 0.15f;
-            home = transform.position; homeRotation = transform.rotation; world.Guards.Add(this);
+            home = transform.position; homeRotation = transform.rotation; Goal = home; world.Guards.Add(this);
         }
         public void Hear(Vector3 position, int grade, SoundEmitter source)
         {
+            if (PracticeInactive) return;
             if (State == GuardState.Stunned || State == GuardState.Panic || State == GuardState.Chasing || State == GuardState.LastSeen) return;
             float distance = Vector3.Distance(transform.position, position);
             if (distance > grade * world.rules.hearingPerGrade) return;
@@ -53,9 +56,9 @@ namespace SoundThief
         }
         void Update()
         {
-            if (!agent || !world.player.Mission.CanAct) return;
+            if (!agent || !world.player.Mission.CanAct || PracticeInactive) return;
             // Contact ends a contract in every guard state, including sleep/stun/panic.
-            if (Vector3.Distance(transform.position, world.player.transform.position) < 0.85f)
+            if (!world.player.Mission.isGuild && Vector3.Distance(transform.position, world.player.transform.position) < 0.85f)
             { world.player.Mission.Caught(); return; }
             if (statusLabel)
             {
@@ -92,8 +95,25 @@ namespace SoundThief
         }
         public bool Stun()
         {
+            if (PracticeInactive) return false;
             if (State == GuardState.Panic || State == GuardState.Stunned) return false;
             Stop(); State = GuardState.Stunned; stateUntil = Time.time + world.rules.guardStun; return true;
+        }
+        public void ResetPractice()
+        {
+            if (!world.player.Mission.isGuild) return;
+            Stop();
+            if (agent && agent.isOnNavMesh) { agent.Warp(home); agent.velocity = Vector3.zero; }
+            transform.rotation = homeRotation; State = GuardState.Sleeping;
+            Goal = home;
+            wakeStimulus = 0; ReactingGrade = 0; listening = null;
+            stateUntil = soundUntil = lastStimulus = 0;
+            if (statusLabel)
+            {
+                statusLabel.text = "zzz";
+                statusLabel.color = new Color(0.7f, 1, 0.9f);
+                statusLabel.transform.rotation = world.player.view.transform.rotation;
+            }
         }
         void EnterAlert() { Stop(); State = GuardState.Alert; stateUntil = Time.time + world.rules.alertSeconds; ReactingGrade = 0; listening = null; }
         void Go(GuardState state, Vector3 position)

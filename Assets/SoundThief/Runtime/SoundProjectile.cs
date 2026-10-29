@@ -5,6 +5,7 @@ namespace SoundThief
     {
         SoundCharge charge;
         SoundWorld world;
+        public SoundWorld World => world;
         public void Init(SoundCharge value, SoundWorld soundWorld) { charge = value; world = soundWorld; }
         void Update() { if (charge != null && charge.Remaining <= 0) Detonate(); }
         void OnCollisionEnter(Collision collision)

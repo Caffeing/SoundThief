@@ -61,14 +61,15 @@ namespace SoundThief
         void Update()
         {
             var keys = Keyboard.current;
-            if (keys == null || Mission == null) return;
+            if (Mission == null) return;
             bool interact = interactRequested, extract = extractRequested, inject = injectRequested, toss = throwRequested;
             bool accept = acceptRequested, pause = pauseRequested, contract = contractRequested, restart = restartRequested;
             ClearRequests();
             if (restart) { Mission.Restart(); return; }
             if (pause) Mission.TogglePause();
             if (contract) Mission.ContractVisible = !Mission.ContractVisible;
-            if (!Mission.Accepted)
+            if (Mission.isGuild && Mission.ContractVisible && accept) Mission.Accept();
+            if (!Mission.isGuild && !Mission.Accepted)
             {
                 Target = null; connection.enabled = false;
                 if (accept || interact) Mission.Accept();
@@ -84,7 +85,7 @@ namespace SoundThief
                 transform.Rotate(0, delta.x, 0); pitch = Mathf.Clamp(pitch - delta.y, -80, 80);
                 view.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
             }
-            var movement = new Vector2((keys.dKey.isPressed ? 1 : 0) - (keys.aKey.isPressed ? 1 : 0),
+            var movement = keys == null ? Vector2.zero : new Vector2((keys.dKey.isPressed ? 1 : 0) - (keys.aKey.isPressed ? 1 : 0),
                 (keys.wKey.isPressed ? 1 : 0) - (keys.sKey.isPressed ? 1 : 0));
             movement = Vector2.ClampMagnitude(movement, 1);
             if (controller.isGrounded && gravitySpeed < 0) gravitySpeed = -2;
@@ -118,7 +119,7 @@ namespace SoundThief
             if (Target.kind == InteractionKind.Door && !Target.CanUnlock(this)) { Mission.Notify("문에 필요한 아이템을 먼저 찾아야 관계를 연결할 수 있습니다."); return false; }
             Held = Target.relation.Extract(Mission.rules);
             if (Held == null) { Mission.Notify("이 관계의 소리가 아직 돌아오지 않았습니다."); return false; }
-            Mission.Extracted = true;
+            Mission.RecordExtraction();
             Mission.Notify("소리를 들고 있습니다. 느린 보폭과 남은 시간을 확인하세요.");
             return true;
         }
@@ -126,7 +127,7 @@ namespace SoundThief
         {
             if (IsStunned || !Mission.CanAct || Held == null || !Target || !Target.emitter) return false;
             if (!Target.emitter.Inject(Held, Mission.World)) { Mission.Notify("이미 소리가 출력 중인 대상입니다."); return false; }
-            Held = null; Mission.Injected = true;
+            Held = null; Mission.RecordInjection();
             Mission.Notify("소리를 주입했습니다. 출력이 끝나면 원래 관계의 소리가 돌아옵니다.");
             return true;
         }
@@ -145,7 +146,7 @@ namespace SoundThief
             body.linearVelocity = view.transform.forward * 8 + Vector3.up * 3;
             Physics.IgnoreCollision(projectile.GetComponent<Collider>(), controller);
             projectile.AddComponent<SoundProjectile>().Init(Held, Mission.World);
-            Held = null;
+            Held = null; Mission.RecordThrow();
             Mission.Notify("소리를 던졌습니다. 착지하거나 남은 시간이 끝나면 폭발합니다.");
             return true;
         }
@@ -157,6 +158,12 @@ namespace SoundThief
             Mission.Notify("보유 시간 초과! 잠시 기절했습니다. 원래 소리는 복구되었습니다.");
         }
         public void Stun(float seconds) { stunUntil = Time.time + seconds; Target = null; if (connection) connection.enabled = false; }
+        public void ResetPracticeState()
+        {
+            Held?.Finish(); Held = null; stunUntil = 0;
+            Inventory.Clear(); Target = null;
+            if (connection) connection.enabled = false;
+        }
         void OnDestroy() { Held?.Finish(); if (lineMaterial) Destroy(lineMaterial); }
     }
 }

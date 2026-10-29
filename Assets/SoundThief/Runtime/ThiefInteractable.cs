@@ -24,6 +24,14 @@ namespace SoundThief
             if (!mission.CanAct || player.IsStunned || Acquired) return;
             switch (kind)
             {
+                case InteractionKind.ContractBoard:
+                    if (mission.isGuild) mission.Accept();
+                    break;
+                case InteractionKind.GuildExit:
+                    mission.Depart(); break;
+                case InteractionKind.PracticeReset:
+                    if (mission.isGuild) mission.practice?.ResetPractice();
+                    break;
                 case InteractionKind.Key:
                 case InteractionKind.Treasure:
                 case InteractionKind.Collectible:
@@ -37,7 +45,7 @@ namespace SoundThief
                     transform.localRotation = closedRotation * Quaternion.Euler(0, IsOpen ? openAngle : 0, 0);
                     var obstacle = GetComponent<UnityEngine.AI.NavMeshObstacle>();
                     if (obstacle) obstacle.enabled = !IsOpen;
-                    if (IsOpen) mission.DoorOpened = true;
+                    if (IsOpen && !mission.isGuild) mission.DoorOpened = true;
                     mission.Notify(relation && relation.IsMuted ? "무음으로 문을 움직였습니다." : "문 소리가 울렸습니다.");
                     break;
                 case InteractionKind.Resonator:
