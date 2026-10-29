@@ -141,13 +141,18 @@ namespace SoundThief.Tests
             Assert.That(player.transform.position.y, Is.GreaterThan(-0.1f), "The floor must support the player.");
         }
         [UnityTest]
-        public IEnumerator BoardAcceptsWithoutLeavingAndExitRejectsUnacceptedContract()
+        public IEnumerator TableOpensBeforeAcceptanceAndExitRejectsUnacceptedContract()
         {
             Find(InteractionKind.GuildExit).Interact(player);
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("Guild"));
             Assert.That(mission.Accepted, Is.False);
-            Aim(Find(InteractionKind.ContractBoard), Find(InteractionKind.ContractBoard).transform.position - Vector3.forward * 1.8f - Vector3.up * 1.5f);
+            Aim(Find(InteractionKind.ContractBoard), new Vector3(-2, 0.05f, -1));
             player.Target.Interact(player); yield return null;
+            Assert.That(mission.TableOpen, Is.True);
+            Assert.That(mission.Accepted, Is.False, "F on the table only opens the documents.");
+            Assert.That(mission.contractTable.AcceptCurrent(), Is.True);
+            Assert.That(mission.TableOpen, Is.True, "Acceptance must not release movement or depart.");
+            mission.contractTable.Close();
             Assert.That(mission.Accepted, Is.True);
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("Guild"));
             Assert.That(mission.practice.Extracted || mission.practice.Injected || mission.practice.Thrown, Is.False);
@@ -226,7 +231,7 @@ namespace SoundThief.Tests
         public IEnumerator SerializedGuildKindsAreNotCollectibleAndPracticeIsOptional()
         {
             Assert.That((int)InteractionKind.Collectible, Is.EqualTo(5), "Shared prefab serialization must remain stable.");
-            Assert.That(Find(InteractionKind.ContractBoard).name, Is.EqualTo("Contract board"));
+            Assert.That(Find(InteractionKind.ContractBoard).name, Is.EqualTo("Contract table"));
             Assert.That(Find(InteractionKind.GuildExit).name, Is.EqualTo("Departure door"));
             Assert.That(Find(InteractionKind.PracticeReset).name, Is.EqualTo("Practice reset"));
             Assert.That(mission.HasObjectives, Is.False);

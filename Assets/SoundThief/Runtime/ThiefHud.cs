@@ -10,6 +10,7 @@ namespace SoundThief
         TextMeshProUGUI title, objective, prompt, inventory, held, message, contractText;
         UnityEngine.UI.Image timer;
         GameObject modal;
+        GameObject[] playPanels;
         void Start()
         {
             // Use the local OS font without copying or redistributing a system font file.
@@ -31,12 +32,14 @@ namespace SoundThief
             timer = bar.GetComponent<UnityEngine.UI.Image>(); timer.color = new Color(0.15f, 0.95f, 0.78f);
             inventory = Text(bottom, "", 19, new Vector2(0.035f, 0.04f), new Vector2(0.97f, 0.30f));
             var controls = Panel("Controls", transform, new Vector2(0.68f, 0.03f), new Vector2(0.975f, 0.20f));
-            Text(controls, "WASD 이동 · 마우스 시점\nF 상호작용 · E 추출 · Q 주입\n" + (mission.rules.throwingEnabled ? "좌클릭 투척 · " : "") + "Ctrl 웅크리기\nTab 의뢰 · Esc 정지 · R 재시작", 18, new Vector2(0.05f, 0.08f), new Vector2(0.96f, 0.93f));
+            Text(controls, "WASD 이동 · 마우스 시점\nF 상호작용 · E 추출 · Q 주입\n" + (mission.rules.throwingEnabled ? "좌클릭 투척 · " : "") + "Ctrl 웅크리기\n" + (mission.isGuild ? "F 테이블 · ← → 문서 · ESC 닫기/정지" : "Tab 의뢰 · Esc 정지 · R 재시작") + "", 18, new Vector2(0.05f, 0.08f), new Vector2(0.96f, 0.93f));
             var cross = Text(transform, "+", 27, new Vector2(0.48f, 0.48f), new Vector2(0.52f, 0.52f)); cross.alignment = TextAlignmentOptions.Center;
             prompt = Text(transform, "", 22, new Vector2(0.22f, 0.30f), new Vector2(0.78f, 0.44f)); prompt.alignment = TextAlignmentOptions.Center;
             message = Text(transform, "", 19, new Vector2(0.16f, 0.21f), new Vector2(0.84f, 0.28f)); message.alignment = TextAlignmentOptions.Center;
             modal = Panel("Contract panel", transform, new Vector2(0.21f, 0.27f), new Vector2(0.79f, 0.77f)).gameObject;
             contractText = Text(modal.transform, "", 26, new Vector2(0.08f, 0.08f), new Vector2(0.92f, 0.92f));
+            playPanels = new[] { top.gameObject, bottom.gameObject, controls.gameObject, cross.gameObject, prompt.gameObject, message.gameObject };
+            if (mission.isGuild && mission.contractTable) gameObject.AddComponent<GuildContractView>().Build(mission.contractTable, font);
             foreach (var guard in FindObjectsByType<GuardAgent>(FindObjectsSortMode.None))
                 if (guard.gameObject.scene == gameObject.scene && guard.statusLabel) guard.statusLabel.font = font;
         }
@@ -44,6 +47,7 @@ namespace SoundThief
         {
             if (!mission || !objective) return;
             var player = mission.player;
+            foreach (var panel in playPanels) panel.SetActive(!mission.TableOpen);
             title.text = mission.isGuild ? "GUILD / 길드 · 선택형 연습장" : "SOUND THIEF / " + mission.Title;
             objective.text = mission.Objective;
             inventory.text = "아이템  |  " + (player.Inventory.Items.Count == 0 ? "없음" : string.Join(" · ", System.Linq.Enumerable.Select(player.Inventory.Items, item => item.label)));
@@ -59,10 +63,10 @@ namespace SoundThief
                 prompt.text += "\n" + target.relation.Label + " · 등급 " + target.relation.grade + (target.relation.IsMuted ? " · 무음 / 복구 대기" : " · [E] 추출");
             if (target && target.emitter)
                 prompt.text += target.emitter.Active ? "\n주입 출력 · 등급 " + target.emitter.CurrentGrade : charge != null ? "\n[Q] 소리 주입" : "";
-            modal.SetActive((!mission.isGuild && !mission.Accepted) || mission.Paused || mission.Completed || mission.ContractVisible);
-            contractText.text = mission.Completed ? "의뢰 완료\n\n" + mission.Title + "\n목표물을 회수하고 탈출했습니다.\n\n[R] 의뢰 처음부터 다시 하기"
+            modal.SetActive(!mission.TableOpen && ((!mission.isGuild && !mission.Accepted) || mission.Paused || mission.Completed || mission.ContractVisible));
+            contractText.text = mission.Completed ? "의뢰 완료\n\n" + mission.Title + "\n목표물을 회수하고 탈출했습니다.\n\n" + (mission.returnToGuildOnSuccess ? "길드 출입문으로 복귀합니다…" : "[R] 의뢰 처음부터 다시 하기")
                 : mission.Paused ? "일시정지\n\n소리 보유 시간과 경비 행동이 멈췄습니다.\n\n[Esc] 계속    [R] 전체 재시작"
-                : mission.Title + "\n\n" + mission.Briefing + "\n\n" + (mission.isGuild ? (!mission.Accepted ? "게시판 [F] / [Enter] 수락 · [Tab] 닫기\n연습은 선택 · 출구 문 [F]로 출발" : "출구 문 [F]로 출발 · 연습 완료 불필요\n[Tab] 닫기 · 시간은 흐릅니다") : !mission.Accepted ? "[Enter / F] 의뢰 시작" : "[Tab] 닫기 · 의뢰창을 열어도 시간은 흐릅니다");
+                : mission.Title + "\n\n" + mission.Briefing + "\n\n" + (mission.isGuild ? (!mission.Accepted ? "의뢰 테이블 [F] 문서 열기 · ESC 닫기\n연습은 선택 · 출구 문 [F]로 출발" : "출구 문 [F]로 출발 · 연습 완료 불필요\n[Tab] 닫기 · 시간은 흐릅니다") : !mission.Accepted ? "[Enter / F] 의뢰 시작" : "[Tab] 닫기 · 의뢰창을 열어도 시간은 흐릅니다");
         }
         static RectTransform Panel(string name, Transform parent, Vector2 min, Vector2 max)
         {

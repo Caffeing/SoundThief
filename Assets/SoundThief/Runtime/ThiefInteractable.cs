@@ -25,7 +25,7 @@ namespace SoundThief
             switch (kind)
             {
                 case InteractionKind.ContractBoard:
-                    if (mission.isGuild) mission.Accept();
+                    if (mission.isGuild && mission.contractTable) mission.contractTable.Open();
                     break;
                 case InteractionKind.GuildExit:
                     mission.Depart(); break;

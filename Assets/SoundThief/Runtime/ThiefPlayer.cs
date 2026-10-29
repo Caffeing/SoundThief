@@ -24,7 +24,7 @@ namespace SoundThief
         Material lineMaterial;
         InputActionMap actions;
         bool interactRequested, extractRequested, injectRequested, throwRequested;
-        bool acceptRequested, pauseRequested, contractRequested, restartRequested;
+        bool acceptRequested, pauseRequested, contractRequested, restartRequested, previousRequested, nextRequested;
 
         void OnEnable()
         {
@@ -37,6 +37,8 @@ namespace SoundThief
             Bind("Pause", "<Keyboard>/escape", () => pauseRequested = true);
             Bind("Contract", "<Keyboard>/tab", () => contractRequested = true);
             Bind("Restart", "<Keyboard>/r", () => restartRequested = true);
+            Bind("Previous contract", "<Keyboard>/leftArrow", () => previousRequested = true);
+            Bind("Next contract", "<Keyboard>/rightArrow", () => nextRequested = true);
             actions.Enable();
         }
         void Bind(string name, string binding, System.Action request)
@@ -47,7 +49,7 @@ namespace SoundThief
         void ClearRequests()
         {
             interactRequested = extractRequested = injectRequested = throwRequested = false;
-            acceptRequested = pauseRequested = contractRequested = restartRequested = false;
+            acceptRequested = pauseRequested = contractRequested = restartRequested = previousRequested = nextRequested = false;
         }
 
         void Awake()
@@ -64,11 +66,21 @@ namespace SoundThief
             if (Mission == null) return;
             bool interact = interactRequested, extract = extractRequested, inject = injectRequested, toss = throwRequested;
             bool accept = acceptRequested, pause = pauseRequested, contract = contractRequested, restart = restartRequested;
+            bool previous = previousRequested, next = nextRequested;
             ClearRequests();
+            // Table browsing locks controls, not world time or a held sound's deadline.
+            if (!Mission.Paused && (Mission.Accepted || Mission.isGuild) && Held != null && Held.Remaining <= 0) ExpireHeld();
+            if (Mission.TableOpen)
+            {
+                Target = null; connection.enabled = false;
+                if (IsStunned || pause) Mission.contractTable.Close();
+                else if (previous != next) Mission.contractTable.Turn(next ? 1 : -1);
+                else if (interact || accept) Mission.contractTable.AcceptCurrent();
+                return;
+            }
             if (restart) { Mission.Restart(); return; }
             if (pause) Mission.TogglePause();
-            if (contract) Mission.ContractVisible = !Mission.ContractVisible;
-            if (Mission.isGuild && Mission.ContractVisible && accept) Mission.Accept();
+            if (contract && !Mission.isGuild) Mission.ContractVisible = !Mission.ContractVisible;
             if (!Mission.isGuild && !Mission.Accepted)
             {
                 Target = null; connection.enabled = false;
@@ -77,7 +89,6 @@ namespace SoundThief
             }
             if (!Mission.CanAct) return;
             // Deadline stays in game time; explicit pause is the only time freeze.
-            if (Held != null && Held.Remaining <= 0) ExpireHeld();
             if (IsStunned) { Target = null; connection.enabled = false; return; }
             if (Mouse.current != null && Cursor.lockState == CursorLockMode.Locked)
             {
@@ -103,8 +114,14 @@ namespace SoundThief
         void FindTarget()
         {
             Target = null;
-            if (Physics.Raycast(view.transform.position, view.transform.forward, out var hit, Mission.rules.interactDistance, ~0, QueryTriggerInteraction.Ignore))
-                Target = hit.collider.GetComponentInParent<ThiefInteractable>();
+            // Looking down at a desk can cross the player's own capsule near its top.
+            // Ignore only the player's colliders; the nearest remaining solid still blocks selection.
+            float nearest = float.PositiveInfinity;
+            foreach (var hit in Physics.RaycastAll(view.transform.position, view.transform.forward, Mission.rules.interactDistance, ~0, QueryTriggerInteraction.Ignore))
+            {
+                if (hit.collider.transform.IsChildOf(transform) || hit.distance >= nearest) continue;
+                nearest = hit.distance; Target = hit.collider.GetComponentInParent<ThiefInteractable>();
+            }
             connection.enabled = Target && Target.relation;
             if (connection.enabled)
             {
@@ -158,6 +175,16 @@ namespace SoundThief
             Mission.Notify("보유 시간 초과! 잠시 기절했습니다. 원래 소리는 복구되었습니다.");
         }
         public void Stun(float seconds) { stunUntil = Time.time + seconds; Target = null; if (connection) connection.enabled = false; }
+        public void PlaceAt(Transform spawn)
+        {
+            controller.enabled = false;
+            transform.SetPositionAndRotation(spawn.position, spawn.rotation);
+            controller.enabled = true;
+            pitch = gravitySpeed = 0;
+            view.transform.localRotation = Quaternion.identity;
+            view.transform.localPosition = Vector3.up * 1.65f;
+            Physics.SyncTransforms();
+        }
         public void ResetPracticeState()
         {
             Held?.Finish(); Held = null; stunUntil = 0;
