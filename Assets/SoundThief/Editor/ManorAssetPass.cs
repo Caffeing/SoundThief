@@ -17,8 +17,8 @@ namespace SoundThief.Editor
     {
         const string ScenePath = "Assets/Scenes/ManorPrototype.unity";
         const string Generated = "Assets/SoundThief/Generated/";
-        const string Dungeon = "Assets/Dungeon Megapack/Prefabs/";
-        const string Slavica = "Assets/EmaceArt/Slavic World/Prefabs/";
+        const string Dungeon = "Assets/ThirdParty/Dungeon Megapack/Prefabs/";
+        const string Slavica = "Assets/ThirdParty/EmaceArt/Slavic World/Prefabs/";
         const string KnightPath = "Assets/ThirdParty/Quaternius/Knight/";
         const string ClockPath = "Assets/ThirdParty/Grab3D/GrandfatherClock/";
         static Material plaster, stone, oak, iron, leather, skin, brass, cloth, border;

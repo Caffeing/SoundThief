@@ -48,7 +48,7 @@ namespace SoundThief.Editor
             if (EditorApplication.isPlaying || scene.path != "Assets/Scenes/ManorPrototype.unity") throw new InvalidOperationException("Open manor in edit mode.");
             if (GameObject.Find("서재 관찰용 높은 책장")) return "Study cover already present.";
             var parent = GameObject.Find("04 상호작용 사물").transform;
-            var shelf = ManorAssetPass.Fit("Assets/Dungeon Megapack/Prefabs/Furniture/Wardrobe_2.prefab", "서재 관찰용 높은 책장", parent,
+            var shelf = ManorAssetPass.Fit("Assets/ThirdParty/Dungeon Megapack/Prefabs/Furniture/Wardrobe_2.prefab", "서재 관찰용 높은 책장", parent,
                 new Bounds(new Vector3(-12.3f, 1.15f, 12.9f), new Vector3(2.8f, 2.3f, .65f)), Quaternion.identity);
             foreach (var f in shelf.GetComponentsInChildren<MeshFilter>().Where(f => f.GetComponent<Renderer>().enabled))
             { f.gameObject.layer = 8; f.gameObject.AddComponent<MeshCollider>().sharedMesh = f.sharedMesh; }
@@ -194,10 +194,10 @@ namespace SoundThief.Editor
             if (!brass) { brass = new Material(Shader.Find("Universal Render Pipeline/Lit")); AssetDatabase.CreateAsset(brass, brassPath); }
             brass.color = new Color(.5f, .3f, .1f); brass.SetFloat("_Metallic", .6f); brass.SetFloat("_Smoothness", .3f);
             EditorUtility.SetDirty(brass);
-            ManorAssetPass.Fit("Assets/EmaceArt/Slavic World/Prefabs/Items/Crockery/EA03_Items_House_Pot_01a_PRE.prefab",
+            ManorAssetPass.Fit("Assets/ThirdParty/EmaceArt/Slavic World/Prefabs/Items/Crockery/EA03_Items_House_Pot_01a_PRE.prefab",
                 "황동 물병 외형", lure.transform, new Bounds(lure.transform.position, new Vector3(.35f, .32f, .34f)), Quaternion.identity, brass);
             var colliderLure = lure.AddComponent<BoxCollider>(); colliderLure.size = new Vector3(.35f, .32f, .34f);
-            var stool = ManorAssetPass.Fit("Assets/EmaceArt/Slavic World/Prefabs/Prop/Furniture/EA03_Prop_Stool_01a_PRE.prefab",
+            var stool = ManorAssetPass.Fit("Assets/ThirdParty/EmaceArt/Slavic World/Prefabs/Prop/Furniture/EA03_Prop_Stool_01a_PRE.prefab",
                 "물병 옆 보조 의자", root.transform, new Bounds(new Vector3(-14.2f, .375f, 7.9f), new Vector3(.55f, .75f, .55f)), Quaternion.identity);
             foreach (var f in stool.GetComponentsInChildren<MeshFilter>().Where(f => f.GetComponent<Renderer>().enabled))
             { f.gameObject.layer = 8; f.gameObject.AddComponent<MeshCollider>().sharedMesh = f.sharedMesh; }

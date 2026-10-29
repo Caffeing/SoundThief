@@ -26,7 +26,7 @@ namespace SoundThief.Editor
         }
         static Mesh BrickUnit()
         {
-            const string sourcePath = "Assets/EmaceArt/Slavic World/Prefabs/Prop/Carpentry/EA03_Prop_StoneMason_Brick_01a_PRE.prefab";
+            const string sourcePath = "Assets/ThirdParty/EmaceArt/Slavic World/Prefabs/Prop/Carpentry/EA03_Prop_StoneMason_Brick_01a_PRE.prefab";
             var source = AssetDatabase.LoadAssetAtPath<GameObject>(sourcePath);
             if (!source) throw new InvalidOperationException("Missing purchased masonry brick.");
             var instance = Object.Instantiate(source);
@@ -91,7 +91,7 @@ namespace SoundThief.Editor
                 for (int x = 0; x < nx; x++) for (int z = 0; z < nz; z++)
                 {
                     var b = new Bounds(new Vector3(zone.min.x + (x + .5f) * dx, zone.center.y, zone.min.z + (z + .5f) * dz), new Vector3(dx, zone.size.y, dz));
-                    var piece = ManorAssetPass.Fit("Assets/Dungeon Megapack/Prefabs/Furniture/Floor_2_1A.prefab", "석재 바닥 원본 모듈", root.transform, b, Quaternion.identity, floorMaterial);
+                    var piece = ManorAssetPass.Fit("Assets/ThirdParty/Dungeon Megapack/Prefabs/Furniture/Floor_2_1A.prefab", "석재 바닥 원본 모듈", root.transform, b, Quaternion.identity, floorMaterial);
                     foreach (var f in piece.GetComponentsInChildren<MeshFilter>().Where(f => f.GetComponent<Renderer>().enabled))
                     {
                         for (int sub = 0; sub < f.sharedMesh.subMeshCount; sub++) floorPieces.Add(new CombineInstance { mesh = f.sharedMesh, subMeshIndex = sub, transform = f.transform.localToWorldMatrix });
@@ -103,7 +103,7 @@ namespace SoundThief.Editor
             var floorObject = new GameObject("저택 석재 바닥 통합 외형"); floorObject.transform.SetParent(root.transform, false); floorObject.AddComponent<MeshFilter>().sharedMesh = floorMesh; floorObject.AddComponent<MeshRenderer>().sharedMaterial = floorMaterial;
             var archMaterial = Slate("Manor arch dressed stone", new Color(.34f, .38f, .47f));
             foreach (float z in new[] { 10.5f, 19.5f })
-                ManorAssetPass.Fit("Assets/Dungeon Megapack/Prefabs/Walls A/Arch_1A.prefab", "Study stone arch " + z, root.transform, new Bounds(new Vector3(-9, 1.95f, z), new Vector3(.62f, 3.9f, 4.4f)), Quaternion.Euler(0, 90, 0), archMaterial);
+                ManorAssetPass.Fit("Assets/ThirdParty/Dungeon Megapack/Prefabs/Walls A/Arch_1A.prefab", "Study stone arch " + z, root.transform, new Bounds(new Vector3(-9, 1.95f, z), new Vector3(.62f, 3.9f, 4.4f)), Quaternion.Euler(0, 90, 0), archMaterial);
             foreach (var column in manor.GetComponentsInChildren<Transform>(true).Where(t => t.name.StartsWith("Art EA_Arch_Pillar")))
                 foreach (var renderer in column.GetComponentsInChildren<Renderer>(true)) renderer.sharedMaterials = renderer.sharedMaterials.Select(_ => archMaterial).ToArray();
             EditorSceneManager.MarkSceneDirty(scene); AssetDatabase.SaveAssets(); EditorSceneManager.SaveScene(scene);

@@ -6,8 +6,8 @@
 
 | 팩 | 프로젝트 경로 | 적용 |
 | --- | --- | --- |
-| EmaceArt Slavica | `Assets/EmaceArt/Slavic World` | 문·가구·식기·석벽 모듈·랜턴, 서재 수납장/사다리/책, 벤치·쿠션·보관함, 경비 인물과 대기·걷기 |
-| EmaceArt Harboria | `Assets/EmaceArt/Harboria` | 홀 기둥과 네 종류 책 묶음 |
+| EmaceArt Slavica | `Assets/ThirdParty/EmaceArt/Slavic World` | 문·가구·식기·석벽 모듈·랜턴, 서재 수납장/사다리/책, 벤치·쿠션·보관함, 경비 인물과 대기·걷기 |
+| EmaceArt Harboria | `Assets/ThirdParty/EmaceArt/Harboria` | 홀 기둥과 네 종류 책 묶음 |
 | RG Poly Cute Dungeon | `Assets/Dungeon Megapack` | 석재 바닥·목재 천장과 보·아치·문틀·사슬·열쇠·식기·의자·방패, 동전과 잔을 조립한 황동 인장 |
 | [Quaternius Animated Knight](https://quaternius.com/packs/knightcharacter.html) · CC0 | `Assets/ThirdParty/Quaternius/Knight` | 장식 갑옷 본체·닫힌 투구, Slavica 경비에 조합한 열린 투구와 견갑 |
 | [Grab3D Grandfather Clock](https://grab3d.com/models/furniture/grandfather-clock/) · CC0 | `Assets/ThirdParty/Grab3D/GrandfatherClock` | 서재 태엽 시계, 원본 FBX·텍스처·라이선스·출처 manifest |

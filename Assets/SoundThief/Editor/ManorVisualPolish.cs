@@ -62,7 +62,7 @@ namespace SoundThief.Editor
             {
                 var filter = renderer.GetComponent<MeshFilter>();
                 // Use the original imported mesh even when this scene was already polished.
-                var original = AssetDatabase.LoadAllAssetsAtPath("Assets/EmaceArt/Slavic World/Meshes/EA03_Items_House_Lantern_01a.fbx")
+                var original = AssetDatabase.LoadAllAssetsAtPath("Assets/ThirdParty/EmaceArt/Slavic World/Meshes/EA03_Items_House_Lantern_01a.fbx")
                     .OfType<Mesh>().First(m => m.name.EndsWith("LOD0"));
                 string meshPath = Generated + "ManorLanternLitPanes.asset";
                 var mesh = AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
