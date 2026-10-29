@@ -3,7 +3,7 @@
 ## 작업 전에 반드시 읽을 문서
 
 이 프로젝트에서 조사·계획·코드/씬/프리팹 변경을 시작하기 전에
-[`Assets/Documentation/JinHo_독립 시스템 범위와 협업 안내.md`](Assets/Documentation/JinHo_독립%20시스템%20범위와%20협업%20안내.md)를 읽는다.
+[`Assets/JinHo/Documentation/JinHo_독립 시스템 범위와 협업 안내.md`](Assets/JinHo/Documentation/JinHo_독립%20시스템%20범위와%20협업%20안내.md)를 읽는다.
 파일이 없거나 읽을 수 없으면 읽었다고 주장하지 말고 사용자에게 알린다.
 상위 지침과 사용자의 최신 명시적 지시를 우선한다.
 
