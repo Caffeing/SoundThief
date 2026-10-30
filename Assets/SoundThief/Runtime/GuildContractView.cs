@@ -10,25 +10,26 @@ namespace SoundThief
         GameObject root;
         RectTransform paper, stackBack, movingShadow;
         ContractPageCurl curl;
-        TextMeshProUGUI pageNumber, heading, body, objective, status, details, footer, movingTitle, movingBody, movingObjective, movingStatus;
+        TextMeshProUGUI pageNumber, heading, body, objective, status, details, hints, footer, movingTitle, movingBody, movingObjective, movingStatus;
         CanvasGroup note;
         bool? movingBehind;
         UnityEngine.UI.Image shadowImage;
-        static readonly Color Ink = new Color(0.19f, 0.14f, 0.09f);
-        static readonly Color Paper = new Color(0.94f, 0.89f, 0.75f);
+        static readonly Color Ink = new Color(0.17f, 0.125f, 0.08f);
+        static readonly Color Paper = new Color(0.96f, 0.9f, 0.76f);
 
         public void Build(GuildContractTable source, TMP_FontAsset sharedFont)
         {
             table = source; font = sharedFont;
-            root = Panel("ContractDeskView", transform, Vector2.zero, Vector2.one, new Color(0.035f, 0.026f, 0.018f, 0.98f)).gameObject;
-            Label(root.transform, "길드 의뢰 문서", 30, new Vector2(0.09f, 0.88f), new Vector2(0.6f, 0.95f), Paper);
-            pageNumber = Label(root.transform, "", 18, new Vector2(0.70f, 0.9f), new Vector2(0.91f, 0.94f), Paper);
+            root = Panel("ContractDeskView", transform, Vector2.zero, Vector2.one, new Color(0.05f, 0.04f, 0.033f, 0.98f)).gameObject;
+            Label(root.transform, "길드 의뢰 문서", 30, new Vector2(0.30f, 0.88f), new Vector2(0.60f, 0.95f), Paper).name = "Desk heading";
+            Panel("HeaderRule", root.transform, new Vector2(0.30f, 0.865f), new Vector2(0.90f, 0.869f), new Color(0.72f, 0.57f, 0.33f, 0.6f));
+            pageNumber = Label(root.transform, "", 18, new Vector2(0.66f, 0.89f), new Vector2(0.90f, 0.94f), Paper); pageNumber.name = "Desk page count";
             pageNumber.alignment = TextAlignmentOptions.Right;
             // Offset sheets remain visible beneath the active document.
-            stackBack = Panel("PaperStackBack", root.transform, new Vector2(0.352f, 0.188f), new Vector2(0.622f, 0.828f), Paper * new Color(0.72f, 0.7f, 0.64f, 1));
+            stackBack = Panel("PaperStackBack", root.transform, new Vector2(0.312f, 0.188f), new Vector2(0.632f, 0.828f), Paper * new Color(0.72f, 0.7f, 0.64f, 1));
             stackBack.localEulerAngles = new Vector3(0, 0, -2);
-            Panel("PaperStackFront", root.transform, new Vector2(0.346f, 0.194f), new Vector2(0.616f, 0.834f), Paper * new Color(0.88f, 0.87f, 0.83f, 1));
-            paper = Panel("ActiveContract", root.transform, new Vector2(0.34f, 0.20f), new Vector2(0.61f, 0.84f), Paper);
+            Panel("PaperStackFront", root.transform, new Vector2(0.306f, 0.194f), new Vector2(0.626f, 0.834f), Paper * new Color(0.88f, 0.87f, 0.83f, 1));
+            paper = Panel("ActiveContract", root.transform, new Vector2(0.30f, 0.20f), new Vector2(0.62f, 0.84f), Paper);
             var ink = Panel("DocumentContent", paper, Vector2.zero, Vector2.one, Color.clear);
             Label(ink, "의 뢰 서   /   GUILD COMMISSION", 16, new Vector2(0.09f, 0.86f), new Vector2(0.91f, 0.94f), Ink);
             Panel("Rule", ink, new Vector2(0.09f, 0.835f), new Vector2(0.91f, 0.839f), Ink);
@@ -36,13 +37,13 @@ namespace SoundThief
             body = Label(ink, "", 21, new Vector2(0.09f, 0.39f), new Vector2(0.91f, 0.61f), Ink);
             objective = Label(ink, "", 19, new Vector2(0.09f, 0.20f), new Vector2(0.91f, 0.37f), Ink);
             status = Label(ink, "", 22, new Vector2(0.09f, 0.07f), new Vector2(0.91f, 0.17f), new Color(0.50f, 0.15f, 0.10f));
-            var memo = Panel("BriefingSheet", root.transform, new Vector2(0.66f, 0.40f), new Vector2(0.93f, 0.81f), new Color(0.86f, 0.81f, 0.66f));
+            var memo = Panel("BriefingSheet", root.transform, new Vector2(0.67f, 0.40f), new Vector2(0.90f, 0.80f), new Color(0.88f, 0.82f, 0.66f));
             memo.localEulerAngles = new Vector3(0, 0, -3);
             note = memo.gameObject.AddComponent<CanvasGroup>();
             Label(memo, "간략한 설명", 25, new Vector2(0.1f, 0.77f), new Vector2(0.9f, 0.94f), Ink);
             details = Label(memo, "", 21, new Vector2(0.1f, 0.12f), new Vector2(0.9f, 0.74f), Ink);
-            footer = Label(root.transform, "", 21, new Vector2(0.12f, 0.06f), new Vector2(0.9f, 0.15f), Paper);
-            footer.alignment = TextAlignmentOptions.Center;
+            hints = Label(root.transform, "", 19, new Vector2(0.30f, 0.115f), new Vector2(0.90f, 0.17f), Paper); hints.name = "Desk hints";
+            footer = Label(root.transform, "", 17, new Vector2(0.30f, 0.05f), new Vector2(0.90f, 0.105f), Paper * new Color(0.8f, 0.78f, 0.7f, 1)); footer.name = "Desk message";
             movingShadow = Panel("MovingPaperShadow", root.transform, paper.anchorMin, paper.anchorMax, new Color(0, 0, 0, 0.22f));
             shadowImage = movingShadow.GetComponent<UnityEngine.UI.Image>();
             var moving = new GameObject("TurningPaper", typeof(RectTransform), typeof(CanvasRenderer), typeof(ContractPageCurl));
@@ -70,9 +71,9 @@ namespace SoundThief
             details.text = description == null ? "" : description.Description;
             pageNumber.text = (descriptionIndex + 1) + " / " + table.Count + "   DOCUMENTS";
             bool repeatBlocked = table.CurrentOffer != null && table.CurrentOffer.IsRepeatBlocked;
-            footer.text = "←  앞 문서를 뒤로     뒤 문서를 앞으로  →     |     "
-                + (repeatBlocked ? "재수락 불가능" : "[F / Enter] 수락") + "     [ESC] 나가기\n"
-                + (repeatBlocked ? "이미 완료한 의뢰입니다. 다른 의뢰 문서를 확인하세요." : table.mission.Message);
+            hints.text = "←  앞 문서를 뒤로     뒤 문서를 앞으로  →     |     "
+                + (repeatBlocked ? "재수락 불가능" : "[F / Enter] 수락") + "     [ESC] 나가기";
+            footer.text = repeatBlocked ? "이미 완료한 의뢰입니다. 다른 의뢰 문서를 확인하세요." : table.mission.Message;
             curl.gameObject.SetActive(table.IsTurning);
             movingShadow.gameObject.SetActive(table.IsTurning);
             note.alpha = 1;
