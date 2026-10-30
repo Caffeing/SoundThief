@@ -83,10 +83,6 @@ namespace SoundThief.PostalDepot.Editor
                     Sign("BAY "+(char)('A'+i),new Vector3(x,2.2f,i==1?20.7f:19.3f),0,0.65f);
                     for(int j=0;j<3;j++) Box("Parcel "+i+"-"+j,new Vector3(x-0.8f+j*0.8f,1.3f,i==1?20.8f:18.7f),new Vector3(0.55f,0.4f,0.5f),cream);
                 }
-                // B bay has one approach: lure the sleeping clerk out before reaching the letter.
-                Wall("Dispatch lure screen",-4.5f,16.8f,5f,0.3f);
-                Wall("B bay left partition",-1.85f,19.1f,0.3f,3.8f);
-                Wall("B bay right partition",-0.15f,19.1f,0.3f,3.8f);
                 var systems = Spawn("StageSystems","Postal stage systems",Vector3.zero);
                 var player = Spawn("PlayerRig","Postal player",new Vector3(-4,0.05f,-4)).GetComponent<ThiefPlayer>();
                 context=systems.GetComponent<StageContext>(); context.player=player;

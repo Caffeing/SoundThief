@@ -10,7 +10,7 @@ namespace SoundThief.PostalDepot
     public sealed class PostalLetterReader : MonoBehaviour
     {
         public MissionDirector mission;
-        public const string RequestClue = "의뢰인 윤서진 → 김하늘\n노란 우산을 돌려주지 않았다고 화내며 쓴 편지입니다.\n우산을 집에서 찾았으니, 발송 전에 그 편지를 회수해 주세요.";
+        public const string RequestClue = "의뢰인 바질 → 로언\n노란 우산을 돌려주지 않았다고 화내며 쓴 편지입니다.\n우산을 집에서 찾았으니, 발송 전에 그 편지를 회수해 주세요.";
         public PostalLetter OpenedLetter { get; private set; }
         public PostalLetter SelectedLetter { get; private set; }
         public bool IsReading => OpenedLetter;
@@ -82,7 +82,9 @@ namespace SoundThief.PostalDepot
             }
             else
             {
-                if (target) target.Interact(mission.player);
+                var gate = target ? target.GetComponent<PostalLoadingGate>() : null;
+                if (gate) gate.Interact(mission.player);
+                else if (target) target.Interact(mission.player);
                 restorePlayerAtFrameEnd = enabled;
             }
         }

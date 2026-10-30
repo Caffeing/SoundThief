@@ -35,8 +35,7 @@ namespace SoundThief.PostalDepot.Editor
             Place("West",new Vector3(-8,1.8f,9),new Vector3(.3f,3.6f,32));
             Place("East",new Vector3(8,1.8f,9),new Vector3(.3f,3.6f,32));
             Place("North",new Vector3(0,1.8f,25),new Vector3(16,3.6f,.3f));
-            // Preserve the existing guarded B1 approach when the room grows northward.
-            Box("B bay back partition",new Vector3(-1,1.8f,21),new Vector3(2,3.6f,.3f),stone);
+
             for(int row=0;row<2;row++)for(int column=0;column<3;column++)
             {
                 float x=-5+column*4;
@@ -62,13 +61,13 @@ namespace SoundThief.PostalDepot.Editor
             if(!reader)reader=context.mission.gameObject.AddComponent<PostalLetterReader>();reader.mission=context.mission;
             var names=new[]{"Letter 01","Letter 02","Letter B","Letter 04"};
             var locations=new[]{new Vector3(3,1.3f,18.05f),new Vector3(-5,1.3f,23.55f),new Vector3(-1,1.3f,20.35f),new Vector3(-1,1.3f,23.55f)};
-            var recipients=new[]{"김하늘","정민수","김하늘","김하늘"};
-            var senders=new[]{"박미정","윤서진","윤서진","윤서진"};
+            var recipients=new[]{"올리버","셀레스트","로언","루카"};
+            var senders=new[]{"피파","바넌 공방","바질","마일로"};
             var bodies=new[]{
-                "하늘 씨께.\n\n토요일 고양이 모임에 가져올 간식 목록을 보냅니다.\n참치 맛은 벌써 세 봉지예요. 이번에는 닭고기 맛으로 부탁해요.\n\n우리 집 고양이는 아직도 우편함을 자기 집이라고 생각하네요.\n\n미정 드림",
-                "민수야.\n\n우산 가게 영수증을 동봉했어. 지난번 장바구니에 들어간\n노란 우산은 네가 주문한 물건이 맞지?\n가게에서는 다음 비 오는 날에 찾으러 와도 된대.\n\n서진이가",
-                "하늘아.\n\n내 노란 우산, 빌려 간 뒤로 왜 소식이 없어?\n비 오는 날마다 네 생각이 나. 좋은 의미는 아니야!\n내일은 꼭 돌려줘. 더는 양말을 말리고 싶지 않거든.\n\n잔뜩 화난 서진이가",
-                "하늘아.\n\n토요일 소풍에는 노란 우산을 챙겨 와.\n비가 오면 둘이 쓰고, 맑으면 도시락 그늘로 쓰면 되잖아.\n이번에는 내가 김밥을 쌀게. 당근이 조금 많아도 이해해 줘.\n\n서진이가"
+                "올리버, 토요일엔 배를 비워 둬!\n\n우리 빵집에서 딸기 타르트 시식회를 열어.\n입장료는 새로 만든 빵 이름 하나야.\n나는 '와삭와삭 구름'에 한 표! 맛있는 이름을 생각해 와.\n\n밀가루투성이 피파가",
+                "셀레스트 님께.\n\n주문하신 망원경용 황동 나사 12개를 발송합니다.\n동봉한 규격표와 수량을 확인해 주십시오.\n작은 부품이므로 작업 중에는 쟁반을 사용하시기 바랍니다.\n\n바넌 공방 배송 담당",
+                "로언!\n\n빌려 간 내 노란 우산은 대체 언제 돌려줄 거야?\n비만 오면 양말부터 젖는다고!\n내일까지 안 돌려주면 네 장화에 물을 가득 채워 놓겠어.\n이건 농담이 아니야. 아마도!\n\n잔뜩 심통 난 바질",
+                "루카, 항구에서 특급 소식이다!\n\n오늘 거대한 바다 괴물과 맞서 싸웠지.\n정확히 말하면 내 점심을 노린 갈매기 한 마리였지만!\n샌드위치는 잃었고 모자는 되찾았다. 무승부로 기록해 줘.\n\n위대한 선장 마일로"
             };
             for(int i=0;i<4;i++)
             {
@@ -86,14 +85,97 @@ namespace SoundThief.PostalDepot.Editor
                 PrefabUtility.RecordPrefabInstancePropertyModifications(o.transform);PrefabUtility.RecordPrefabInstancePropertyModifications(interact);
             }
             var manifest=GameObject.Find("Route manifest").GetComponent<ThiefInteractable>();manifest.displayName="분류표 · 개인 우편 발송 구역";PrefabUtility.RecordPrefabInstancePropertyModifications(manifest);
-            context.definition.briefing="윤서진의 의뢰: 김하늘에게 노란 우산을 돌려주지 않았다고 화내며 쓴 편지를 회수해 주세요. 우산은 집에서 찾았다고 합니다. 분류표로 발송 구역을 확인하고, 편지들을 읽어 목표 한 통을 골라 앞마당으로 돌아오세요.";
+            context.definition.briefing="바질의 의뢰: 로언에게 노란 우산을 돌려주지 않았다고 화내며 쓴 편지를 회수해 주세요. 우산은 집에서 찾았다고 합니다. 분류표로 발송 구역을 확인하고, 편지들을 읽어 목표 한 통을 골라 앞마당으로 돌아오세요.";
             context.definition.objectiveText="분류표를 확인하고, 편지를 읽어 의뢰와 맞는 한 통을 회수하세요.";
             EditorUtility.SetDirty(context.definition);
+            ApplyRoomExpansion(geometry,props,wood,cream,stone);
             var surface=geometry.GetComponent<NavMeshSurface>();var saved=surface.navMeshData;
             surface.BuildNavMesh();var baked=surface.navMeshData;
             if(saved && baked!=saved){surface.RemoveData();EditorUtility.CopySerialized(baked,saved);surface.navMeshData=saved;surface.AddData();UnityEngine.Object.DestroyImmediate(baked);EditorUtility.SetDirty(saved);}
             EditorSceneManager.MarkSceneDirty(context.gameObject.scene);
             var errors=context.Validate();if(errors.Count>0)throw new InvalidOperationException(string.Join("\n",errors));
+        }
+        // Absolute placements keep repeated authoring runs deterministic.
+        static void ApplyRoomExpansion(Transform geometry,Transform props,Material wood,Material cream,Material stone)
+        {
+            void Move(string name,Vector3 point,Vector3? size=null)
+            {
+                var o=GameObject.Find(name);if(!o)return;
+                o.transform.position=point;if(size.HasValue)o.transform.localScale=size.Value;
+                if(PrefabUtility.IsPartOfPrefabInstance(o))PrefabUtility.RecordPrefabInstancePropertyModifications(o.transform);
+            }
+            void Shift(string name,Vector3 delta)
+            {var o=GameObject.Find(name);if(o)Move(name,o.transform.position+delta);}
+            void Box(string name,Vector3 point,Vector3 size,Material material)
+            {
+                var o=GameObject.Find(name);
+                if(!o){o=GameObject.CreatePrimitive(PrimitiveType.Cube);o.name=name;o.transform.SetParent(geometry,false);}
+                o.layer=8;o.transform.SetPositionAndRotation(point,Quaternion.identity);o.transform.localScale=size;
+                o.GetComponent<Renderer>().sharedMaterial=material;
+            }
+            Move("Floor",new Vector3(0,-.25f,12),new Vector3(24,.5f,38));
+            Move("West",new Vector3(-12,1.8f,12),new Vector3(.3f,3.6f,38));
+            Move("East",new Vector3(12,1.8f,12),new Vector3(.3f,3.6f,38));
+            Move("North",new Vector3(0,1.8f,31),new Vector3(24,3.6f,.3f));
+            Move("Yard south",new Vector3(0,1.8f,-7),new Vector3(24,3.6f,.3f));
+            Move("Front left",new Vector3(-8.5f,1.8f,0),new Vector3(7,3.6f,.3f));
+            Move("Front right",new Vector3(9,1.8f,0),new Vector3(6,3.6f,.3f));
+            Move("Sorting west",new Vector3(-8,1.8f,6),new Vector3(8,3.6f,.3f));
+            Move("Dispatch west",new Vector3(-8,1.8f,14),new Vector3(8,3.6f,.3f));
+            Move("Dispatch right",new Vector3(9,1.8f,14),new Vector3(6,3.6f,.3f));
+            Move("Loading pallets",new Vector3(9.5f,.6f,7),new Vector3(2,1.2f,3));
+            Move("Sorting divider",new Vector3(-1,.85f,10.8f),new Vector3(1,1.7f,2));
+            // Seal the reception-to-service bypass until the sorting door is used.
+            Box("Reception service closure",new Vector3(2,1.8f,2.8f),new Vector3(.3f,3.6f,2.4f),stone);
+            var gate=GameObject.Find("Inside-release loading gate");
+            if(!gate){gate=GameObject.CreatePrimitive(PrimitiveType.Cube);gate.name="Inside-release loading gate";gate.transform.SetParent(props,false);}
+            gate.layer=0;gate.transform.position=new Vector3(5,1.8f,0);gate.transform.localScale=new Vector3(2.1f,3.6f,.3f);
+            gate.GetComponent<Renderer>().sharedMaterial=stone;
+            var interaction=gate.GetComponent<ThiefInteractable>();if(!interaction)interaction=gate.AddComponent<ThiefInteractable>();
+            interaction.kind=InteractionKind.Door;interaction.displayName="하역문 · 안쪽에서 F로 개방";
+            interaction.requiresKey=true;interaction.requiredItemId="postal_staff_key";
+            if(!gate.GetComponent<PostalLoadingGate>())gate.AddComponent<PostalLoadingGate>();
+            var obstacle=gate.GetComponent<UnityEngine.AI.NavMeshObstacle>();if(!obstacle)obstacle=gate.AddComponent<UnityEngine.AI.NavMeshObstacle>();
+            obstacle.shape=UnityEngine.AI.NavMeshObstacleShape.Box;obstacle.size=Vector3.one;obstacle.carving=true;
+            // No objective-specific enclosure or guard placement: all front shelves share a row.
+            foreach(var name in new[]{"B bay left partition","B bay right partition","B bay back partition","Dispatch lure screen"})
+            {var old=GameObject.Find(name);if(old)UnityEngine.Object.DestroyImmediate(old);}
+            Move("Dispatch guard",new Vector3(9,0,25));
+            Move("Dispatch source",new Vector3(9,1,19));
+            Move("Dispatch receiver",new Vector3(9,1,21.5f));
+            for(int row=0;row<2;row++)for(int col=0;col<3;col++)
+            {
+                string bay=((char)('A'+col)).ToString()+(row+1);
+                float x=col==0?-7:col==1?-1:7;
+                float z=row==0?20:29;
+                var delta=new Vector3(x-(-5+col*4),0,z-(row==0?(col==1?20.6f:18.5f):24));
+                if(row==0)
+                {
+                    Move("Dispatch shelf "+(char)('A'+col),new Vector3(x,.55f,z));
+                    for(int j=0;j<3;j++)Move("Parcel "+col+"-"+j,new Vector3(x-.8f+j*.8f,1.3f,z+.2f));
+                }
+                else Shift("Dispatch shelf "+bay,delta);
+                Shift("Mail rack "+bay+" upper",delta);
+                foreach(int side in new[]{-1,1})Shift("Mail rack "+bay+" post "+side,delta);
+                for(int j=0;j<5;j++){Shift("Mail stack "+bay+" "+j,delta);if(row==1)Shift("Parcel rear "+bay+" "+j,delta);}
+                Shift("Postal bay sign "+bay,delta);
+            }
+            Move("Letter B",new Vector3(-1,1.3f,19.55f));
+            Move("Letter 01",new Vector3(7,1.3f,19.55f));
+            Move("Letter 02",new Vector3(-7,1.3f,28.55f));
+            Move("Letter 04",new Vector3(-1,1.3f,28.55f));
+            Move("03 DISPATCH",new Vector3(-1,3.2f,30.7f));
+            // Wall-side sorting furniture fills the added space without narrowing the routes.
+            for(int i=0;i<3;i++)
+            {
+                float z=18+i*4;
+                Box("West parcel bench "+i,new Vector3(-10.5f,.55f,z),new Vector3(1.2f,1.1f,2),wood);
+                Box("West parcel bundle "+i,new Vector3(-10.5f,1.3f,z),new Vector3(.9f,.4f,1.4f),cream);
+                Box("East dispatch trolley "+i,new Vector3(10.5f,.5f,z),new Vector3(1.2f,1,2),wood);
+                Box("East mail bundle "+i,new Vector3(10.5f,1.2f,z),new Vector3(.9f,.4f,1.4f),cream);
+            }
+            Box("Sorting west workbench",new Vector3(-10,.55f,10),new Vector3(1.2f,1.1f,3),wood);
+            Box("Reception waiting bench",new Vector3(-10,.4f,3),new Vector3(1.2f,.8f,3),wood);
         }
     }
 }

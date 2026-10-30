@@ -55,9 +55,58 @@ namespace SoundThief.PostalDepot.Tests
             Assert.That(context.definition.stageId,Is.EqualTo("gganwoor-postal-depot"));
             Assert.That(context.SceneComponents<GuardAgent>().Length,Is.EqualTo(2));
             Assert.That(context.SceneComponents<GuardAgent>().All(g=>g.GetComponent<NavMeshAgent>().isOnNavMesh),Is.True);
+            Move(new Vector3(5,.08f,1.5f));
+            Object.FindFirstObjectByType<PostalLoadingGate>().Interact(Player);
+            yield return null;yield return null;
             var path=new NavMeshPath();
             Assert.That(NavMesh.CalculatePath(new Vector3(5,0,-3),new Vector3(-1,0,17),NavMesh.AllAreas,path),Is.True);
             Assert.That(path.status,Is.EqualTo(NavMeshPathStatus.PathComplete));
+            yield return null;
+        }
+        [UnityTest] public IEnumerator ExpandedShelvesAndReturnRouteAreConnected()
+        {
+            Move(new Vector3(5,.08f,1.5f));Object.FindFirstObjectByType<PostalLoadingGate>().Interact(Player);
+            yield return null;yield return null;
+            var points=new[]{new Vector3(7,0,18),new Vector3(7,0,26),new Vector3(-7,0,27),
+                new Vector3(-1,0,27),new Vector3(0,0,18.8f),new Vector3(5,0,16),new Vector3(5,0,-2)};
+            var path=new NavMeshPath();var previous=new Vector3(-4,0,-4);
+            foreach(var point in points)
+            {
+                Assert.That(NavMesh.SamplePosition(point,out var hit,.4f,NavMesh.AllAreas),Is.True,"Walkable: "+point);
+                Assert.That(NavMesh.CalculatePath(previous,hit.position,NavMesh.AllAreas,path),Is.True);
+                Assert.That(path.status,Is.EqualTo(NavMeshPathStatus.PathComplete),"Connected: "+point);
+                previous=hit.position;
+            }
+            Assert.That(GameObject.Find("Floor").transform.localScale.x,Is.EqualTo(24));
+            Assert.That(GameObject.Find("Floor").transform.localScale.z,Is.EqualTo(38));
+            var guard=GameObject.Find("Dispatch guard").transform.position;
+            Assert.That(Vector3.Distance(guard,new Vector3(0,0,18.8f)),Is.GreaterThan(1.5f));
+            yield return null;
+        }
+        [UnityTest] public IEnumerator LoadingGateRejectsOutsideAndOpensThroughPostalInteractionInside()
+        {
+            var gate=Object.FindFirstObjectByType<PostalLoadingGate>();
+            var item=gate.GetComponent<ThiefInteractable>();
+            Aim(item,new Vector3(5,.08f,-1.5f));Reader.Interact();
+            Assert.That(gate.IsOpen,Is.False);Assert.That(Mission.Message,Does.Contain("안쪽"));
+            item.Interact(Player);Assert.That(item.IsOpen,Is.False,"Shared door cannot bypass the inside release.");
+            Player.GetComponent<CharacterController>().Move(Vector3.forward*3);
+            Assert.That(Player.transform.position.z,Is.LessThan(-.3f));
+            Aim(item,new Vector3(5,.08f,1.5f));Reader.Interact();
+            Assert.That(gate.IsOpen,Is.True);Assert.That(item.GetComponent<Collider>().enabled,Is.False);
+            Assert.That(item.GetComponent<NavMeshObstacle>().enabled,Is.False);
+            Player.GetComponent<CharacterController>().Move(Vector3.back*3);
+            Assert.That(Player.transform.position.z,Is.LessThan(-1));
+            Player.GetComponent<CharacterController>().Move(Vector3.forward*3);
+            Assert.That(Player.transform.position.z,Is.GreaterThan(1));
+            Mission.Restart();yield return null;yield return null;
+            gate=Object.FindFirstObjectByType<PostalLoadingGate>();
+            Assert.That(gate.IsOpen,Is.False);Assert.That(gate.GetComponent<Collider>().enabled,Is.True);
+        }
+        [UnityTest] public IEnumerator ReceptionCannotBypassSortingDoorThroughServicePartition()
+        {
+            Move(new Vector3(3.3f,.08f,3));Player.GetComponent<CharacterController>().Move(Vector3.left*3);
+            Assert.That(Player.transform.position.x,Is.GreaterThan(2.3f));
             yield return null;
         }
         [UnityTest] public IEnumerator EntranceIsWalkableAndWallBlocksMovement()
@@ -113,8 +162,15 @@ namespace SoundThief.PostalDepot.Tests
             Assert.That(letters.Length,Is.EqualTo(4));
             Assert.That(letters.Select(l=>l.body).Distinct().Count(),Is.EqualTo(4));
             Assert.That(letters.Count(l=>l.isObjective),Is.EqualTo(1));
-            Read("Letter 01",new Vector3(3,0.08f,16.5f));
-            Assert.That(Reader.OpenedLetter.body,Does.Contain("고양이"));
+            Assert.That(letters.Select(l=>l.sender).Distinct().Count(),Is.EqualTo(4));
+            Assert.That(letters.Select(l=>l.recipient).Distinct().Count(),Is.EqualTo(4));
+            Assert.That(GameObject.Find("B bay left partition"),Is.Null);
+            Assert.That(GameObject.Find("B bay right partition"),Is.Null);
+            Assert.That(GameObject.Find("B bay back partition"),Is.Null);
+            Assert.That(GameObject.Find("Dispatch shelf B").transform.position.z,Is.EqualTo(GameObject.Find("Dispatch shelf A").transform.position.z));
+            Assert.That(Vector3.Distance(Named("Letter B").transform.position,GameObject.Find("Dispatch guard").transform.position),Is.GreaterThan(8));
+            Read("Letter 01",new Vector3(7,0.08f,18f));
+            Assert.That(Reader.OpenedLetter.body,Does.Contain("타르트"));
             Assert.That(Player.Inventory.Items,Is.Empty);
             Assert.That(Named("Letter 01").Acquired,Is.False);
             Reader.Close();Assert.That(Mission.Paused,Is.False);yield return null;
@@ -122,7 +178,7 @@ namespace SoundThief.PostalDepot.Tests
         [UnityTest] public IEnumerator WrongLetterCanBeReplacedAndCannotCompleteContract()
         {
             Named("Route manifest").Interact(Player);
-            Read("Letter 01",new Vector3(3,0.08f,16.5f));Reader.TakeOpenedLetter();
+            Read("Letter 01",new Vector3(7,0.08f,18f));Reader.TakeOpenedLetter();
             Assert.That(Mission.HasObjectives,Is.False);
             Named("Yard exit").Interact(Player);Assert.That(Mission.Completed,Is.False);
             Assert.That(Player.Inventory.Contains("postal_letter_1"),Is.True);
@@ -137,7 +193,7 @@ namespace SoundThief.PostalDepot.Tests
             Named("Staff key").Interact(Player);
             Aim(Named("Sorting room bell door"),new Vector3(-3,0.08f,4.2f));Assert.That(Player.TryExtract(),Is.True);
             Player.enabled=true;
-            Read("Letter 01",new Vector3(3,0.08f,16.5f));
+            Read("Letter 01",new Vector3(7,0.08f,18f));
             float remaining=Player.Held.Remaining;
             var position=Player.transform.position;
             Assert.That(Mission.Paused,Is.True);Assert.That(Time.timeScale,Is.Zero);Assert.That(Player.enabled,Is.False);
@@ -151,7 +207,7 @@ namespace SoundThief.PostalDepot.Tests
         }
         [UnityTest] public IEnumerator ReadingCannotReachThroughWalls()
         {
-            Aim(Named("Letter 01"),new Vector3(3,0.08f,16.5f));
+            Aim(Named("Letter 01"),new Vector3(7,0.08f,18f));
             var obstacle=GameObject.CreatePrimitive(PrimitiveType.Cube);
             obstacle.transform.position=Vector3.Lerp(Player.view.transform.position,Named("Letter 01").GetComponentInChildren<Collider>().bounds.center,.5f);
             obstacle.transform.localScale=Vector3.one*.4f;Physics.SyncTransforms();
