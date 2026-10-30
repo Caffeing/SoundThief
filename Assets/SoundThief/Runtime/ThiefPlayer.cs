@@ -16,13 +16,18 @@ namespace SoundThief
         public SoundCharge Held { get; private set; }
         public ThiefInteractable Target { get; private set; }
         public bool IsStunned => Time.time < stunUntil;
-        public bool Slow => Held != null || (Keyboard.current != null && Keyboard.current.leftCtrlKey.isPressed);
+        public bool IsCrouching { get; private set; }
+        bool CrouchRequested => Keyboard.current != null && Keyboard.current.leftCtrlKey.isPressed;
+        public bool Slow => Held != null || CrouchRequested || IsCrouching;
         public float CurrentSpeed => Slow ? Mission.rules.carrySpeed : Mission.rules.walkSpeed;
         CharacterController controller;
         float pitch, gravitySpeed, stunUntil;
         float connectionUntil;
+        float standingHeight, standingFoot, cameraVelocity, fovVelocity, standingFov, stridePhase;
+        Vector3 standingCamera, standingCenter;
         LineRenderer connection;
         Material lineMaterial;
+        HeldSoundPresentation heldPresentation;
         InputActionMap actions;
         bool interactRequested, extractRequested, injectRequested, throwRequested;
         bool acceptRequested, pauseRequested, contractRequested, restartRequested;
@@ -54,10 +59,15 @@ namespace SoundThief
         void Awake()
         {
             controller = GetComponent<CharacterController>();
+            standingHeight = controller.height; standingCenter = controller.center;
+            standingFoot = standingCenter.y - standingHeight * .5f;
+            standingCamera = view.transform.localPosition; standingFov = view.fieldOfView;
             connection = gameObject.AddComponent<LineRenderer>(); connection.positionCount = 2;
             connection.widthMultiplier = 0.018f;
             lineMaterial = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
             lineMaterial.color = new Color(0.2f, 1, 0.85f); connection.sharedMaterial = lineMaterial;
+            var presentation = Resources.Load<HeldSoundPresentation>("HeldSoundPresentation");
+            if (presentation && view) { heldPresentation = Instantiate(presentation, view.transform); heldPresentation.Initialize(this); }
         }
         void Update()
         {
@@ -88,17 +98,38 @@ namespace SoundThief
             var movement = new Vector2((keys.dKey.isPressed ? 1 : 0) - (keys.aKey.isPressed ? 1 : 0),
                 (keys.wKey.isPressed ? 1 : 0) - (keys.sKey.isPressed ? 1 : 0));
             movement = Vector2.ClampMagnitude(movement, 1);
+            UpdatePosture();
             if (controller.isGrounded && gravitySpeed < 0) gravitySpeed = -2;
             gravitySpeed += Physics.gravity.y * Time.deltaTime;
+            var beforeMove = transform.position;
             controller.Move(((transform.right * movement.x + transform.forward * movement.y) * CurrentSpeed + Vector3.up * gravitySpeed) * Time.deltaTime);
+            var travelled = transform.position - beforeMove; travelled.y = 0;
+            stridePhase += travelled.magnitude * (IsCrouching ? 5 : 7);
             var local = view.transform.localPosition;
-            local.y = Mathf.MoveTowards(local.y, Slow ? 1.05f : 1.65f, Time.deltaTime * 3);
+            float bob = travelled.sqrMagnitude > .00001f && controller.isGrounded ? Mathf.Sin(stridePhase) * (IsCrouching ? .008f : .018f) : 0;
+            local.y = Mathf.SmoothDamp(local.y, (IsCrouching ? .72f : standingCamera.y) + bob, ref cameraVelocity, .12f);
+            local.z = Mathf.Lerp(local.z, standingCamera.z + (IsCrouching ? .07f : 0), 1 - Mathf.Exp(-Time.deltaTime * 12));
             view.transform.localPosition = local;
+            view.fieldOfView = Mathf.SmoothDamp(view.fieldOfView, standingFov - (IsCrouching ? 4 : 0), ref fovVelocity, .16f);
             FindTarget();
             if (interact && Target) Target.Interact(this);
             if (extract) TryExtract();
             if (inject) TryInject();
             if (toss) TryThrow();
+        }
+        void UpdatePosture()
+        {
+            bool crouch = CrouchRequested;
+            if (!crouch && controller.height < standingHeight - .01f)
+            {
+                float radius = Mathf.Max(.05f, controller.radius - .02f);
+                var bottom = transform.position + Vector3.up * (standingFoot + controller.height - radius);
+                var top = transform.position + Vector3.up * (standingFoot + standingHeight - radius);
+                crouch = Physics.CheckCapsule(bottom, top, radius, 1 << 8, QueryTriggerInteraction.Ignore);
+            }
+            IsCrouching = crouch;
+            controller.height = Mathf.MoveTowards(controller.height, crouch ? Mathf.Max(1, controller.radius * 2) : standingHeight, Time.deltaTime * 7);
+            controller.center = new Vector3(standingCenter.x, standingFoot + controller.height * .5f, standingCenter.z);
         }
         void FindTarget()
         {
@@ -163,7 +194,11 @@ namespace SoundThief
         {
             if (Held == null) return;
             var charge = Held; Held = null;
-            if (charge.Finish()) Mission.World.Blast(transform.position + Vector3.up, charge.Grade, true);
+            if (charge.Finish())
+            {
+                if (heldPresentation) heldPresentation.Burst();
+                Mission.World.Blast(transform.position + Vector3.up, charge.Grade, true);
+            }
             Mission.Notify("보유 시간 초과! 잠시 기절했습니다. 원래 소리는 복구되었습니다.");
         }
         public void Stun(float seconds) { stunUntil = Time.time + seconds; Target = null; if (connection) connection.enabled = false; }

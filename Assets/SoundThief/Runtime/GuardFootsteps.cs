@@ -7,7 +7,7 @@ namespace SoundThief
     public sealed class GuardFootsteps : MonoBehaviour
     {
         public AudioClip clip;
-        public float stepDistance = .9f, volume = .45f;
+        public float stepDistance = .9f, volume = .9f;
         GuardAgent guard;
         NavMeshAgent agent;
         Vector3 previous;
@@ -22,6 +22,7 @@ namespace SoundThief
             travelled = 0;
             // Familiar guard footsteps inform the player without recursively alerting guards.
             guard.world.PlaySound(position + Vector3.up * .1f, 2, clip, volume);
+            guard.world.ReportAudibleSound(position + Vector3.up * .1f, 2, volume, this);
         }
     }
 }

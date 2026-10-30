@@ -12,6 +12,7 @@ namespace SoundThief
         GuardAgent guard;
         NavMeshAgent agent;
         int current = -1;
+        float walkUntil;
         static readonly int Idle = Animator.StringToHash("Idle");
         static readonly int Walk = Animator.StringToHash("Walk");
 
@@ -46,11 +47,15 @@ namespace SoundThief
         void Update()
         {
             if (!animator || !guard || !agent) return;
-            bool moving = guard.State != GuardState.Sleeping && guard.State != GuardState.Stunned
-                && guard.State != GuardState.Panic && agent.isOnNavMesh && agent.velocity.sqrMagnitude > 0.01f;
+            bool active = guard.enabled && guard.world && guard.world.player.Mission.CanAct
+                && guard.State != GuardState.Sleeping && guard.State != GuardState.Stunned && guard.State != GuardState.Panic;
+            bool translating = agent.isOnNavMesh && agent.velocity.sqrMagnitude > .0225f;
+            if (active && (translating || guard.IsTurning)) walkUntil = Time.time + .14f;
+            bool moving = active && Time.time < walkUntil;
+            animator.speed = moving ? translating ? Mathf.Clamp(agent.velocity.magnitude / 2.2f, .65f, 2.4f) : .55f : 1;
             int state = moving ? Walk : Idle;
             if (state == current) return;
-            animator.CrossFade(state, 0.15f);
+            animator.CrossFadeInFixedTime(state, .2f);
             current = state;
         }
     }

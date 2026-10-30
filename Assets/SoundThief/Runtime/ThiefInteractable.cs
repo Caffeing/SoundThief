@@ -14,11 +14,19 @@ namespace SoundThief
         public float openAngle = -100;
         [Tooltip("0이면 열린 상태를 유지. 양수이면 통과한 뒤 자동으로 닫히는 문.")]
         public float autoCloseSeconds;
+        public bool guardsCanOpen = true;
+        bool unlocked;
+        public bool IsUnlocked => !requiresKey || unlocked;
         Quaternion closedRotation;
         float closeAt;
         MissionDirector doorMission;
         public string ItemId => string.IsNullOrWhiteSpace(itemId) ? (kind == InteractionKind.Key ? "key" : "objective") : itemId;
-        public bool CanUnlock(ThiefPlayer player) => !requiresKey || player.Inventory.Contains(requiredItemId);
+        public bool CanUnlock(ThiefPlayer player) => IsUnlocked || player.Inventory.Contains(requiredItemId);
+        public bool OpenForGuard(GuardAgent guard)
+        {
+            if (kind != InteractionKind.Door || IsOpen || !guardsCanOpen || !IsUnlocked || !guard || !guard.world.player.Mission.CanAct) return false;
+            SetDoor(true, guard.world.player.Mission); return true;
+        }
         void Awake()
         {
             closedRotation = transform.localRotation;
@@ -60,6 +68,7 @@ namespace SoundThief
                     gameObject.SetActive(false); break;
                 case InteractionKind.Door:
                     if (!CanUnlock(player)) { mission.Notify("이 문에 필요한 아이템이 없습니다."); return; }
+                    unlocked = true;
                     SetDoor(!IsOpen, mission);
                     if (IsOpen) mission.DoorOpened = true;
                     mission.Notify(relation && relation.IsMuted ? "무음으로 문을 움직였습니다." : "문 소리가 울렸습니다.");

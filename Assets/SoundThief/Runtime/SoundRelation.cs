@@ -20,7 +20,10 @@ namespace SoundThief
         public void Restore() => IsMuted = false;
         public void MakeNoise(SoundWorld world)
         {
-            if (!IsMuted) world.Pulse(transform.position, grade, null, soundClip);
+            if (IsMuted) return;
+            var item = GetComponent<ThiefInteractable>();
+            var leaf = item && item.kind == InteractionKind.Door ? GetComponentInChildren<Collider>() : null;
+            world.Pulse(leaf ? leaf.bounds.center : transform.position, grade, null, soundClip);
         }
     }
 
