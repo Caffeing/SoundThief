@@ -9,7 +9,7 @@ namespace SoundThief.SoundScan
         public const int Capacity = 8;
         [Header("Appearance")]
         [ColorUsage(false, true)] public Color scanColor = new Color(.08f, 1f, .85f, 1f);
-        [Min(0)] public float brightness = .9f;
+        [Min(0)] public float brightness = .3f;
         [Min(.02f)] public float contourSpacing = .22f;
         [Range(.01f, .45f)] public float contourThickness = .06f;
         [Range(0, 3)] public float edgeStrength = .8f;

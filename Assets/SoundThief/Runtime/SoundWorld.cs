@@ -64,20 +64,17 @@ namespace SoundThief
             if (source && source.SoundClip) clip = source.SoundClip;
             if (!clip) tones.TryGetValue(grade, out clip);
             PlaySound(position, grade, clip);
-            var ring = new GameObject("Sound pulse").AddComponent<SoundRing>();
-            ring.transform.SetParent(transform);
-            ring.Init(position, grade, false);
         }
-        public void PlaySound(Vector3 position, int grade, AudioClip clip, float volume = 1)
+        public void PlaySound(Vector3 position, int grade, AudioClip clip, float volume = 1, bool localPlayer = false)
         {
             if (clip)
             {
                 var soundObject = new GameObject("Positional sound"); soundObject.transform.SetParent(transform); soundObject.transform.position = position;
                 var feedback = soundObject.AddComponent<AudioSource>();
                 float transmission = player && player.view ? HearingMultiplier(position, player.view.transform.position) : 1;
-                feedback.spatialBlend = 1; feedback.minDistance = .5f; feedback.maxDistance = Mathf.Max(.6f, rules.hearingPerGrade * grade * transmission);
+                feedback.spatialBlend = localPlayer ? 0 : 1; feedback.minDistance = .5f; feedback.maxDistance = Mathf.Max(.6f, rules.hearingPerGrade * grade * transmission);
                 feedback.rolloffMode = AudioRolloffMode.Linear;
-                feedback.volume = volume * Mathf.Sqrt(transmission);
+                feedback.volume = localPlayer ? volume : volume * Mathf.Sqrt(transmission);
                 feedback.PlayOneShot(clip);
                 Destroy(soundObject, clip.length + 0.1f);
             }
@@ -91,9 +88,6 @@ namespace SoundThief
                     && !Blocked(position + Vector3.up * 0.08f, guard.transform.position + Vector3.up))
                     guard.Stun();
             if (stunPlayer) player.Stun(rules.playerStun);
-            var ring = new GameObject("Blast").AddComponent<SoundRing>();
-            ring.transform.SetParent(transform);
-            ring.Init(position, grade, true);
         }
         // Shock and sight use physical occlusion. Hearing attenuates authored barriers separately.
         public static bool Blocked(Vector3 from, Vector3 to) => Physics.Linecast(from, to, 1 << 8, QueryTriggerInteraction.Ignore);

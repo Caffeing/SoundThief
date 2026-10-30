@@ -89,7 +89,7 @@ namespace SoundThief.Tests
             SetUpKeyboard();
             Place(new Vector3(0, 0, 8), 1.65f); player.enabled = true;
             var controller = player.GetComponent<CharacterController>(); bool walking = false, crouching = false;
-            player.GetComponent<PlayerFootsteps>().StepPlayed += volume => { walking |= Mathf.Approximately(volume, .42f); crouching |= Mathf.Approximately(volume, .12f); };
+            player.GetComponent<PlayerFootsteps>().StepPlayed += volume => { walking |= Mathf.Approximately(volume, .3f); crouching |= Mathf.Approximately(volume, .1f); };
             for (int i = 0; i < 20; i++) { controller.Move(new Vector3(.16f, -.05f, 0)); yield return null; }
             InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.LeftCtrl)); InputSystem.Update();
             for (int i = 0; i < 16; i++) { controller.Move(new Vector3(.1f, -.05f, 0)); yield return null; }

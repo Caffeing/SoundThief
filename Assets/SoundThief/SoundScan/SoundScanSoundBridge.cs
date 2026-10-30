@@ -34,6 +34,8 @@ namespace SoundThief.SoundScan
             if (!footstep && lastSourceTime.TryGetValue(key, out float last) && Time.time - last < repeatedSourceInterval) return;
             lastSourceTime[key] = Time.time;
             float radius = grade * world.rules.hearingPerGrade;
+            if (source is PlayerFootsteps footsteps)
+                radius = 2f * world.rules.hearingPerGrade / 3f * (footsteps.GetComponent<ThiefPlayer>().IsCrouching ? .5f : 1f);
             scanner.TriggerRadius(position, radius, loudness, point => world.HearingMultiplier(position, point));
         }
     }
