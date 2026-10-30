@@ -275,19 +275,45 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 553261119569158846, guid: f31e96f467a824a40b37851ee792da38, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 753300508}
   m_SourcePrefab: {fileID: 100100000, guid: f31e96f467a824a40b37851ee792da38, type: 3}
 --- !u!114 &753300506 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 930968018147056977, guid: f31e96f467a824a40b37851ee792da38, type: 3}
   m_PrefabInstance: {fileID: 753300505}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 753300507}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fac499b76d1ee749a4a7f8d3f4d5d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundThief.ThiefPlayer
+--- !u!1 &753300507 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 553261119569158846, guid: f31e96f467a824a40b37851ee792da38, type: 3}
+  m_PrefabInstance: {fileID: 753300505}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &753300508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753300507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc9a9121f45a964bbe26fdc9bc35bc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.PlayerFootsteps
+  clip: {fileID: 8300000, guid: d7c618fcb4a743b4d98e4a56192fe88b, type: 3}
+  walkingVolume: 0.42
+  crouchingVolume: 0.12
+  carryingVolume: 0.28
+  walkingStepDistance: 1.5
+  crouchingStepDistance: 0.85
 --- !u!1 &1272817624
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,6 +511,10 @@ PrefabInstance:
       propertyPath: definition
       value: 
       objectReference: {fileID: 11400000, guid: 7d73b12384c182b4f9cb02d8838fd538, type: 2}
+    - target: {fileID: 6734539751893270216, guid: 3b0f82108454496409040b3c8895c0e5, type: 3}
+      propertyPath: audio
+      value: 
+      objectReference: {fileID: 11400000, guid: b6905a93b87634947b23ef0061f66b95, type: 2}
     - target: {fileID: 6734539751893270216, guid: 3b0f82108454496409040b3c8895c0e5, type: 3}
       propertyPath: player
       value: 

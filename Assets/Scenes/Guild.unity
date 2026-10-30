@@ -2753,7 +2753,7 @@ MonoBehaviour:
   firstMedium: "\uC190"
   secondMedium: "\uC5F0\uC2B5 \uACF5\uBA85\uCCB4 3"
   grade: 3
-  soundClip: {fileID: 0}
+  soundClip: {fileID: 8300000, guid: c493f29fa78cc7a4cb102d463df6fce4, type: 3}
 --- !u!114 &895396392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4412,7 +4412,7 @@ MonoBehaviour:
   firstMedium: "\uC190"
   secondMedium: "\uC5F0\uC2B5 \uACF5\uBA85\uCCB4 1"
   grade: 1
-  soundClip: {fileID: 0}
+  soundClip: {fileID: 8300000, guid: c493f29fa78cc7a4cb102d463df6fce4, type: 3}
 --- !u!114 &1245569278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4938,7 +4938,7 @@ MonoBehaviour:
   firstMedium: "\uC190"
   secondMedium: "\uC5F0\uC2B5 \uACF5\uBA85\uCCB4 2"
   grade: 2
-  soundClip: {fileID: 0}
+  soundClip: {fileID: 8300000, guid: c493f29fa78cc7a4cb102d463df6fce4, type: 3}
 --- !u!114 &1373014621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5741,6 +5741,7 @@ GameObject:
   - component: {fileID: 1537219571}
   - component: {fileID: 1537219573}
   - component: {fileID: 1537219572}
+  - component: {fileID: 1537219574}
   m_Layer: 0
   m_Name: Practice guard
   m_TagString: Untagged
@@ -5806,6 +5807,21 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1537219574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537219570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5542450f8be9a044a949620364f511c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.GuardFootsteps
+  clip: {fileID: 8300000, guid: 4d92593e10aede849840bc71dd6d5d14, type: 3}
+  stepDistance: 0.9
+  volume: 0.9
 --- !u!1 &1567323774
 GameObject:
   m_ObjectHideFlags: 0
@@ -7400,6 +7416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundWorld
   rules: {fileID: 11400000, guid: a8044401eeed7214faa1c5ee299d5047, type: 2}
   player: {fileID: 1188242218}
+  audio: {fileID: 11400000, guid: b6905a93b87634947b23ef0061f66b95, type: 2}
 --- !u!4 &1834094709
 Transform:
   m_ObjectHideFlags: 0

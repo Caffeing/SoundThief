@@ -17,6 +17,7 @@ namespace SoundThief
     {
         public SoundRules rules;
         public ThiefPlayer player;
+        public SoundAudioLibrary audio;
         public readonly List<GuardAgent> Guards = new List<GuardAgent>();
         public int BlastCount { get; private set; }
         public Vector3 LastBlastPosition { get; private set; }

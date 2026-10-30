@@ -37,9 +37,17 @@ namespace SoundThief
         }
         public bool IsOpen { get; private set; }
         public bool Acquired { get; private set; }
+        // Doors with a relation sound through it (so a stolen sound stays silent); others use the library door clips.
+        Vector3 AudioPosition { get { var leaf = GetComponentInChildren<Collider>(); return leaf ? leaf.bounds.center : transform.position; } }
+        void PlayCue(SoundWorld world, int grade, AudioClip clip, float volume)
+        {
+            if (clip) world.PlaySound(AudioPosition, grade, clip, volume);
+        }
         void SetDoor(bool open, MissionDirector mission)
         {
+            var library = mission.World.audio;
             if (relation) relation.MakeNoise(mission.World);
+            else if (library) PlayCue(mission.World, 2, open ? library.doorOpen : library.doorClose, library.doorVolume);
             IsOpen = open;
             transform.localRotation = closedRotation * Quaternion.Euler(0, IsOpen ? openAngle : 0, 0);
             // Physics must follow the visual immediately, including frames without a fixed step.
@@ -75,6 +83,7 @@ namespace SoundThief
                 case InteractionKind.Treasure:
                 case InteractionKind.Collectible:
                     if (relation) relation.MakeNoise(mission.World);
+                    else if (mission.World.audio) PlayCue(mission.World, 1, mission.World.audio.PickupClip(kind), mission.World.audio.pickupVolume);
                     player.Inventory.Add(ItemId, displayName); Acquired = true;
                     if (ItemId == "dining_key") mission.SetGuidanceObjective("식당 문을 열고 가문의 인장을 찾으세요.");
                     mission.Notify(displayName + " 획득. " + mission.Objective);
