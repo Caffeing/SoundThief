@@ -3,6 +3,16 @@ using UnityEngine;
 
 namespace SoundThief
 {
+    public interface ISoundPropagationPolicy
+    {
+        bool AllowsHearing(Vector3 position, int grade, SoundEmitter source, GuardAgent receiver);
+        float AudioGain(Vector3 position, int grade, SoundEmitter source, Vector3 listener);
+    }
+    public interface IPositionalSoundPropagationPolicy : ISoundPropagationPolicy
+    {
+        bool CanHear(Vector3 origin, Vector3 listener, int grade, SoundRules rules, out float proximity);
+    }
+
     public sealed class SoundWorld : MonoBehaviour
     {
         public SoundRules rules;
@@ -16,6 +26,22 @@ namespace SoundThief
         {
             AudibleSound?.Invoke(position, grade, volume, source);
         }
+        public ISoundPropagationPolicy PropagationPolicy { get; private set; }
+        MonoBehaviour policyOwner;
+        ISoundPropagationPolicy ActivePolicy => policyOwner ? PropagationPolicy : null;
+        public bool RegisterPropagationPolicy(MonoBehaviour owner)
+        {
+            if (!owner || owner.gameObject.scene != gameObject.scene || !(owner is ISoundPropagationPolicy policy)) return false;
+            if (policyOwner && policyOwner != owner) return false;
+            policyOwner = owner; PropagationPolicy = policy; return true;
+        }
+        public void UnregisterPropagationPolicy(MonoBehaviour owner)
+        {
+            if (policyOwner != owner) return;
+            policyOwner = null; PropagationPolicy = null;
+        }
+        public float AudibleGain(Vector3 position, Vector3 listener, int grade, SoundEmitter source = null)
+            => ActivePolicy != null ? Mathf.Clamp01(ActivePolicy.AudioGain(position, grade, source, listener)) : Mathf.Sqrt(HearingMultiplier(position, listener));
         readonly Dictionary<int, AudioClip> tones = new Dictionary<int, AudioClip>();
 
         void Awake()
@@ -50,8 +76,11 @@ namespace SoundThief
             }
             return multiplier;
         }
-        public bool CanHear(Vector3 from, Vector3 listener, int grade, out float proximity)
+        public bool CanHear(Vector3 from, Vector3 listener, int grade, out float proximity, GuardAgent receiver = null, SoundEmitter source = null)
         {
+            var policy = ActivePolicy;
+            if (policy is IPositionalSoundPropagationPolicy positional) return positional.CanHear(from, listener, grade, rules, out proximity);
+            if (policy != null && receiver && !policy.AllowsHearing(from, grade, source, receiver)) { proximity = 0; return false; }
             float reach = Mathf.Max(.01f, grade * rules.hearingPerGrade * HearingMultiplier(from, listener + Vector3.up * 1.4f));
             float distance = Vector3.Distance(from, listener);
             proximity = Mathf.Clamp01(1 - distance / reach);
@@ -71,10 +100,11 @@ namespace SoundThief
             {
                 var soundObject = new GameObject("Positional sound"); soundObject.transform.SetParent(transform); soundObject.transform.position = position;
                 var feedback = soundObject.AddComponent<AudioSource>();
-                float transmission = player && player.view ? HearingMultiplier(position, player.view.transform.position) : 1;
+                float transmission = ActivePolicy == null && player && player.view ? HearingMultiplier(position, player.view.transform.position) : 1;
+                float gain = player && player.view ? AudibleGain(position, player.view.transform.position, grade) : 1;
                 feedback.spatialBlend = localPlayer ? 0 : 1; feedback.minDistance = .5f; feedback.maxDistance = Mathf.Max(.6f, rules.hearingPerGrade * grade * transmission);
                 feedback.rolloffMode = AudioRolloffMode.Linear;
-                feedback.volume = localPlayer ? volume : volume * Mathf.Sqrt(transmission);
+                feedback.volume = localPlayer ? volume : volume * gain;
                 feedback.PlayOneShot(clip);
                 Destroy(soundObject, clip.length + 0.1f);
             }

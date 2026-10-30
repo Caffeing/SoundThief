@@ -26,8 +26,8 @@ namespace SoundThief.SoundScan
             float scaledVolume = Mathf.Clamp01(volume);
             if (grade <= 0 || scaledVolume <= 0) return;
             if (!world.CanHear(position, world.player.transform.position, grade, out float proximity)) return;
-            float transmission = world.HearingMultiplier(position, world.player.view.transform.position);
-            float loudness = Mathf.Clamp01(scaledVolume * Mathf.Sqrt(transmission) * Mathf.Lerp(.5f, 1f, proximity));
+            float transmission = world.AudibleGain(position, world.player.view.transform.position, grade, source as SoundEmitter);
+            float loudness = Mathf.Clamp01(scaledVolume * transmission * Mathf.Lerp(.5f, 1f, proximity));
             if (loudness < .035f) return;
             int key = source ? source.GetInstanceID() : Vector3Int.FloorToInt(position).GetHashCode();
             bool footstep = source is PlayerFootsteps || source is GuardFootsteps;

@@ -5,7 +5,14 @@ using System.Linq;
 
 namespace SoundThief
 {
-    public enum GuardState { Sleeping, InvestigatingSound, Chasing, LastSeen, Alert, Returning, Stunned, Panic, Patrolling }
+    public enum GuardState { Sleeping, InvestigatingSound, Chasing, LastSeen, Alert, Returning, Stunned, Panic, Patrolling, Watching }
+    public enum InvestigationDirective { Original, Hold, ReturnHome }
+    public interface IGuardInvestigationPolicy
+    {
+        bool AllowsHearing(GuardAgent guard, SoundEmitter source);
+        InvestigationDirective Evaluate(GuardAgent guard, SoundEmitter source);
+    }
+
 
     [DefaultExecutionOrder(-10), RequireComponent(typeof(NavMeshAgent))]
     public sealed class GuardAgent : MonoBehaviour
@@ -13,6 +20,7 @@ namespace SoundThief
         public SoundWorld world;
         public TextMeshPro statusLabel;
         public bool startsAwake;
+        public bool stayAwakeAfterFirstWake;
         public Transform[] patrolPoints = new Transform[0];
         public float patrolWaitSeconds = 2;
         [Range(0, 3)] public int instantWakeGrade;
@@ -22,6 +30,20 @@ namespace SoundThief
         public bool IsTurning { get; private set; }
         NavMeshAgent agent;
         SoundEmitter listening;
+        bool hasAwakened;
+        MonoBehaviour investigationOwner;
+        IGuardInvestigationPolicy investigationPolicy;
+        public bool RegisterInvestigationPolicy(MonoBehaviour owner)
+        {
+            if (!owner || owner.gameObject.scene != gameObject.scene || !(owner is IGuardInvestigationPolicy policy)) return false;
+            if (investigationOwner && investigationOwner != owner) return false;
+            investigationOwner = owner; investigationPolicy = policy; return true;
+        }
+        public void UnregisterInvestigationPolicy(MonoBehaviour owner)
+        {
+            if (investigationOwner != owner) return;
+            investigationOwner = null; investigationPolicy = null;
+        }
         bool continuousSound;
         Vector3 home;
         Quaternion homeRotation;
@@ -40,16 +62,18 @@ namespace SoundThief
         {
             agent = GetComponent<NavMeshAgent>(); agent.speed = world.rules.guardSpeed;
             agent.updateRotation = false; agent.stoppingDistance = 0.15f;
-            home = transform.position; homeRotation = transform.rotation; Goal = home; world.Guards.Add(this);
+            home = transform.position; homeRotation = transform.rotation; Goal = requestedGoal = home; world.Guards.Add(this);
             doors = gameObject.scene.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<ThiefInteractable>()).Where(i => i.kind == InteractionKind.Door).ToArray();
-            if (startsAwake) { State = GuardState.Patrolling; Goal = home; Stop(); }
+            hasAwakened = startsAwake;
+            if (startsAwake) ResumeDuty();
         }
         public void Hear(Vector3 position, int grade, SoundEmitter source)
         {
             if (PracticeInactive) return;
             if (openingDoor) return;
+            if (investigationOwner && !investigationPolicy.AllowsHearing(this, source)) return;
             if (State == GuardState.Stunned || State == GuardState.Panic || State == GuardState.Chasing || State == GuardState.LastSeen) return;
-            if (!world.CanHear(position, transform.position, grade, out float proximity)) return;
+            if (!world.CanHear(position, transform.position, grade, out float proximity, this, source)) return;
             lastStimulus = Time.time;
             if (State == GuardState.Sleeping)
             {
@@ -61,6 +85,7 @@ namespace SoundThief
                 if (source && source == listening) return;
                 if (grade <= ReactingGrade) return;
             }
+            hasAwakened = true;
             ReactingGrade = grade; listening = source; continuousSound = source != null;
             Go(GuardState.InvestigatingSound, position);
         }
@@ -81,7 +106,7 @@ namespace SoundThief
             {
                 statusLabel.text = State == GuardState.Sleeping ? "zzz" : State == GuardState.Stunned ? "×" : State == GuardState.Chasing ? "!!"
                     : State == GuardState.InvestigatingSound || State == GuardState.LastSeen ? "!" : State == GuardState.Returning ? "..."
-                    : State == GuardState.Panic ? "?\n패닉 · 면역" : State == GuardState.Patrolling ? "..." : "?";
+                    : State == GuardState.Panic ? "?\n패닉 · 면역" : (State == GuardState.Patrolling || State == GuardState.Watching) ? "..." : "?";
                 statusLabel.transform.rotation = world.player.view.transform.rotation;
                 statusLabel.color = State == GuardState.Chasing ? new Color(1, 0.3f, 0.25f) : new Color(0.7f, 1, 0.9f);
             }
@@ -107,7 +132,13 @@ namespace SoundThief
             if (State == GuardState.Chasing) { Go(GuardState.LastSeen, Goal); return; }
             if (State == GuardState.InvestigatingSound)
             {
-                if (continuousSound && (!listening || !listening.Active || listening.Pending || !world.CanHear(listening.transform.position, transform.position, listening.CurrentGrade, out _))) EnterAlert();
+                var directive = investigationOwner ? investigationPolicy.Evaluate(this, listening) : InvestigationDirective.Original;
+                if (directive == InvestigationDirective.ReturnHome)
+                {
+                    ReactingGrade = 0; listening = null; continuousSound = false; Go(GuardState.Returning, home); return;
+                }
+                if (directive == InvestigationDirective.Hold) { if (Arrived()) Stop(); return; }
+                if (continuousSound && (!listening || !listening.Active || listening.Pending || !world.CanHear(listening.transform.position, transform.position, listening.CurrentGrade, out _, this, listening))) EnterAlert();
                 else if (Arrived()) { if (continuousSound) Stop(); else EnterAlert(); }
             }
             else if (State == GuardState.LastSeen && Arrived()) EnterAlert();
@@ -149,15 +180,16 @@ namespace SoundThief
         void ResumeDuty()
         {
             patrolWaiting = false;
-            if (!startsAwake) { State = GuardState.Sleeping; return; }
+            if (!startsAwake) { State = stayAwakeAfterFirstWake && hasAwakened ? GuardState.Watching : GuardState.Sleeping; return; }
             if (patrolPoints != null && patrolPoints.Length > 0 && patrolPoints[patrolIndex % patrolPoints.Length])
                 Go(GuardState.Patrolling, patrolPoints[patrolIndex % patrolPoints.Length].position);
-            else { State = GuardState.Patrolling; Goal = home; Stop(); }
+            else { State = GuardState.Watching; Goal = home; Stop(); }
         }
         public bool Stun()
         {
             if (PracticeInactive) return false;
             if (State == GuardState.Panic || State == GuardState.Stunned) return false;
+            hasAwakened = true;
             waitingForDoor = false; restoringFacing = false; Stop(); State = GuardState.Stunned; stateUntil = Time.time + world.rules.guardStun; return true;
         }
         public void ResetPractice()
@@ -167,6 +199,7 @@ namespace SoundThief
             if (agent && agent.isOnNavMesh) { agent.Warp(home); agent.velocity = Vector3.zero; }
             transform.rotation = homeRotation; State = GuardState.Sleeping;
             Goal = home;
+            hasAwakened = false;
             wakeStimulus = 0; ReactingGrade = 0; listening = null;
             stateUntil = lastStimulus = 0;
             continuousSound = false; patrolIndex = 0; patrolWaiting = false;
