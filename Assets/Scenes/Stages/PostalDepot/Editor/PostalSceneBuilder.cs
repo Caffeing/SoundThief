@@ -26,6 +26,7 @@ namespace SoundThief.PostalDepot.Editor
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             var builder = new Layout();
             builder.Build();
+            PostalSearchAuthoring.Apply();
             EditorSceneManager.SaveScene(scene, ScenePath);
             AssetDatabase.SaveAssets();
             Selection.activeGameObject = builder.context.player.gameObject;

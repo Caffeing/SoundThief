@@ -41,12 +41,12 @@ namespace SoundThief.PostalDepot
         {
             if (!pendingMessage) return;
             pendingMessage = false;
-            if (letterFound && routeKnown)
-                mission.Notify("편지 회수 완료! 왔던 길이나 하역 통로를 이용해 앞마당의 출구로 돌아가세요.");
+            if (FindFirstObjectByType<PostalLetterReader>().SelectedLetter && routeKnown)
+                mission.Notify("편지 한 통을 회수했습니다. 의뢰의 수취인과 사연을 다시 대조하세요. 다른 편지로 교체할 수 있습니다.");
             else if (letterFound)
                 mission.Notify("편지를 찾았습니다. 작업실의 분류표도 확인해 주소와 일치하는지 대조하세요.");
             else if (routeKnown)
-                mission.Notify("분류표 확인: 붉은 봉인의 편지는 발송 대기실 B구역입니다. Q 주입으로 경비를 유인해 보세요.");
+                mission.Notify("분류표 확인: 개인 편지는 발송 대기실 A~C 선반입니다. F로 내용을 읽고, 의뢰와 맞는 한 통을 회수하세요.");
         }
         void OnDestroy()
         {

@@ -15,6 +15,16 @@ namespace SoundThief.PostalDepot.Tests
         StageContext context;
         ThiefPlayer Player => context.player;
         MissionDirector Mission => context.mission;
+        PostalLetterReader Reader => context.mission.GetComponent<PostalLetterReader>();
+        void Read(string name,Vector3 point)
+        {
+            Aim(Named(name),point);Reader.Interact();
+            Assert.That(Reader.IsReading,Is.True);
+        }
+        void TakeTarget()
+        {
+            Read("Letter B",new Vector3(-1,0.08f,18.8f));Reader.TakeOpenedLetter();
+        }
         ThiefInteractable Named(string name) => context.SceneComponents<ThiefInteractable>().Single(i=>i.name==name);
         void Move(Vector3 point)
         {
@@ -86,7 +96,7 @@ namespace SoundThief.PostalDepot.Tests
         [UnityTest] public IEnumerator RouteClueAndLetterAreBothRequiredForEscape()
         {
             var exit=Named("Yard exit");exit.Interact(Player);Assert.That(Mission.Completed,Is.False);
-            Named("Letter B").Interact(Player);exit.Interact(Player);Assert.That(Mission.Completed,Is.False);
+            TakeTarget();exit.Interact(Player);Assert.That(Mission.Completed,Is.False);
             Named("Route manifest").Interact(Player);yield return null;
             Assert.That(Object.FindFirstObjectByType<PostalBriefing>().RouteKnown,Is.True);
             Assert.That(Mission.HasObjectives,Is.True);exit.Interact(Player);Assert.That(Mission.Completed,Is.True);
@@ -94,8 +104,59 @@ namespace SoundThief.PostalDepot.Tests
         [UnityTest] public IEnumerator ManifestProvidesTheDestinationClue()
         {
             Named("Route manifest").Interact(Player);yield return null;
-            Assert.That(Mission.Message,Does.Contain("B구역"));
+            Assert.That(Mission.Message,Does.Contain("A~C 선반"));
             Assert.That(Mission.Completed,Is.False);
+        }
+        [UnityTest] public IEnumerator LettersHaveDistinctBodiesAndReadingDoesNotCollect()
+        {
+            var letters=context.SceneComponents<PostalLetter>();
+            Assert.That(letters.Length,Is.EqualTo(4));
+            Assert.That(letters.Select(l=>l.body).Distinct().Count(),Is.EqualTo(4));
+            Assert.That(letters.Count(l=>l.isObjective),Is.EqualTo(1));
+            Read("Letter 01",new Vector3(3,0.08f,16.5f));
+            Assert.That(Reader.OpenedLetter.body,Does.Contain("고양이"));
+            Assert.That(Player.Inventory.Items,Is.Empty);
+            Assert.That(Named("Letter 01").Acquired,Is.False);
+            Reader.Close();Assert.That(Mission.Paused,Is.False);yield return null;
+        }
+        [UnityTest] public IEnumerator WrongLetterCanBeReplacedAndCannotCompleteContract()
+        {
+            Named("Route manifest").Interact(Player);
+            Read("Letter 01",new Vector3(3,0.08f,16.5f));Reader.TakeOpenedLetter();
+            Assert.That(Mission.HasObjectives,Is.False);
+            Named("Yard exit").Interact(Player);Assert.That(Mission.Completed,Is.False);
+            Assert.That(Player.Inventory.Contains("postal_letter_1"),Is.True);
+            TakeTarget();
+            Assert.That(Player.Inventory.Contains("postal_letter_1"),Is.False);
+            Assert.That(Player.Inventory.Contains(PostalBriefing.LetterId),Is.True);
+            Assert.That(Player.Inventory.Items.Count,Is.EqualTo(2));
+            Named("Yard exit").Interact(Player);Assert.That(Mission.Completed,Is.True);yield return null;
+        }
+        [UnityTest] public IEnumerator ReadingFreezesChargeAndRestoresPlayerAndHud()
+        {
+            Named("Staff key").Interact(Player);
+            Aim(Named("Sorting room bell door"),new Vector3(-3,0.08f,4.2f));Assert.That(Player.TryExtract(),Is.True);
+            Player.enabled=true;
+            Read("Letter 01",new Vector3(3,0.08f,16.5f));
+            float remaining=Player.Held.Remaining;
+            var position=Player.transform.position;
+            Assert.That(Mission.Paused,Is.True);Assert.That(Time.timeScale,Is.Zero);Assert.That(Player.enabled,Is.False);
+            Assert.That(context.hud.GetComponent<Canvas>().enabled,Is.False);
+            yield return new WaitForSecondsRealtime(0.2f);
+            Assert.That(Player.Held.Remaining,Is.EqualTo(remaining).Within(0.001f));
+            Assert.That(Player.transform.position,Is.EqualTo(position));
+            Reader.Close();Assert.That(Mission.Paused,Is.False);Assert.That(Time.timeScale,Is.EqualTo(1));
+            Assert.That(Player.enabled,Is.True);Assert.That(context.hud.GetComponent<Canvas>().enabled,Is.True);
+            yield return null;Assert.That(Player.Held.Remaining,Is.LessThan(remaining));
+        }
+        [UnityTest] public IEnumerator ReadingCannotReachThroughWalls()
+        {
+            Aim(Named("Letter 01"),new Vector3(3,0.08f,16.5f));
+            var obstacle=GameObject.CreatePrimitive(PrimitiveType.Cube);
+            obstacle.transform.position=Vector3.Lerp(Player.view.transform.position,Named("Letter 01").GetComponentInChildren<Collider>().bounds.center,.5f);
+            obstacle.transform.localScale=Vector3.one*.4f;Physics.SyncTransforms();
+            Reader.Interact();Assert.That(Reader.IsReading,Is.False);
+            Object.Destroy(obstacle);yield return null;
         }
         [UnityTest] public IEnumerator KeyAllowsSilentDoorAndInjectionRestoresRelationship()
         {
@@ -113,13 +174,15 @@ namespace SoundThief.PostalDepot.Tests
         [UnityTest] public IEnumerator RestartResetsPostalItemsAndDoor()
         {
             Named("Staff key").Interact(Player);Named("Route manifest").Interact(Player);
-            Named("Letter B").Interact(Player);Named("Sorting room bell door").Interact(Player);
+            TakeTarget();Named("Sorting room bell door").Interact(Player);
             Mission.Restart();yield return null;yield return null;
             context=Object.FindFirstObjectByType<StageContext>();
             Assert.That(SceneManager.GetActiveScene().path,Is.EqualTo(ScenePath));
             Assert.That(Player.Inventory.Items,Is.Empty);Assert.That(Mission.CanAct,Is.True);
             Assert.That(context.SceneComponents<ThiefInteractable>().Any(i=>i.Acquired||i.IsOpen),Is.False);
             Assert.That(Object.FindFirstObjectByType<PostalBriefing>().RouteKnown,Is.False);
+            Assert.That(Reader.SelectedLetter,Is.Null);
+            Assert.That(context.SceneComponents<PostalLetter>().Any(l=>l.WasRead),Is.False);
             Assert.That(Player.transform.position.z,Is.LessThan(0));
         }
     }
