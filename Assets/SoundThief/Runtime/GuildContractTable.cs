@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace SoundThief
 {
+    public sealed class ContractRepeatPolicyAttribute : PropertyAttribute { }
+
     [Serializable]
     public sealed class GuildContractOffer
     {
@@ -11,10 +13,16 @@ namespace SoundThief
         [TextArea] public string description = "새로운 의뢰를 준비하고 있습니다.";
         public string scenePath;
         public bool available;
+        [ContractRepeatPolicy]
+        [Tooltip("켜면 완료 후 재수락할 수 없습니다. 최초 수락과 실패 후 재시도는 가능하며, 기본값은 재수락 가능입니다.")]
+        public bool nonRepeatable;
         public string Title => definition ? definition.title : title;
         public string Description => definition ? definition.briefing : description;
-        public bool CanAccept => available && definition && !string.IsNullOrWhiteSpace(scenePath)
+        public bool IsCompleted => MissionDirector.WasContractCompleted(scenePath);
+        public bool IsAvailable => available && definition && !string.IsNullOrWhiteSpace(scenePath)
             && Application.CanStreamedLevelBeLoaded(scenePath);
+        public bool IsRepeatBlocked => nonRepeatable && IsCompleted;
+        public bool CanAccept => IsAvailable && !IsRepeatBlocked;
     }
 
     // Owns browsing state only. Accepting a document never changes the scene.
@@ -36,6 +44,14 @@ namespace SoundThief
         public GuildContractOffer CurrentOffer => Count == 0 ? null : offers[SelectedIndex];
         int nextIndex;
         const float TurnDuration = 0.92f;
+
+        public bool IsRepeatBlocked(string scenePath)
+        {
+            if (offers == null) return false;
+            foreach (var offer in offers)
+                if (offer != null && offer.scenePath == scenePath && offer.IsRepeatBlocked) return true;
+            return false;
+        }
 
         public bool Open()
         {
@@ -61,6 +77,7 @@ namespace SoundThief
         {
             if (!IsOpen || IsTurning || !mission || mission.Paused || mission.player.IsStunned) return false;
             var offer = CurrentOffer;
+            if (offer != null && offer.IsRepeatBlocked) { mission.Notify("이미 완료한 의뢰입니다. 이 의뢰는 재수락 불가능합니다."); return false; }
             if (offer == null || !offer.CanAccept) { mission.Notify("이 문서는 준비 중입니다. 현재 수행 가능한 의뢰만 수락할 수 있습니다."); return false; }
             if (mission.Accepted)
             {

@@ -14,11 +14,21 @@ namespace SoundThief
         public float openAngle = -100;
         [Tooltip("0이면 열린 상태를 유지. 양수이면 통과한 뒤 자동으로 닫히는 문.")]
         public float autoCloseSeconds;
+        public bool guardsCanOpen = true;
+        bool unlocked;
+        public bool IsUnlocked => !requiresKey || unlocked;
         Quaternion closedRotation;
         float closeAt;
         MissionDirector doorMission;
         public string ItemId => string.IsNullOrWhiteSpace(itemId) ? (kind == InteractionKind.Key ? "key" : "objective") : itemId;
-        public bool CanUnlock(ThiefPlayer player) => !requiresKey || player.Inventory.Contains(requiredItemId);
+        public bool CanUnlock(ThiefPlayer player) => IsUnlocked || player.Inventory.Contains(requiredItemId);
+        public bool OpenForGuard(GuardAgent guard)
+        {
+            if (kind != InteractionKind.Door || IsOpen || !guardsCanOpen || !IsUnlocked || !guard || !guard.world.player.Mission.CanAct) return false;
+            SetDoor(true, guard.world.player.Mission); return true;
+        }
+        public bool CanInteract(ThiefPlayer player) => kind != InteractionKind.GuildExit
+            || (player && player.Mission && player.Mission.isGuild && player.Mission.Accepted);
         void Awake()
         {
             closedRotation = transform.localRotation;
@@ -50,7 +60,7 @@ namespace SoundThief
         public void Interact(ThiefPlayer player)
         {
             var mission = player.Mission;
-            if (!mission.CanAct || player.IsStunned || Acquired) return;
+            if (!mission.CanAct || player.IsStunned || Acquired || !CanInteract(player)) return;
             switch (kind)
             {
                 case InteractionKind.ContractBoard:
@@ -66,13 +76,14 @@ namespace SoundThief
                 case InteractionKind.Collectible:
                     if (relation) relation.MakeNoise(mission.World);
                     player.Inventory.Add(ItemId, displayName); Acquired = true;
+                    if (ItemId == "dining_key") mission.SetGuidanceObjective("식당 문을 열고 가문의 인장을 찾으세요.");
                     mission.Notify(displayName + " 획득. " + mission.Objective);
                     gameObject.SetActive(false); break;
                 case InteractionKind.Door:
-                    if (!CanUnlock(player)) { mission.Notify("이 문에 필요한 아이템이 없습니다."); return; }
+                    if (!CanUnlock(player)) { if (requiredItemId == "dining_key") mission.SetGuidanceObjective("식당 문을 열 열쇠를 찾으세요."); mission.Notify("잠겨 있다. 이 문을 열 열쇠가 필요하다."); return; }
+                    unlocked = true;
                     SetDoor(!IsOpen, mission);
                     if (IsOpen && !mission.isGuild) mission.DoorOpened = true;
-                    mission.Notify(relation && relation.IsMuted ? "무음으로 문을 움직였습니다." : "문 소리가 울렸습니다.");
                     break;
                 case InteractionKind.Resonator:
                     relation.MakeNoise(mission.World);

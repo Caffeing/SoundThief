@@ -1,0 +1,105 @@
+{
+  "success": true,
+  "command": "command test status",
+  "data": {
+    "command": "test status",
+    "parameters": {},
+    "result": {
+      "status": "completed",
+      "duration": 22.04,
+      "summary": {
+        "total": 11,
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.ArrowInputTurnsOneDocumentAndCannotAcceptDuringTurnOrPlaceholder",
+          "Status": "Passed",
+          "Duration": 3.1866244,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.ClosingDuringTurnCancelsAnimationAndNoRemoteTabAcceptance",
+          "Status": "Passed",
+          "Duration": 1.4848044,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.DepartureDoorCannotBeTargetedOrUsedUntilContractAcceptance",
+          "Status": "Passed",
+          "Duration": 2.2977548,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.DocumentMovesBesidePileAndChangesFrontBackOrder(-1)",
+          "Status": "Passed",
+          "Duration": 1.6281383,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.DocumentMovesBesidePileAndChangesFrontBackOrder(1)",
+          "Status": "Passed",
+          "Duration": 1.5460641,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.LeftCyclesFrontToBackAndRightReversesThePile",
+          "Status": "Passed",
+          "Duration": 4.9125342,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.PaperAndShadowOrderStaysStableAcrossFrames(-1)",
+          "Status": "Passed",
+          "Duration": 0.9200369,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.PaperAndShadowOrderStaysStableAcrossFrames(1)",
+          "Status": "Passed",
+          "Duration": 0.8062168,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.RealTableInputLocksMovementAndEscapeOnlyClosesTable",
+          "Status": "Passed",
+          "Duration": 0.9302535,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.SuccessfulTheftAndExitReturnToGuildDoorWithFreshState",
+          "Status": "Passed",
+          "Duration": 3.3891387,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.WorldTimeAndHeldDeadlineStillAdvanceWhileReading",
+          "Status": "Passed",
+          "Duration": 0.8148527,
+          "Message": null,
+          "StackTrace": null
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\SoundThief"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

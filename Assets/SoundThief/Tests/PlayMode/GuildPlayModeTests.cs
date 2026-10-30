@@ -31,6 +31,7 @@ namespace SoundThief.Tests
         {
             input = new PlayModeInputScope();
             Time.timeScale = 1;
+            typeof(MissionDirector).GetMethod("ResetSession", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, null);
             yield return SceneManager.LoadSceneAsync("Guild"); yield return null;
             mission = Object.FindFirstObjectByType<MissionDirector>(); player = mission.player;
             player.enabled = false;
@@ -266,6 +267,7 @@ namespace SoundThief.Tests
             stage.Caught(); yield return null; yield return null;
             stage = Object.FindFirstObjectByType<MissionDirector>();
             Assert.That(stage.Accepted && stage.CanAct, Is.True);
+            Assert.That(MissionDirector.WasContractCompleted(stage.gameObject.scene.path), Is.False, "Failure must not mark a contract complete.");
             Assert.That(stage.player.HasKey || stage.player.HasTreasure || stage.Extracted || stage.Injected || stage.DoorOpened, Is.False);
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo(MissionDirector.StageScene));
         }

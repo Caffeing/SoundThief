@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "command": "command script eval",
+  "data": {
+    "command": "script eval",
+    "parameters": {
+      "code": "if(EditorApplication.isPlaying)throw new System.Exception(\"Edit mode required\");const string path=\"Assets/Scenes/Guild.unity\";var scene=UnityEngine.SceneManagement.SceneManager.GetSceneByPath(path);if(!scene.IsValid()||!scene.isLoaded)scene=UnityEditor.SceneManagement.EditorSceneManager.OpenScene(path,UnityEditor.SceneManagement.OpenSceneMode.Additive);var table=scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<SoundThief.GuildContractTable>(true)).Single();var so=new SerializedObject(table);var offers=so.FindProperty(\"offers\");int changed=0;string label=null;for(int i=0;i<offers.arraySize;i++){var offer=offers.GetArrayElementAtIndex(i);if(offer.FindPropertyRelative(\"available\").boolValue&&offer.FindPropertyRelative(\"scenePath\").stringValue==\"Assets/Scenes/ManorPrototype.unity\"){var option=offer.FindPropertyRelative(\"nonRepeatable\");option.boolValue=true;label=option.displayName;changed++;}}if(changed!=1)throw new System.Exception(\"Expected exactly one Stage 1 offer\");so.ApplyModifiedProperties();UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene);return new{tableObject=table.name,inspectorLabel=label,configured=changed,offers=table.offers.Select(o=>new{o.Title,o.scenePath,o.nonRepeatable}).ToArray()};"
+    },
+    "result": {
+      "output": null,
+      "diagnostics": [],
+      "success": true,
+      "result": {
+        "tableObject": "Contract table",
+        "inspectorLabel": "Non Repeatable",
+        "configured": 1,
+        "offers": [
+          {
+            "Title": "푸른 저택의 인장",
+            "scenePath": "Assets/Scenes/ManorPrototype.unity",
+            "nonRepeatable": true
+          },
+          {
+            "Title": "다음 의뢰 · 준비 중",
+            "scenePath": "",
+            "nonRepeatable": false
+          },
+          {
+            "Title": "미접수 의뢰 · 준비 중",
+            "scenePath": "",
+            "nonRepeatable": false
+          }
+        ]
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\SoundThief"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

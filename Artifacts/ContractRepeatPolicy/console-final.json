@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "command": "command console get",
+  "data": {
+    "command": "console get",
+    "parameters": {
+      "level": "error",
+      "tail": "20"
+    },
+    "result": {
+      "entries": [],
+      "cursor": 101,
+      "session": "3de4039ab05948bb8c651b5e945f258a",
+      "returned": 0,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 0,
+        "warn": 4,
+        "log": 97
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-10-30T04:03:56.8525947Z",
+        "ageMs": 93,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 0,
+        "consoleLogs": 5,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\SoundThief"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

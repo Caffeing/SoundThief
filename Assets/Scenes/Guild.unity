@@ -678,6 +678,7 @@ MonoBehaviour:
   requiresKey: 1
   requiredItemId: key
   openAngle: -100
+  autoCloseSeconds: 0
 --- !u!23 &244396326
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2751,6 +2752,7 @@ MonoBehaviour:
   firstMedium: "\uC190"
   secondMedium: "\uC5F0\uC2B5 \uACF5\uBA85\uCCB4 3"
   grade: 3
+  soundClip: {fileID: 0}
 --- !u!114 &895396392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2771,6 +2773,7 @@ MonoBehaviour:
   requiresKey: 1
   requiredItemId: key
   openAngle: -100
+  autoCloseSeconds: 0
 --- !u!23 &895396393
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3934,6 +3937,7 @@ MonoBehaviour:
   requiresKey: 1
   requiredItemId: key
   openAngle: -100
+  autoCloseSeconds: 0
 --- !u!23 &1150858998
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4386,6 +4390,7 @@ MonoBehaviour:
   firstMedium: "\uC190"
   secondMedium: "\uC5F0\uC2B5 \uACF5\uBA85\uCCB4 1"
   grade: 1
+  soundClip: {fileID: 0}
 --- !u!114 &1245569278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4406,6 +4411,7 @@ MonoBehaviour:
   requiresKey: 1
   requiredItemId: key
   openAngle: -100
+  autoCloseSeconds: 0
 --- !u!23 &1245569279
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4909,6 +4915,7 @@ MonoBehaviour:
   firstMedium: "\uC190"
   secondMedium: "\uC5F0\uC2B5 \uACF5\uBA85\uCCB4 2"
   grade: 2
+  soundClip: {fileID: 0}
 --- !u!114 &1373014621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4929,6 +4936,7 @@ MonoBehaviour:
   requiresKey: 1
   requiredItemId: key
   openAngle: -100
+  autoCloseSeconds: 0
 --- !u!23 &1373014622
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5747,6 +5755,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.GuardAgent
   world: {fileID: 1834094708}
   statusLabel: {fileID: 1721509690}
+  startsAwake: 0
+  patrolPoints: []
+  patrolWaitSeconds: 2
 --- !u!195 &1537219573
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -7434,6 +7445,7 @@ MonoBehaviour:
   requiresKey: 1
   requiredItemId: key
   openAngle: -100
+  autoCloseSeconds: 0
 --- !u!23 &1895042347
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8693,6 +8705,7 @@ MonoBehaviour:
   requiresKey: 1
   requiredItemId: key
   openAngle: -100
+  autoCloseSeconds: 0
 --- !u!114 &2088283562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8713,6 +8726,7 @@ MonoBehaviour:
       \uC788\uC2B5\uB2C8\uB2E4."
     scenePath: Assets/Scenes/ManorPrototype.unity
     available: 1
+    nonRepeatable: 1
   - definition: {fileID: 0}
     title: "\uB2E4\uC74C \uC758\uB8B0 \xB7 \uC900\uBE44 \uC911"
     description: "\uC544\uC9C1 \uC815\uC2DD\uC73C\uB85C \uC811\uC218\uB418\uC9C0
@@ -8722,6 +8736,7 @@ MonoBehaviour:
       \uD655\uC778\uC6A9\uC774\uBA70 \uC218\uB77D\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
     scenePath: 
     available: 0
+    nonRepeatable: 0
   - definition: {fileID: 0}
     title: "\uBBF8\uC811\uC218 \uC758\uB8B0 \xB7 \uC900\uBE44 \uC911"
     description: "\uAE38\uB4DC\uAC00 \uC0C8\uB85C\uC6B4 \uC758\uB8B0 \uBB38\uC11C\uB97C
@@ -8730,6 +8745,7 @@ MonoBehaviour:
       \uC774\uC804 \uBB38\uC11C\uB85C \uB3CC\uC544\uAC00\uC138\uC694."
     scenePath: 
     available: 0
+    nonRepeatable: 0
 --- !u!1 &2132084592
 GameObject:
   m_ObjectHideFlags: 0

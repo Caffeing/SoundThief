@@ -33,6 +33,7 @@ namespace SoundThief.Tests
         [UnitySetUp] public IEnumerator SetUp()
         {
             input = new PlayModeInputScope(); Time.timeScale = 1;
+            typeof(MissionDirector).GetMethod("ResetSession", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, null);
             yield return SceneManager.LoadSceneAsync("Guild"); yield return null;
             mission = Object.FindFirstObjectByType<MissionDirector>(); player = mission.player; table = mission.contractTable;
             foreach (var guard in mission.World.Guards) guard.enabled = false;
@@ -184,8 +185,29 @@ namespace SoundThief.Tests
             }
             finally { mission.rules = mission.World.rules = original; Object.Destroy(rules); }
         }
+        [UnityTest] public IEnumerator DepartureDoorCannotBeTargetedOrUsedUntilContractAcceptance()
+        {
+            var door = Object.FindObjectsByType<ThiefInteractable>(FindObjectsSortMode.None).First(i => i.kind == InteractionKind.GuildExit);
+            var approach = door.transform.position + Vector3.back * 2; approach.y = .05f;
+            AimAt(door, approach); yield return null;
+            Assert.That(door.CanInteract(player), Is.False);
+            Assert.That(player.Target, Is.Null, "Locked exit must not expose the F interaction prompt.");
+            Press(Key.F); door.Interact(player); yield return null; yield return null;
+            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("Guild"));
+            Assert.That(mission.Accepted, Is.False);
+            table.Open(); Assert.That(table.AcceptCurrent(), Is.True); table.Close();
+            AimAt(door, approach); yield return null;
+            Assert.That(door.CanInteract(player), Is.True);
+            Assert.That(player.Target, Is.SameAs(door));
+            Press(Key.F); yield return null; yield return null;
+            var stage = Object.FindFirstObjectByType<MissionDirector>();
+            Assert.That(stage.isGuild, Is.False); Assert.That(stage.Accepted, Is.True);
+            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo(MissionDirector.StageScene));
+        }
         [UnityTest] public IEnumerator SuccessfulTheftAndExitReturnToGuildDoorWithFreshState()
         {
+            Assert.That(new GuildContractOffer().nonRepeatable, Is.False, "New offers must allow repeat acceptance by default.");
+            Assert.That(table.CurrentOffer.nonRepeatable, Is.True, "Stage 1 must be configured as non-repeatable in the saved Guild scene.");
             table.Open(); Assert.That(table.AcceptCurrent(), Is.True); table.Close();
             mission.Depart(); yield return null; yield return null;
             var stage = Object.FindFirstObjectByType<MissionDirector>(); stage.player.enabled = false;
@@ -207,6 +229,31 @@ namespace SoundThief.Tests
             Assert.That(mission.Accepted || table.IsOpen || mission.Paused, Is.False);
             Assert.That(player.Inventory.Items, Is.Empty); Assert.That(player.Held, Is.Null); Assert.That(Time.timeScale, Is.EqualTo(1));
             Assert.That(mission.Depart(), Is.False, "Completed contracts must not remain accepted.");
+            Assert.That(table.CurrentOffer.IsCompleted, Is.True);
+            Assert.That(table.offers.Where(o => !o.IsAvailable).Any(o => o.IsCompleted), Is.False);
+            Assert.That(table.Open(), Is.True); yield return null; yield return null;
+            var view = Object.FindFirstObjectByType<GuildContractView>();
+            var stamp = (TMPro.TextMeshProUGUI)typeof(GuildContractView).GetField("status", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(view);
+            Assert.That(stamp.text, Is.EqualTo("의뢰 완료\n재수락 불가능"));
+            Assert.That(stamp.color.g, Is.GreaterThan(stamp.color.r));
+            table.Close(); Assert.That(table.Open(), Is.True); yield return null;
+            Assert.That(stamp.text, Is.EqualTo("의뢰 완료\n재수락 불가능"), "Reopening the table must preserve completion and its repeat policy.");
+            Assert.That(table.CurrentOffer.CanAccept, Is.False);
+            Assert.That(table.AcceptCurrent(), Is.False);
+            Press(Key.F); yield return null; Press(Key.Enter); yield return null;
+            Assert.That(mission.Accepted, Is.False, "F and Enter must not reaccept a completed non-repeatable offer.");
+            table.Close(); mission.Accept();
+            Assert.That(mission.Accepted, Is.False, "Direct acceptance must respect the same policy.");
+            Assert.That(mission.Depart(), Is.False);
+            var door = Object.FindObjectsByType<ThiefInteractable>(FindObjectsSortMode.None).First(i => i.kind == InteractionKind.GuildExit);
+            Assert.That(door.CanInteract(player), Is.False);
+            Assert.That(table.Open(), Is.True);
+            table.CurrentOffer.nonRepeatable = false;
+            Assert.That(table.CurrentOffer.CanAccept, Is.True, "Turning the inspector option off must allow repeat acceptance.");
+            Assert.That(table.AcceptCurrent(), Is.True);
+            yield return null;
+            Assert.That(stamp.text, Is.EqualTo("완료 · 재수락"));
+            Assert.That(table.CurrentOffer.IsCompleted, Is.True);
         }
     }
 }

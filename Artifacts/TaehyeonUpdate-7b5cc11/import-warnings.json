@@ -1,0 +1,96 @@
+{
+  "success": true,
+  "command": "command console get",
+  "data": {
+    "command": "console get",
+    "parameters": {
+      "level": "warn",
+      "tail": "6"
+    },
+    "result": {
+      "entries": [
+        {
+          "seq": 1,
+          "timestampUtc": "2026-10-30T00:12:12.5200936Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "A polygon of Mesh 'EA03_Prop_Town_Tabble_01a_LOD0' in Assets/ThirdParty/EmaceArt/Slavic World/Meshes/EA03_Prop_Town_Tabble_01a.fbx is self-intersecting and has been discarded.",
+          "stackTrace": "UnityEditor.AssetDatabase:Refresh ()\nPipelineEvaluation.PipelineEval_ce73fd45:Execute ()\nSystem.Reflection.MethodBase:Invoke (object,object[])\nUnity.Pipeline.Compilation.EvalCodeCompiler:ExecuteCompiledAssembly (System.Reflection.Assembly) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Compilation/EvalCodeCompiler.cs:190)\nUnity.Pipeline.Compilation.EvalCodeCompiler:CompileAndExecuteOnMainThread (string,System.TimeSpan,System.Diagnostics.Stopwatch) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Compilation/EvalCodeCompiler.cs:54)\nUnity.Pipeline.Runtime.Commands.CodeEvalCommand:EvaluateSource (string,System.TimeSpan,string) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Commands/CodeEvalCommand.cs:97)\nUnity.Pipeline.Runtime.Commands.CodeEvalCommand:Eval (string,double) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Commands/CodeEvalCommand.cs:26)\nSystem.Reflection.MethodBase:Invoke (object,object[])\nUnity.Pipeline.Commands.DefaultCommandQueue:InvokeDirect (Unity.Pipeline.Commands.CommandContext,Unity.Pipeline.Commands.CommandInfo,object[]) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/CommandExecution/CommandQueue/DefaultCommandQueue.cs:487)\nUnity.Pipeline.Commands.DefaultCommandQueue/<>c__DisplayClass19_0:<Invoke>b__1 () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/CommandExecution/CommandQueue/DefaultCommandQueue.cs:409)\nUnity.Pipeline.Threading.Dispatcher/WorkItem`1<object>:ExecuteCore () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:342)\nUnity.Pipeline.Threading.Dispatcher/WorkItem:Execute () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:285)\nUnity.Pipeline.Threading.Dispatcher:ProcessWorkQueue (int) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:251)\nUnity.Pipeline.Threading.Dispatcher:ProcessWorkQueue () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:266)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 2,
+          "timestampUtc": "2026-10-30T00:12:13.3042203Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "A polygon of Mesh 'Villager_Male_Vest_02c' in Assets/ThirdParty/EmaceArt/Slavic World/Slavic Characters/Character#2/Model/EA_C_Villager_Male.fbx is self-intersecting and has been discarded.",
+          "stackTrace": "UnityEditor.AssetDatabase:Refresh ()\nPipelineEvaluation.PipelineEval_ce73fd45:Execute ()\nSystem.Reflection.MethodBase:Invoke (object,object[])\nUnity.Pipeline.Compilation.EvalCodeCompiler:ExecuteCompiledAssembly (System.Reflection.Assembly) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Compilation/EvalCodeCompiler.cs:190)\nUnity.Pipeline.Compilation.EvalCodeCompiler:CompileAndExecuteOnMainThread (string,System.TimeSpan,System.Diagnostics.Stopwatch) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Compilation/EvalCodeCompiler.cs:54)\nUnity.Pipeline.Runtime.Commands.CodeEvalCommand:EvaluateSource (string,System.TimeSpan,string) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Commands/CodeEvalCommand.cs:97)\nUnity.Pipeline.Runtime.Commands.CodeEvalCommand:Eval (string,double) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Commands/CodeEvalCommand.cs:26)\nSystem.Reflection.MethodBase:Invoke (object,object[])\nUnity.Pipeline.Commands.DefaultCommandQueue:InvokeDirect (Unity.Pipeline.Commands.CommandContext,Unity.Pipeline.Commands.CommandInfo,object[]) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/CommandExecution/CommandQueue/DefaultCommandQueue.cs:487)\nUnity.Pipeline.Commands.DefaultCommandQueue/<>c__DisplayClass19_0:<Invoke>b__1 () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/CommandExecution/CommandQueue/DefaultCommandQueue.cs:409)\nUnity.Pipeline.Threading.Dispatcher/WorkItem`1<object>:ExecuteCore () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:342)\nUnity.Pipeline.Threading.Dispatcher/WorkItem:Execute () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:285)\nUnity.Pipeline.Threading.Dispatcher:ProcessWorkQueue (int) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:251)\nUnity.Pipeline.Threading.Dispatcher:ProcessWorkQueue () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:266)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 3,
+          "timestampUtc": "2026-10-30T00:12:14.2015401Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Main Object Name '03 저택 구조' does not match filename 'ManorShortHallNavMesh'",
+          "stackTrace": "UnityEditor.AssetDatabase:Refresh ()\nPipelineEvaluation.PipelineEval_ce73fd45:Execute ()\nSystem.Reflection.MethodBase:Invoke (object,object[])\nUnity.Pipeline.Compilation.EvalCodeCompiler:ExecuteCompiledAssembly (System.Reflection.Assembly) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Compilation/EvalCodeCompiler.cs:190)\nUnity.Pipeline.Compilation.EvalCodeCompiler:CompileAndExecuteOnMainThread (string,System.TimeSpan,System.Diagnostics.Stopwatch) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Compilation/EvalCodeCompiler.cs:54)\nUnity.Pipeline.Runtime.Commands.CodeEvalCommand:EvaluateSource (string,System.TimeSpan,string) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Commands/CodeEvalCommand.cs:97)\nUnity.Pipeline.Runtime.Commands.CodeEvalCommand:Eval (string,double) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Commands/CodeEvalCommand.cs:26)\nSystem.Reflection.MethodBase:Invoke (object,object[])\nUnity.Pipeline.Commands.DefaultCommandQueue:InvokeDirect (Unity.Pipeline.Commands.CommandContext,Unity.Pipeline.Commands.CommandInfo,object[]) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/CommandExecution/CommandQueue/DefaultCommandQueue.cs:487)\nUnity.Pipeline.Commands.DefaultCommandQueue/<>c__DisplayClass19_0:<Invoke>b__1 () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/CommandExecution/CommandQueue/DefaultCommandQueue.cs:409)\nUnity.Pipeline.Threading.Dispatcher/WorkItem`1<object>:ExecuteCore () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:342)\nUnity.Pipeline.Threading.Dispatcher/WorkItem:Execute () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:285)\nUnity.Pipeline.Threading.Dispatcher:ProcessWorkQueue (int) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:251)\nUnity.Pipeline.Threading.Dispatcher:ProcessWorkQueue () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:266)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 4,
+          "timestampUtc": "2026-10-30T00:12:14.2350959Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Main Object Name 'Manor wall trim' does not match filename 'ManorWallTrim'",
+          "stackTrace": "UnityEditor.AssetDatabase:Refresh ()\nPipelineEvaluation.PipelineEval_ce73fd45:Execute ()\nSystem.Reflection.MethodBase:Invoke (object,object[])\nUnity.Pipeline.Compilation.EvalCodeCompiler:ExecuteCompiledAssembly (System.Reflection.Assembly) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Compilation/EvalCodeCompiler.cs:190)\nUnity.Pipeline.Compilation.EvalCodeCompiler:CompileAndExecuteOnMainThread (string,System.TimeSpan,System.Diagnostics.Stopwatch) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Compilation/EvalCodeCompiler.cs:54)\nUnity.Pipeline.Runtime.Commands.CodeEvalCommand:EvaluateSource (string,System.TimeSpan,string) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Commands/CodeEvalCommand.cs:97)\nUnity.Pipeline.Runtime.Commands.CodeEvalCommand:Eval (string,double) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Commands/CodeEvalCommand.cs:26)\nSystem.Reflection.MethodBase:Invoke (object,object[])\nUnity.Pipeline.Commands.DefaultCommandQueue:InvokeDirect (Unity.Pipeline.Commands.CommandContext,Unity.Pipeline.Commands.CommandInfo,object[]) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/CommandExecution/CommandQueue/DefaultCommandQueue.cs:487)\nUnity.Pipeline.Commands.DefaultCommandQueue/<>c__DisplayClass19_0:<Invoke>b__1 () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/CommandExecution/CommandQueue/DefaultCommandQueue.cs:409)\nUnity.Pipeline.Threading.Dispatcher/WorkItem`1<object>:ExecuteCore () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:342)\nUnity.Pipeline.Threading.Dispatcher/WorkItem:Execute () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:285)\nUnity.Pipeline.Threading.Dispatcher:ProcessWorkQueue (int) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:251)\nUnity.Pipeline.Threading.Dispatcher:ProcessWorkQueue () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:266)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 102,
+          "timestampUtc": "2026-10-30T04:14:45.3542216Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Main Object Name '03 저택 구조' does not match filename 'ManorShortHallNavMesh'",
+          "stackTrace": "UnityEditor.AssetDatabase:Refresh ()\nPipelineEvaluation.PipelineEval_a6fd2ae6:Execute ()\nSystem.Reflection.MethodBase:Invoke (object,object[])\nUnity.Pipeline.Compilation.EvalCodeCompiler:ExecuteCompiledAssembly (System.Reflection.Assembly) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Compilation/EvalCodeCompiler.cs:190)\nUnity.Pipeline.Compilation.EvalCodeCompiler:CompileAndExecuteOnMainThread (string,System.TimeSpan,System.Diagnostics.Stopwatch) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Compilation/EvalCodeCompiler.cs:54)\nUnity.Pipeline.Runtime.Commands.CodeEvalCommand:EvaluateSource (string,System.TimeSpan,string) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Commands/CodeEvalCommand.cs:97)\nUnity.Pipeline.Runtime.Commands.CodeEvalCommand:Eval (string,double) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Commands/CodeEvalCommand.cs:26)\nSystem.Reflection.MethodBase:Invoke (object,object[])\nUnity.Pipeline.Commands.DefaultCommandQueue:InvokeDirect (Unity.Pipeline.Commands.CommandContext,Unity.Pipeline.Commands.CommandInfo,object[]) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/CommandExecution/CommandQueue/DefaultCommandQueue.cs:487)\nUnity.Pipeline.Commands.DefaultCommandQueue/<>c__DisplayClass19_0:<Invoke>b__1 () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/CommandExecution/CommandQueue/DefaultCommandQueue.cs:409)\nUnity.Pipeline.Threading.Dispatcher/WorkItem`1<object>:ExecuteCore () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:342)\nUnity.Pipeline.Threading.Dispatcher/WorkItem:Execute () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:285)\nUnity.Pipeline.Threading.Dispatcher:ProcessWorkQueue (int) (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:251)\nUnity.Pipeline.Threading.Dispatcher:ProcessWorkQueue () (at ./Library/PackageCache/com.unity.pipeline@363b8bb9e91d/Runtime/Common/Dispatcher.cs:266)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 103,
+          "timestampUtc": "2026-10-30T04:15:05.187256Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\MasterStylizedProjectiles\\Scripts\\ParticleDropdownController.cs(14,21): warning CS0108: 'ParticleDropdownController.audio' hides inherited member 'Component.audio'. Use the new keyword if hiding was intended.",
+          "stackTrace": "",
+          "seeded": false
+        }
+      ],
+      "cursor": 103,
+      "session": "3de4039ab05948bb8c651b5e945f258a",
+      "returned": 6,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 0,
+        "warn": 6,
+        "log": 97
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-10-30T04:18:12.4208516Z",
+        "ageMs": 239,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 1,
+        "consoleLogs": 0,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\SoundThief"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

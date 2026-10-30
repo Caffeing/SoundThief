@@ -69,7 +69,10 @@ namespace SoundThief
             var description = table.Count == 0 ? null : table.offers[descriptionIndex];
             details.text = description == null ? "" : description.Description;
             pageNumber.text = (descriptionIndex + 1) + " / " + table.Count + "   DOCUMENTS";
-            footer.text = "←  앞 문서를 뒤로     뒤 문서를 앞으로  →     |     [F / Enter] 수락     [ESC] 나가기\n" + table.mission.Message;
+            bool repeatBlocked = table.CurrentOffer != null && table.CurrentOffer.IsRepeatBlocked;
+            footer.text = "←  앞 문서를 뒤로     뒤 문서를 앞으로  →     |     "
+                + (repeatBlocked ? "재수락 불가능" : "[F / Enter] 수락") + "     [ESC] 나가기\n"
+                + (repeatBlocked ? "이미 완료한 의뢰입니다. 다른 의뢰 문서를 확인하세요." : table.mission.Message);
             curl.gameObject.SetActive(table.IsTurning);
             movingShadow.gameObject.SetActive(table.IsTurning);
             note.alpha = 1;
@@ -116,10 +119,13 @@ namespace SoundThief
         void FillDocument(GuildContractOffer offer, TextMeshProUGUI title, TextMeshProUGUI text, TextMeshProUGUI goal, TextMeshProUGUI stamp)
         {
             title.text = offer == null ? "의뢰 없음" : offer.Title;
-            bool available = offer != null && offer.CanAccept;
-            text.text = available ? "정식 의뢰\n목표를 수행한 뒤 출구로 복귀하십시오." : "미개방 의뢰\n수행할 수 있는 스테이지가 아직 없습니다.";
+            bool available = offer != null && offer.IsAvailable;
+            bool completed = offer != null && offer.IsCompleted;
+            text.text = completed ? "완수한 의뢰\n목표물 회수와 탈출을 완료했습니다." : available ? "정식 의뢰\n목표를 수행한 뒤 출구로 복귀하십시오." : "미개방 의뢰\n수행할 수 있는 스테이지가 아직 없습니다.";
             goal.text = available && offer.definition ? "수행 목표\n" + offer.definition.objectiveText : "이 문서는 넘김 확인용 예시입니다.\n수락하거나 출발할 수 없습니다.";
-            stamp.text = available ? (table.mission.Accepted && table.mission.stage == offer.definition ? "수 락 완 료" : "수 락 가 능") : "준 비 중";
+            bool accepted = available && table.mission.Accepted && table.mission.stage == offer.definition;
+            stamp.text = completed ? (offer.IsRepeatBlocked ? "의뢰 완료\n재수락 불가능" : accepted ? "완료 · 재수락" : "의뢰 완료") : available ? (accepted ? "수 락 완 료" : "수 락 가 능") : "준 비 중";
+            stamp.color = completed ? new Color(0.16f, 0.38f, 0.22f) : new Color(0.50f, 0.15f, 0.10f);
         }
         static RectTransform Panel(string name, Transform parent, Vector2 min, Vector2 max, Color color)
         {

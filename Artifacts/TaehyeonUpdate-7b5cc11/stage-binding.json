@@ -1,0 +1,29 @@
+{
+  "success": true,
+  "command": "command script eval",
+  "data": {
+    "command": "script eval",
+    "parameters": {
+      "code": "if(EditorApplication.isPlaying)throw new System.Exception(\"Edit mode required\");const string path=\"Assets/Scenes/ManorPrototype.unity\";var scene=UnityEngine.SceneManagement.SceneManager.GetSceneByPath(path);bool opened=!scene.IsValid()||!scene.isLoaded;if(opened)scene=UnityEditor.SceneManagement.EditorSceneManager.OpenScene(path,UnityEditor.SceneManagement.OpenSceneMode.Additive);var context=scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<SoundThief.StageContext>(true)).Single();var mission=context.mission;Undo.RecordObject(mission,\"Connect latest taehyeon stage to HMM guild\");mission.isGuild=false;mission.returnToGuildOnSuccess=true;mission.guildScenePath=\"Assets/Scenes/Guild.unity\";EditorUtility.SetDirty(mission);Undo.FlushUndoRecordObjects();UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene);var result=new{path=scene.path,mission.returnToGuildOnSuccess,mission.guildScenePath,navMesh=scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<Unity.AI.Navigation.NavMeshSurface>(true)).Single().navMeshData.name,validation=context.Validate().ToArray()};if(opened)UnityEditor.SceneManagement.EditorSceneManager.CloseScene(scene,true);return result;"
+    },
+    "result": {
+      "output": null,
+      "diagnostics": [],
+      "success": true,
+      "result": {
+        "path": "Assets/Scenes/ManorPrototype.unity",
+        "returnToGuildOnSuccess": true,
+        "guildScenePath": "Assets/Scenes/Guild.unity",
+        "navMesh": "03 저택 구조",
+        "validation": []
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\SoundThief"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

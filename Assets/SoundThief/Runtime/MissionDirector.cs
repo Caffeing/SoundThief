@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,6 +21,9 @@ namespace SoundThief
         public bool returnToGuildOnSuccess;
         public string guildScenePath = "Assets/Scenes/Guild.unity";
         static string pendingGuildReturn;
+        // Completion history survives scene transitions within this play session.
+        static readonly HashSet<string> completedContracts = new HashSet<string>(StringComparer.Ordinal);
+        public static bool WasContractCompleted(string scenePath) => !string.IsNullOrEmpty(scenePath) && completedContracts.Contains(scenePath);
         public bool ReturnedToGuild { get; private set; }
         public bool TableOpen => contractTable && contractTable.IsOpen;
         public const string StageScene = "ManorPrototype";
@@ -36,9 +40,11 @@ namespace SoundThief
         public string Briefing => stage ? stage.briefing : "목표물을 회수한 뒤 출구로 돌아오세요.";
         public event Action Started, Succeeded, Failed;
         bool restarting;
+        string guidanceObjective;
+        public void SetGuidanceObjective(string value) { guidanceObjective = value; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void ResetSession() { pendingAcceptedScene = pendingGuildReturn = null; }
+        static void ResetSession() { pendingAcceptedScene = pendingGuildReturn = null; completedContracts.Clear(); }
         void Awake()
         {
             Time.timeScale = 1;
@@ -68,6 +74,8 @@ namespace SoundThief
         public void Accept()
         {
             if (Accepted || Completed || Paused || restarting || (player && player.IsStunned)) return;
+            if (isGuild && contractTable && contractTable.IsRepeatBlocked(destinationScenePath))
+            { Notify("이미 완료한 의뢰입니다. 이 의뢰는 재수락 불가능합니다."); return; }
             Accepted = true; ContractVisible = false;
             Notify(isGuild ? "의뢰를 수락했습니다. 연습 없이도 출구 문에 F를 눌러 출발할 수 있습니다." : Briefing);
             SetCursor(true); Started?.Invoke();
@@ -75,6 +83,8 @@ namespace SoundThief
         public bool Depart()
         {
             if (!isGuild || !CanAct || !player || player.IsStunned) return false;
+            if (contractTable && contractTable.IsRepeatBlocked(destinationScenePath))
+            { Notify("이미 완료한 의뢰입니다. 이 의뢰는 재수락 불가능합니다."); return false; }
             if (!Accepted) { Notify("의뢰 테이블에서 의뢰를 먼저 수락하세요. 연습 완료는 필요하지 않습니다."); return false; }
             if (string.IsNullOrEmpty(destinationScenePath) || !Application.CanStreamedLevelBeLoaded(destinationScenePath))
             { Notify("출발 씬을 Build Settings에 등록하세요: " + destinationScenePath); return false; }
@@ -105,7 +115,9 @@ namespace SoundThief
         public void Complete()
         {
             if (!HasObjectives || !CanAct) return;
-            Completed = true; Time.timeScale = 0; SetCursor(false);
+            Completed = true;
+            if (!string.IsNullOrEmpty(gameObject.scene.path)) completedContracts.Add(gameObject.scene.path);
+            Time.timeScale = 0; SetCursor(false);
             Notify(Title + " — 목표를 달성하고 탈출했습니다."); Succeeded?.Invoke();
             if (returnToGuildOnSuccess) StartCoroutine(ReturnAfterSuccess());
         }
@@ -149,7 +161,7 @@ namespace SoundThief
         public string Objective => isGuild
             ? (Accepted ? "출구 문 [F] 출발 · 뒤쪽 연습장은 선택" : "의뢰 테이블에서 문서 보기 [F] · 연습장 자유 이용")
             : !Accepted ? Title : HasObjectives ? (stage ? stage.exitText : "출구에서 F로 탈출")
-            : stage ? stage.objectiveText : "목표물을 회수하세요.";
+            : !string.IsNullOrEmpty(guidanceObjective) ? guidanceObjective : stage ? stage.objectiveText : "목표물을 회수하세요.";
         static void SetCursor(bool locked) { Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None; Cursor.visible = !locked; }
         void OnDestroy() { Time.timeScale = 1; SetCursor(false); }
     }

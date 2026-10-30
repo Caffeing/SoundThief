@@ -10,6 +10,12 @@ namespace SoundThief
         public readonly List<GuardAgent> Guards = new List<GuardAgent>();
         public int BlastCount { get; private set; }
         public Vector3 LastBlastPosition { get; private set; }
+        // Presentation listeners do not affect guard hearing or sound propagation.
+        public event System.Action<Vector3, int, float, Object> AudibleSound;
+        public void ReportAudibleSound(Vector3 position, int grade, float volume, Object source)
+        {
+            AudibleSound?.Invoke(position, grade, volume, source);
+        }
         readonly Dictionary<int, AudioClip> tones = new Dictionary<int, AudioClip>();
 
         void Awake()
@@ -53,6 +59,7 @@ namespace SoundThief
         }
         public void Pulse(Vector3 position, int grade, SoundEmitter source, AudioClip clip = null)
         {
+            ReportAudibleSound(position, grade, 1f, source);
             foreach (var guard in Guards) if (guard) guard.Hear(position, grade, source);
             if (source && source.SoundClip) clip = source.SoundClip;
             if (!clip) tones.TryGetValue(grade, out clip);

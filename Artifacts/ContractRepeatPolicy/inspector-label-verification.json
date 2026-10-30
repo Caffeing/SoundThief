@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "command": "command script eval",
+  "data": {
+    "command": "script eval",
+    "parameters": {
+      "code": "var table=UnityEngine.Object.FindFirstObjectByType<SoundThief.GuildContractTable>();var so=new SerializedObject(table);var offers=so.FindProperty(\"offers\");offers.isExpanded=true;offers.GetArrayElementAtIndex(0).isExpanded=true;var property=offers.GetArrayElementAtIndex(0).FindPropertyRelative(\"nonRepeatable\");var type=TypeCache.GetTypesDerivedFrom<PropertyDrawer>().Single(t=>t.FullName==\"SoundThief.Editor.ContractRepeatPolicyDrawer\");var drawer=(PropertyDrawer)System.Activator.CreateInstance(type);var toggle=(UnityEngine.UIElements.Toggle)drawer.CreatePropertyGUI(property);Selection.activeGameObject=table.gameObject;Undo.FlushUndoRecordObjects();var scene=table.gameObject.scene;if(scene.isDirty)UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene);return new{table.name,label=toggle.label,toggle.value,stage1NonRepeatable=property.boolValue,newOfferNonRepeatable=new SoundThief.GuildContractOffer().nonRepeatable,scene.isDirty};"
+    },
+    "result": {
+      "output": null,
+      "diagnostics": [],
+      "success": true,
+      "result": {
+        "name": "Contract table",
+        "label": "재수락 불가능",
+        "value": true,
+        "stage1NonRepeatable": true,
+        "newOfferNonRepeatable": false,
+        "isDirty": false
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\SoundThief"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

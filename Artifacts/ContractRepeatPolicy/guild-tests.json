@@ -1,0 +1,182 @@
+{
+  "success": true,
+  "command": "command test status",
+  "data": {
+    "command": "test status",
+    "parameters": {},
+    "result": {
+      "status": "completed",
+      "duration": 31.11,
+      "summary": {
+        "total": 22,
+        "passed": 22,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.DisabledThrowRemainsDisabledInGuildAndDoesNotBlockPracticeGuidance",
+          "Status": "Passed",
+          "Duration": 1.7034919,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.ExitDirectlyEntersAcceptedStageWithoutPractice",
+          "Status": "Passed",
+          "Duration": 3.3380615,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.GuildPauseFreezesPracticeAndContractPanelKeepsTimeRunning",
+          "Status": "Passed",
+          "Duration": 1.3924468,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.GuildRestartClearsPracticeButRetainsAcceptedContract",
+          "Status": "Passed",
+          "Duration": 0.9802559,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Sleeping)",
+          "Status": "Passed",
+          "Duration": 0.9224735,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(InvestigatingSound)",
+          "Status": "Passed",
+          "Duration": 0.9115584,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Chasing)",
+          "Status": "Passed",
+          "Duration": 0.9444474,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(LastSeen)",
+          "Status": "Passed",
+          "Duration": 0.8799096,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Alert)",
+          "Status": "Passed",
+          "Duration": 0.8932564,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Returning)",
+          "Status": "Passed",
+          "Duration": 0.843623,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Stunned)",
+          "Status": "Passed",
+          "Duration": 0.8873382,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Panic)",
+          "Status": "Passed",
+          "Duration": 0.9134285,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Patrolling)",
+          "Status": "Passed",
+          "Duration": 0.9074907,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.PracticeConnectionOnlyFlashesWhenUsingTheAbility",
+          "Status": "Passed",
+          "Duration": 1.0944909,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.PracticeInjectionUsesTaehyeonDelayAndReleasesTheHand",
+          "Status": "Passed",
+          "Duration": 3.9712697,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.PracticeUsesSharedRulesAndResetPreservesContract",
+          "Status": "Passed",
+          "Duration": 0.8131514,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.PracticingDoesNotDepartAndPracticeChargeDoesNotTransfer",
+          "Status": "Passed",
+          "Duration": 1.9837876,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.RearRoomIsSeparatedAndDoorwayIsWalkable",
+          "Status": "Passed",
+          "Duration": 0.9993458,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.SerializedGuildKindsAreNotCollectibleAndPracticeIsOptional",
+          "Status": "Passed",
+          "Duration": 0.7697143,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.StageContactRestartsAcceptedContractWithCleanState",
+          "Status": "Passed",
+          "Duration": 3.5158628,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.TableOpensBeforeAcceptanceAndExitRejectsUnacceptedContract",
+          "Status": "Passed",
+          "Duration": 0.8570566,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.UnacceptedPlayerMovesAndIsStoppedByWalls",
+          "Status": "Passed",
+          "Duration": 1.4409036,
+          "Message": null,
+          "StackTrace": null
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\SoundThief"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

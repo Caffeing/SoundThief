@@ -208,7 +208,7 @@ namespace SoundThief.Tests
             void TargetFromHere(ThiefInteractable target)
             {
                 var cameraPosition = player.view.transform.localPosition;
-                cameraPosition.y = player.Held == null ? 1.65f : 1.05f;
+                cameraPosition.y = player.IsCrouching ? .72f : 1.65f;
                 player.view.transform.localPosition = cameraPosition;
                 player.view.transform.LookAt(target.GetComponentInChildren<Renderer>().bounds.center);
                 Physics.SyncTransforms();
