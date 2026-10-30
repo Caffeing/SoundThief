@@ -1,0 +1,70 @@
+{
+  "success": true,
+  "command": "command script eval_file",
+  "data": {
+    "command": "script eval_file",
+    "parameters": {
+      "file": "C:\\Users\\User\\Desktop\\sound_thief_wiki\\.taehyeon-integration\\configure-stage2.cs"
+    },
+    "result": {
+      "output": null,
+      "diagnostics": [],
+      "success": true,
+      "result": {
+        "stage": "Assets/Scenes/Stages/Stage2.unity",
+        "definition": "두 경비의 보관실",
+        "rules": "Assets/SoundThief/Generated/Stage2Rules.asset",
+        "navMesh": "Assets/JinHo/Navigation/Stage2NavMesh.asset",
+        "footsteps": [
+          {
+            "scene": "Assets/Scenes/Guild.unity",
+            "player": "Thief",
+            "clip": "Assets/ThirdParty/CompleteKenney/ImpactSounds/Audio/footstep_concrete_000.ogg",
+            "count": 1
+          },
+          {
+            "scene": "Assets/Scenes/ManorPrototype.unity",
+            "player": "01 플레이어",
+            "clip": "Assets/ThirdParty/CompleteKenney/ImpactSounds/Audio/footstep_concrete_000.ogg",
+            "count": 1
+          },
+          {
+            "scene": "Assets/Scenes/Stages/Stage2.unity",
+            "player": "PlayerRig",
+            "clip": "Assets/ThirdParty/CompleteKenney/ImpactSounds/Audio/footstep_concrete_000.ogg",
+            "count": 1
+          }
+        ],
+        "offers": [
+          {
+            "Title": "푸른 저택의 인장",
+            "scenePath": "Assets/Scenes/ManorPrototype.unity",
+            "available": true,
+            "nonRepeatable": true
+          },
+          {
+            "Title": "두 경비의 보관실",
+            "scenePath": "Assets/Scenes/Stages/Stage2.unity",
+            "available": true,
+            "nonRepeatable": false
+          },
+          {
+            "Title": "미접수 의뢰 · 준비 중",
+            "scenePath": "",
+            "available": false,
+            "nonRepeatable": false
+          }
+        ],
+        "activeBuildProfile": null,
+        "playMode": false
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\SoundThief"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
