@@ -138,5 +138,25 @@ namespace SoundThief.Tests
             Assert.That(mission.World.BlastCount, Is.EqualTo(previousBlasts + 1));
             Object.Destroy(relationObject);
         }
+        [UnityTest] public IEnumerator NearAimHighlightsKeyWithoutSelectingThroughWalls()
+        {
+            Place(new Vector3(200, 0, 200), 1.65f);
+            player.view.transform.rotation = Quaternion.identity;
+            var key = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            key.transform.position = player.view.transform.position + new Vector3(.24f, 0, 2);
+            key.transform.localScale = Vector3.one * .1f;
+            var item = key.AddComponent<ThiefInteractable>(); item.kind = InteractionKind.Key;
+            Physics.SyncTransforms();
+            var find = typeof(ThiefPlayer).GetMethod("FindTarget", BindingFlags.NonPublic | BindingFlags.Instance);
+            find.Invoke(player, null);
+            Assert.That(player.HighlightTarget, Is.EqualTo(item));
+            Assert.That(player.Target, Is.Null, "Highlighting near aim must not silently change interaction targeting.");
+            cover = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cover.transform.position = player.view.transform.position + Vector3.forward;
+            cover.transform.localScale = new Vector3(2, 2, .1f);
+            Physics.SyncTransforms(); find.Invoke(player, null);
+            Assert.That(player.HighlightTarget, Is.Null, "Walls must block the nearby highlight.");
+            Object.Destroy(key); yield return null;
+        }
     }
 }

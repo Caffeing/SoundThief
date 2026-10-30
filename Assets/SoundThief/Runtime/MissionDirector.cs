@@ -22,6 +22,8 @@ namespace SoundThief
         public string Briefing => stage ? stage.briefing : "목표물을 회수한 뒤 출구로 돌아오세요.";
         public event Action Started, Succeeded, Failed;
         bool restarting;
+        string guidanceObjective;
+        public void SetGuidanceObjective(string value) { guidanceObjective = value; }
         void Awake() { Time.timeScale = 1; SetCursor(false); }
         void Start()
         {
@@ -71,7 +73,7 @@ namespace SoundThief
             SceneManager.LoadScene(scene.path);
         }
         public string Objective => !Accepted ? Title : HasObjectives ? (stage ? stage.exitText : "출구에서 F로 탈출")
-            : stage ? stage.objectiveText : "목표물을 회수하세요.";
+            : !string.IsNullOrEmpty(guidanceObjective) ? guidanceObjective : stage ? stage.objectiveText : "목표물을 회수하세요.";
         static void SetCursor(bool locked) { Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None; Cursor.visible = !locked; }
         void OnDestroy() { Time.timeScale = 1; SetCursor(false); }
     }

@@ -64,14 +64,14 @@ namespace SoundThief
                 case InteractionKind.Collectible:
                     if (relation) relation.MakeNoise(mission.World);
                     player.Inventory.Add(ItemId, displayName); Acquired = true;
+                    if (ItemId == "dining_key") mission.SetGuidanceObjective("식당 문을 열고 가문의 인장을 찾으세요.");
                     mission.Notify(displayName + " 획득. " + mission.Objective);
                     gameObject.SetActive(false); break;
                 case InteractionKind.Door:
-                    if (!CanUnlock(player)) { mission.Notify("이 문에 필요한 아이템이 없습니다."); return; }
+                    if (!CanUnlock(player)) { if (requiredItemId == "dining_key") mission.SetGuidanceObjective("식당 문을 열 열쇠를 찾으세요."); mission.Notify("잠겨 있다. 이 문을 열 열쇠가 필요하다."); return; }
                     unlocked = true;
                     SetDoor(!IsOpen, mission);
                     if (IsOpen) mission.DoorOpened = true;
-                    mission.Notify(relation && relation.IsMuted ? "무음으로 문을 움직였습니다." : "문 소리가 울렸습니다.");
                     break;
                 case InteractionKind.Resonator:
                     relation.MakeNoise(mission.World);

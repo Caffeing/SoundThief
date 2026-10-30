@@ -15,6 +15,7 @@ namespace SoundThief
         public bool HasTreasure { get => Inventory.Contains("objective"); set { if (value) Inventory.Add("objective", "목표물"); else Inventory.Remove("objective"); } }
         public SoundCharge Held { get; private set; }
         public ThiefInteractable Target { get; private set; }
+        public ThiefInteractable HighlightTarget { get; private set; }
         public bool IsStunned => Time.time < stunUntil;
         public bool IsCrouching { get; private set; }
         bool CrouchRequested => Keyboard.current != null && Keyboard.current.leftCtrlKey.isPressed;
@@ -134,6 +135,7 @@ namespace SoundThief
         void FindTarget()
         {
             Target = null;
+            HighlightTarget = null;
             // The camera may sit against the player's CharacterController when looking down.
             // Ignore the player's own colliders but still respect the nearest wall or object.
             float nearest = float.PositiveInfinity;
@@ -142,6 +144,26 @@ namespace SoundThief
                 if (hit.collider.transform.IsChildOf(transform) || hit.distance >= nearest) continue;
                 nearest = hit.distance;
                 Target = hit.collider.GetComponentInParent<ThiefInteractable>();
+            }
+            HighlightTarget = Target;
+            if (!HighlightTarget)
+            {
+                float best = float.PositiveInfinity;
+                foreach (var hit in Physics.SphereCastAll(view.transform.position, .22f, view.transform.forward, Mission.rules.interactDistance, ~0, QueryTriggerInteraction.Ignore))
+                {
+                    if (hit.collider.transform.IsChildOf(transform)) continue;
+                    var item = hit.collider.GetComponentInParent<ThiefInteractable>();
+                    if (!item || item.Acquired || (!item.relation && !item.emitter && item.kind != InteractionKind.Key && item.kind != InteractionKind.Treasure && item.kind != InteractionKind.Collectible)) continue;
+                    var point = hit.collider.ClosestPoint(view.transform.position);
+                    var direction = point - view.transform.position;
+                    if (direction.sqrMagnitude < .0001f) continue;
+                    bool blocked = false;
+                    foreach (var obstacle in Physics.RaycastAll(view.transform.position, direction.normalized, direction.magnitude, ~0, QueryTriggerInteraction.Ignore))
+                        if (!obstacle.collider.transform.IsChildOf(transform) && obstacle.collider.GetComponentInParent<ThiefInteractable>() != item) { blocked = true; break; }
+                    if (blocked) continue;
+                    float score = Vector3.Angle(view.transform.forward, direction) * .1f + direction.magnitude;
+                    if (score < best) { best = score; HighlightTarget = item; }
+                }
             }
             connection.enabled = Target && Target.relation && Time.time < connectionUntil;
             if (connection.enabled)

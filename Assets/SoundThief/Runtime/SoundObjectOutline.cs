@@ -22,7 +22,7 @@ namespace SoundThief
             target = GetComponent<ThiefInteractable>();
             var context = gameObject.scene.GetRootGameObjects().SelectMany(o => o.GetComponentsInChildren<StageContext>()).FirstOrDefault();
             player = context ? context.player : null;
-            if (!material || (!target.relation && !target.emitter)) return;
+            if (!material || (!target.relation && !target.emitter && target.kind != InteractionKind.Key && target.kind != InteractionKind.Treasure && target.kind != InteractionKind.Collectible)) return;
             foreach (var filter in GetComponentsInChildren<MeshFilter>(true))
             {
                 var source = filter.GetComponent<MeshRenderer>();
@@ -41,10 +41,11 @@ namespace SoundThief
         void LateUpdate()
         {
             if (!target || !player || !player.view) return;
-            bool focused = player.Mission.CanAct && !player.IsStunned && player.Target == target;
+            bool focused = player.Mission.CanAct && !player.IsStunned && player.HighlightTarget == target;
             visibility = Mathf.MoveTowards(visibility, focused ? 1 : 0, Time.deltaTime / .15f);
             // A small warm rim supports close interaction without painting the room in ability colors.
-            var color = new Color(.85f, .69f, .43f, visibility * .5f);
+            bool missionItem = target.kind == InteractionKind.Key || target.kind == InteractionKind.Treasure || target.kind == InteractionKind.Collectible;
+            var color = missionItem ? new Color(1f, .72f, .22f, visibility * .8f) : new Color(.8f, .84f, .78f, visibility * .5f);
             properties.SetColor("_OutlineColor", color); properties.SetFloat("_Thickness", .005f);
             foreach (var pair in shells)
             {
