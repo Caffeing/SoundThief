@@ -34,17 +34,19 @@ namespace SoundThief.SoundScan
             SoundScanController controller;
             readonly Vector4[] origins = new Vector4[SoundScanController.Capacity];
             readonly Vector4[] parameters = new Vector4[SoundScanController.Capacity];
+            readonly Vector4[] attenuation = new Vector4[SoundScanController.Capacity * 16];
             sealed class PassData { public Material material; public MaterialPropertyBlock properties; }
             public void Setup(Material value, SoundScanController owner) { material = value; controller = owner; }
             public override void RecordRenderGraph(RenderGraph graph, ContextContainer frameData)
             {
                 var resources = frameData.Get<UniversalResourceData>();
                 if (!resources.cameraDepthTexture.IsValid() || !resources.cameraNormalsTexture.IsValid() || !resources.activeColorTexture.IsValid()) return;
-                int count = controller.CopyWaves(origins, parameters);
+                int count = controller.CopyWaves(origins, parameters, attenuation);
                 if (count == 0) return;
                 var block = new MaterialPropertyBlock();
                 block.SetVector("_BlitScaleBias", new Vector4(1, 1, 0, 0));
                 block.SetVectorArray("_ScanOrigins", origins); block.SetVectorArray("_ScanParameters", parameters);
+                block.SetVectorArray("_ScanAttenuation", attenuation);
                 block.SetInt("_ScanCount", count); block.SetColor("_ScanColor", controller.scanColor);
                 block.SetVector("_ScanStyle", new Vector4(Mathf.Max(.02f, controller.contourSpacing), controller.contourThickness, controller.brightness, controller.edgeStrength));
                 block.SetFloat("_ScanFrontWidth", Mathf.Max(.01f, controller.frontWidth));

@@ -37,6 +37,11 @@ namespace SoundThief.SoundScan.Tests
             Assert.That(scanner.ActiveCount, Is.EqualTo(count + 2), "Quiet footsteps still produce a small scan.");
             mission.World.ReportAudibleSound(mission.player.transform.position, 1, .12f, temporary);
             Assert.That(scanner.ActiveCount, Is.EqualTo(count + 2), "Repeated source events are throttled.");
+            var footsteps = mission.player.GetComponent<PlayerFootsteps>();
+            Assert.That(footsteps, Is.Not.Null);
+            mission.World.ReportAudibleSound(mission.player.transform.position, 1, .12f, footsteps);
+            mission.World.ReportAudibleSound(mission.player.transform.position, 1, .12f, footsteps);
+            Assert.That(scanner.ActiveCount, Is.EqualTo(count + 4), "Each footstep creates its own scan without the emitter cooldown.");
             Object.Destroy(temporary);
         }
     }

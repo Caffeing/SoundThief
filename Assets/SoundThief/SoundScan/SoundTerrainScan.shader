@@ -19,6 +19,7 @@ Shader "SoundThief/Sound Terrain Scan"
 
             float4 _ScanOrigins[8]; // xyz world origin, w maximum radius
             float4 _ScanParameters[8]; // elapsed, speed, trail duration
+            float4 _ScanAttenuation[128]; // 16 horizontal directions, four distances each
             int _ScanCount;
             float4 _ScanColor, _ScanStyle; // spacing, thickness, brightness, edge strength
             float _ScanFrontWidth;
@@ -74,13 +75,20 @@ Shader "SoundThief/Sound Terrain Scan"
                 [loop] for (int i = 0; i < _ScanCount; i++)
                 {
                     float distanceFromOrigin = distance(pos, _ScanOrigins[i].xyz);
+                    float2 horizontal = pos.xz - _ScanOrigins[i].xz;
+                    float angle = atan2(horizontal.y, horizontal.x);
+                    int directionIndex = ((int)floor(angle * (16.0 / 6.2831853) + 16.5)) & 15;
+                    float4 attenuation = _ScanAttenuation[i * 16 + directionIndex];
+                    float radial = distanceFromOrigin / max(_ScanOrigins[i].w, .001);
+                    float transmission = radial < .25 ? attenuation.x : radial < .5 ? attenuation.y : radial < .75 ? attenuation.z : attenuation.w;
                     float elapsed = _ScanParameters[i].x;
                     float speed = _ScanParameters[i].y;
                     float age = elapsed - distanceFromOrigin / speed;
-                    float reached = step(0, age) * step(distanceFromOrigin, _ScanOrigins[i].w);
+                    float reached = step(0, age) * step(distanceFromOrigin, _ScanOrigins[i].w * transmission);
                     float afterglow = reached * (1 - smoothstep(0, _ScanParameters[i].z, age));
                     float front = reached * (1 - smoothstep(0, _ScanFrontWidth, abs(elapsed * speed - distanceFromOrigin)));
-                    illumination = max(illumination, afterglow * (lines * .70 + edge * .65) + front * (lines * .9 + edge));
+                    float distanceFade = 1 - smoothstep(0, 1, saturate(distanceFromOrigin / max(_ScanOrigins[i].w * transmission, .001)));
+                    illumination = max(illumination, (afterglow * (lines * .70 + edge * .65) + front * (lines * .9 + edge)) * distanceFade * _ScanParameters[i].w * .4);
                 }
                 return half4(_ScanColor.rgb * (_ScanStyle.z * illumination), 0);
             }

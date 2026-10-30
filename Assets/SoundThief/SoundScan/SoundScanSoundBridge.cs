@@ -27,12 +27,14 @@ namespace SoundThief.SoundScan
             if (grade <= 0 || scaledVolume <= 0) return;
             if (!world.CanHear(position, world.player.transform.position, grade, out float proximity)) return;
             float transmission = world.HearingMultiplier(position, world.player.view.transform.position);
-            float loudness = Mathf.Clamp01(grade / 3f * scaledVolume * Mathf.Sqrt(transmission) * Mathf.Lerp(.5f, 1f, proximity));
+            float loudness = Mathf.Clamp01(scaledVolume * Mathf.Sqrt(transmission) * Mathf.Lerp(.5f, 1f, proximity));
             if (loudness < .035f) return;
             int key = source ? source.GetInstanceID() : Vector3Int.FloorToInt(position).GetHashCode();
-            if (lastSourceTime.TryGetValue(key, out float last) && Time.time - last < repeatedSourceInterval) return;
+            bool footstep = source is PlayerFootsteps || source is GuardFootsteps;
+            if (!footstep && lastSourceTime.TryGetValue(key, out float last) && Time.time - last < repeatedSourceInterval) return;
             lastSourceTime[key] = Time.time;
-            scanner.TriggerSoundScan(position, loudness);
+            float radius = grade * world.rules.hearingPerGrade;
+            scanner.TriggerRadius(position, radius, loudness, point => world.HearingMultiplier(position, point));
         }
     }
 }

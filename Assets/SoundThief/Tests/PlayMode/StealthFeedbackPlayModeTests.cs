@@ -150,7 +150,7 @@ namespace SoundThief.Tests
             var find = typeof(ThiefPlayer).GetMethod("FindTarget", BindingFlags.NonPublic | BindingFlags.Instance);
             find.Invoke(player, null);
             Assert.That(player.HighlightTarget, Is.EqualTo(item));
-            Assert.That(player.Target, Is.Null, "Highlighting near aim must not silently change interaction targeting.");
+            Assert.That(player.Target, Is.EqualTo(item), "The visible near-aim highlight must also be actionable.");
             cover = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cover.transform.position = player.view.transform.position + Vector3.forward;
             cover.transform.localScale = new Vector3(2, 2, .1f);

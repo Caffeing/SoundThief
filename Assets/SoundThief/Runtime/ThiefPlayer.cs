@@ -147,7 +147,6 @@ namespace SoundThief
         void FindTarget()
         {
             Target = HighlightTarget = null;
-            HighlightTarget = HighlightTarget = null;
             // The camera may sit against the player's CharacterController when looking down.
             // Ignore the player's own colliders but still respect the nearest wall or object.
             float nearest = float.PositiveInfinity;
@@ -178,6 +177,9 @@ namespace SoundThief
                     if (score < best) { best = score; HighlightTarget = item; }
                 }
             }
+            // The softly highlighted object is also the actionable target: small meshes
+            // should not require a second, pixel-perfect aim after becoming highlighted.
+            if (!Target && HighlightTarget) Target = HighlightTarget;
             connection.enabled = Target && Target.relation && Time.time < connectionUntil;
             if (connection.enabled)
             {

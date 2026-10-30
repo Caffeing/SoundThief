@@ -343,7 +343,7 @@ namespace SoundThief.Tests
             var items = Object.FindObjectsByType<ThiefInteractable>(FindObjectsSortMode.None);
             var diningDoor = items.First(i => i.name == "식당 앞문");
             var diningKey = items.First(i => i.kind == InteractionKind.Key && i.ItemId == "dining_key");
-            Aim(Find(InteractionKind.Key), new Vector3(-1.8f, 0, 2)); player.Target.Interact(player);
+            Aim(Find(InteractionKind.Key), new Vector3(-3.1f, 0, 3.6f)); player.Target.Interact(player);
             Assert.That(player.HasKey, Is.True);
             Aim(Door, new Vector3(0, 0, 4)); player.Target.Interact(player); Assert.That(Door.IsOpen, Is.True);
             Aim(diningDoor, new Vector3(7.4f, 0, 10.5f)); player.Target.Interact(player);
