@@ -4416,6 +4416,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8885051918283878312, guid: 366996b461ab4464d876e07e841e8125, type: 3}
+      propertyPath: injectionDelaySeconds
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6453,7 +6457,7 @@ PrefabInstance:
     - target: {fileID: 3866564273064145368, guid: 3b0f82108454496409040b3c8895c0e5, type: 3}
       propertyPath: rules
       value: 
-      objectReference: {fileID: 11400000, guid: e9fb839e720e87441b2badf11a988b0a, type: 2}
+      objectReference: {fileID: 11400000, guid: ac396c86c1b2e80458620655e5bf1c67, type: 2}
     - target: {fileID: 3866564273064145368, guid: 3b0f82108454496409040b3c8895c0e5, type: 3}
       propertyPath: stage
       value: 
@@ -6477,7 +6481,7 @@ PrefabInstance:
     - target: {fileID: 6223557764366112114, guid: 3b0f82108454496409040b3c8895c0e5, type: 3}
       propertyPath: rules
       value: 
-      objectReference: {fileID: 11400000, guid: e9fb839e720e87441b2badf11a988b0a, type: 2}
+      objectReference: {fileID: 11400000, guid: ac396c86c1b2e80458620655e5bf1c67, type: 2}
     - target: {fileID: 6223557764366112114, guid: 3b0f82108454496409040b3c8895c0e5, type: 3}
       propertyPath: player
       value: 
@@ -6489,7 +6493,7 @@ PrefabInstance:
     - target: {fileID: 6734539751893270216, guid: 3b0f82108454496409040b3c8895c0e5, type: 3}
       propertyPath: rules
       value: 
-      objectReference: {fileID: 11400000, guid: 11405871aecc00e4c8dd7836bb105eaf, type: 2}
+      objectReference: {fileID: 11400000, guid: ac396c86c1b2e80458620655e5bf1c67, type: 2}
     - target: {fileID: 6734539751893270216, guid: 3b0f82108454496409040b3c8895c0e5, type: 3}
       propertyPath: player
       value: 
@@ -6603,6 +6607,7 @@ MonoBehaviour:
   guard1: {fileID: 96946848}
   guard2: {fileID: 1605855202}
   traceLifecycle: 0
+  immediateInjection: 1
 --- !u!114 &1250636784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7343,6 +7348,7 @@ MonoBehaviour:
   firstRoomMin: {x: 1.7, y: 11.599999}
   firstRoomMax: {x: 6.3100004, y: 14.8}
   firstExtraSeconds: 2
+  keepAcceptedLureWhileActive: 1
 --- !u!1 &1254602473
 GameObject:
   m_ObjectHideFlags: 0
@@ -10566,6 +10572,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4490595987899424781, guid: 366996b461ab4464d876e07e841e8125, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8885051918283878312, guid: 366996b461ab4464d876e07e841e8125, type: 3}
+      propertyPath: injectionDelaySeconds
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

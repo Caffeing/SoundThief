@@ -10,6 +10,8 @@ namespace SoundThief.JinHo
         public JinHoSoundPropagation propagation;
         public GuardAgent guard1, guard2;
         public bool traceLifecycle;
+        // Stage2 인스턴스만 true. HMM의 다른 씬은 기본 false라 기존 3초 주입 지연을 유지한다.
+        public bool immediateInjection;
         SoundWorld world;
         public bool Ready { get; private set; }
 
@@ -34,6 +36,13 @@ namespace SoundThief.JinHo
         {
             if (world && propagation) world.UnregisterPropagationPolicy(propagation);
             Ready = false;
+        }
+        void Start()
+        {
+            if(!immediateInjection)return;
+            // 모든 Awake 이후 한 번만 설정하므로 문이 Awake에서 추가한 SoundEmitter도 포함한다.
+            // 실제 Inject/출력/감쇠는 공통 컴포넌트가 담당하며 가짜 소리나 매 프레임 상태 변경은 없다.
+            foreach(var emitter in context.SceneComponents<SoundEmitter>())emitter.injectionDelaySeconds=0;
         }
     }
 }

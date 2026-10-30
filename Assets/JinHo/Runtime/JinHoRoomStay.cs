@@ -15,6 +15,10 @@ namespace SoundThief.JinHo
         public SoundEmitter firstEmitter;
         public Vector2 firstRoomMin,firstRoomMax;
         public float firstExtraSeconds=2;
+        // Stage2에서만 켜는 원래 JinHo 유인 규칙. 기본 false인 다른 씬은 HMM 처리를 유지한다.
+        // 이미 수락한 두 유인 장치의 출력이 지속되는 동안 등급 하락/재가청 판정으로 조사를 취소하지 않는다.
+        // 시야 발견·기절·패닉의 우선순위와 최초 소리를 들을 수 있는 조건은 GuardAgent가 그대로 담당한다.
+        public bool keepAcceptedLureWhileActive;
         bool firstEntered;
         public bool FirstRoomEntered=>firstEntered;
         float firstOutputEnded=-1;
@@ -77,6 +81,7 @@ namespace SoundThief.JinHo
             {
                 var body=BodyBounds(guard);
                 firstEntered|=body.min.x>=firstRoomMin.x&&body.max.x<=firstRoomMax.x&&body.min.z>=firstRoomMin.y&&body.max.z<=firstRoomMax.y;
+                if(keepAcceptedLureWhileActive&&source.Active)return InvestigationDirective.Hold;
                 if(!source.Active)
                 {
                     if(firstOutputEnded<0)firstOutputEnded=Time.time;
@@ -88,7 +93,7 @@ namespace SoundThief.JinHo
             state.participating=true;
             if(state.enteredAt<0)
             {
-                if(!ContainsWholeBody(guard))return InvestigationDirective.Original;
+                if(!ContainsWholeBody(guard))return keepAcceptedLureWhileActive&&source.Active?InvestigationDirective.Hold:InvestigationDirective.Original;
                 state.enteredAt=Time.time;
                 if(trace)Debug.Log($"JINHO_ROOM_ENTER guard={guard.name} t={Time.time:F3}",this);
             }
