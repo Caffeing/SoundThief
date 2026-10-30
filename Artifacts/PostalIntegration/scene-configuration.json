@@ -1,0 +1,30 @@
+{
+  "scene": "Assets/Scenes/Stages/PostalDepot/PostalDepot.unity",
+  "definition": "Assets/Scenes/Stages/PostalDepot/PostalDepot Definition.asset",
+  "rules": "Assets/Scenes/Stages/PostalDepot/PostalDepot HMM Rules.asset",
+  "startImmediately": false,
+  "returnToGuild": true,
+  "guards": 2,
+  "letters": 4,
+  "playerFootsteps": true,
+  "scanWorldBound": true,
+  "offers": [
+    {
+      "scenePath": "Assets/Scenes/ManorPrototype.unity",
+      "nonRepeatable": true,
+      "available": true
+    },
+    {
+      "scenePath": "Assets/Scenes/Stages/Stage2.unity",
+      "nonRepeatable": false,
+      "available": true
+    },
+    {
+      "scenePath": "Assets/Scenes/Stages/PostalDepot/PostalDepot.unity",
+      "nonRepeatable": false,
+      "available": true
+    }
+  ],
+  "playMode": false,
+  "navMeshRebuilt": false
+}
