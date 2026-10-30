@@ -61,6 +61,8 @@ namespace SoundThief
         {
             var mission = player.Mission;
             if (!mission.CanAct || player.IsStunned || Acquired || !CanInteract(player)) return;
+            foreach (var behaviour in GetComponents<MonoBehaviour>())
+                if (behaviour is IThiefInteractionHandler handler && handler.TryInteract(player)) return;
             switch (kind)
             {
                 case InteractionKind.ContractBoard:

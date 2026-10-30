@@ -62,6 +62,7 @@ namespace SoundThief
         void Awake()
         {
             controller = GetComponent<CharacterController>();
+            controller.minMoveDistance = 0;
             standingHeight = controller.height; standingCenter = controller.center;
             standingFoot = standingCenter.y - standingHeight * .5f;
             standingCamera = view.transform.localPosition; standingFov = view.fieldOfView;

@@ -1035,6 +1035,7 @@ GameObject:
   m_Component:
   - component: {fileID: 23946654}
   - component: {fileID: 23946655}
+  - component: {fileID: 23946656}
   m_Layer: 0
   m_Name: Upper gallery lantern
   m_TagString: Untagged
@@ -1122,6 +1123,35 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &23946656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23946653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &28635474
 GameObject:
   m_ObjectHideFlags: 0
@@ -2413,7 +2443,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4287748607
   m_fontColor: {r: 1, g: 0.85, b: 0.57, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2426,7 +2456,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -3280,7 +3310,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4287748607
   m_fontColor: {r: 1, g: 0.85, b: 0.57, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -3293,7 +3323,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -4367,6 +4397,7 @@ GameObject:
   m_Component:
   - component: {fileID: 144443012}
   - component: {fileID: 144443013}
+  - component: {fileID: 144443014}
   m_Layer: 0
   m_Name: Upper gallery lantern
   m_TagString: Untagged
@@ -4454,6 +4485,35 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &144443014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144443011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &145416904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10115,7 +10175,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4287748607
   m_fontColor: {r: 1, g: 0.85, b: 0.57, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -10128,7 +10188,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -22629,7 +22689,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4287748607
   m_fontColor: {r: 1, g: 0.85, b: 0.57, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -22642,7 +22702,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -28709,6 +28769,7 @@ GameObject:
   m_Component:
   - component: {fileID: 875303656}
   - component: {fileID: 875303657}
+  - component: {fileID: 875303658}
   m_Layer: 0
   m_Name: Upper gallery lantern
   m_TagString: Untagged
@@ -28796,6 +28857,35 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &875303658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875303655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &876042342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29346,6 +29436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &895396391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35154,6 +35245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1043899810}
   - component: {fileID: 1043899811}
+  - component: {fileID: 1043899812}
   m_Layer: 0
   m_Name: Upper gallery lantern
   m_TagString: Untagged
@@ -35241,6 +35333,35 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &1043899812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043899809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &1043934089
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37386,7 +37507,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4287748607
   m_fontColor: {r: 1, g: 0.85, b: 0.57, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -37399,7 +37520,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -38928,6 +39049,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1119225732}
   - component: {fileID: 1119225733}
+  - component: {fileID: 1119225734}
   m_Layer: 0
   m_Name: Upper gallery lantern
   m_TagString: Untagged
@@ -39015,6 +39137,35 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &1119225734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119225731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &1123291333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43413,6 +43564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &1245569277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48275,6 +48427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &1373014620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49400,7 +49553,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4287748607
   m_fontColor: {r: 1, g: 0.85, b: 0.57, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -49413,7 +49566,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -58834,7 +58987,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4287748607
   m_fontColor: {r: 1, g: 0.85, b: 0.57, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -58847,7 +59000,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -69103,6 +69256,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1994452760}
   - component: {fileID: 1994452761}
+  - component: {fileID: 1994452762}
   m_Layer: 0
   m_Name: Upper gallery lantern
   m_TagString: Untagged
@@ -69190,6 +69344,35 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &1994452762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994452759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &1995151512
 GameObject:
   m_ObjectHideFlags: 0
@@ -72453,14 +72636,12 @@ MonoBehaviour:
     scenePath: Assets/Scenes/Stages/Stage2.unity
     available: 1
     nonRepeatable: 0
-  - definition: {fileID: 0}
-    title: "\uBBF8\uC811\uC218 \uC758\uB8B0 \xB7 \uC900\uBE44 \uC911"
-    description: "\uAE38\uB4DC\uAC00 \uC0C8\uB85C\uC6B4 \uC758\uB8B0 \uBB38\uC11C\uB97C
-      \uAE30\uB2E4\uB9AC\uACE0 \uC788\uC2B5\uB2C8\uB2E4.\n\n\uD604\uC7AC \uC5F0\uACB0\uB41C
-      \uC2A4\uD14C\uC774\uC9C0\uB294 \uC5C6\uC2B5\uB2C8\uB2E4. \uC67C\uCABD \uBC29\uD5A5\uD0A4\uB85C
-      \uC774\uC804 \uBB38\uC11C\uB85C \uB3CC\uC544\uAC00\uC138\uC694."
-    scenePath: 
-    available: 0
+  - definition: {fileID: 11400000, guid: 9afaf027707a341469537fd2b4c56147, type: 2}
+    title: "\uC900\uBE44 \uC911\uC778 \uC758\uB8B0"
+    description: "\uC0C8\uB85C\uC6B4 \uC758\uB8B0\uB97C \uC900\uBE44\uD558\uACE0
+      \uC788\uC2B5\uB2C8\uB2E4."
+    scenePath: Assets/Scenes/Stages/PostalDepot/PostalDepot.unity
+    available: 1
     nonRepeatable: 0
 --- !u!1 &2090743438
 GameObject:
