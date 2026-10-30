@@ -1,0 +1,518 @@
+{
+  "success": true,
+  "command": "command test status",
+  "data": {
+    "command": "test status",
+    "parameters": {},
+    "result": {
+      "status": "completed",
+      "duration": 199.14,
+      "summary": {
+        "total": 70,
+        "passed": 70,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "SoundThief.Tests.FrameworkPlayModeTests.DoorRespectsAuthoredRotationAndInventoryRejectsDuplicateIds",
+          "Status": "Passed",
+          "Duration": 0.885632,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.FrameworkPlayModeTests.MultipleCustomObjectivesAndCustomKeyControlCompletionAndRestart",
+          "Status": "Passed",
+          "Duration": 1.1506391,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.FrameworkPlayModeTests.SceneBindsSharedActorsAndValidates",
+          "Status": "Passed",
+          "Duration": 0.5924896,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.FrameworkPlayModeTests.StageDataCanRequireExternalStartDespiteLegacyDefault",
+          "Status": "Passed",
+          "Duration": 0.6057421,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.FrameworkPlayModeTests.ValidatorReportsMissingObjectivesReferencesAndDuplicateContexts",
+          "Status": "Passed",
+          "Duration": 0.5977214,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.ArrowInputTurnsOneDocumentAndCannotAcceptDuringTurnOrPlaceholder",
+          "Status": "Passed",
+          "Duration": 2.8902525,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.ClosingDuringTurnCancelsAnimationAndNoRemoteTabAcceptance",
+          "Status": "Passed",
+          "Duration": 1.339209,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.DocumentMovesBesidePileAndChangesFrontBackOrder(-1)",
+          "Status": "Passed",
+          "Duration": 1.1317845,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.DocumentMovesBesidePileAndChangesFrontBackOrder(1)",
+          "Status": "Passed",
+          "Duration": 1.1586855,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.LeftCyclesFrontToBackAndRightReversesThePile",
+          "Status": "Passed",
+          "Duration": 4.7100477,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.PaperAndShadowOrderStaysStableAcrossFrames(-1)",
+          "Status": "Passed",
+          "Duration": 0.6522397,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.PaperAndShadowOrderStaysStableAcrossFrames(1)",
+          "Status": "Passed",
+          "Duration": 0.6444057,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.RealTableInputLocksMovementAndEscapeOnlyClosesTable",
+          "Status": "Passed",
+          "Duration": 0.7859342,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.SuccessfulTheftAndExitReturnToGuildDoorWithFreshState",
+          "Status": "Passed",
+          "Duration": 2.9111343,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildContractTableTests.WorldTimeAndHeldDeadlineStillAdvanceWhileReading",
+          "Status": "Passed",
+          "Duration": 0.8261773,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.DisabledThrowRemainsDisabledInGuildAndDoesNotBlockPracticeGuidance",
+          "Status": "Passed",
+          "Duration": 0.6594185,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.ExitDirectlyEntersAcceptedStageWithoutPractice",
+          "Status": "Passed",
+          "Duration": 1.4847209,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.GuildPauseFreezesPracticeAndContractPanelKeepsTimeRunning",
+          "Status": "Passed",
+          "Duration": 0.7865547,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.GuildRestartClearsPracticeButRetainsAcceptedContract",
+          "Status": "Passed",
+          "Duration": 0.5673725,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Sleeping)",
+          "Status": "Passed",
+          "Duration": 0.6722464,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(InvestigatingSound)",
+          "Status": "Passed",
+          "Duration": 0.683886,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Chasing)",
+          "Status": "Passed",
+          "Duration": 0.6810172,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(LastSeen)",
+          "Status": "Passed",
+          "Duration": 0.6712953,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Alert)",
+          "Status": "Passed",
+          "Duration": 0.6667197,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Returning)",
+          "Status": "Passed",
+          "Duration": 0.6743465,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Stunned)",
+          "Status": "Passed",
+          "Duration": 0.6634275,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Panic)",
+          "Status": "Passed",
+          "Duration": 0.708061,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.LeavingPracticeResetsEveryNpcJudgement(Patrolling)",
+          "Status": "Passed",
+          "Duration": 0.6897131,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.PracticeConnectionOnlyFlashesWhenUsingTheAbility",
+          "Status": "Passed",
+          "Duration": 0.9288715,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.PracticeInjectionUsesTaehyeonDelayAndReleasesTheHand",
+          "Status": "Passed",
+          "Duration": 3.7637793,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.PracticeUsesSharedRulesAndResetPreservesContract",
+          "Status": "Passed",
+          "Duration": 0.5691712,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.PracticingDoesNotDepartAndPracticeChargeDoesNotTransfer",
+          "Status": "Passed",
+          "Duration": 1.4731011,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.RearRoomIsSeparatedAndDoorwayIsWalkable",
+          "Status": "Passed",
+          "Duration": 0.5578417,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.SerializedGuildKindsAreNotCollectibleAndPracticeIsOptional",
+          "Status": "Passed",
+          "Duration": 0.5003974,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.StageContactRestartsAcceptedContractWithCleanState",
+          "Status": "Passed",
+          "Duration": 2.1137583,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.TableOpensBeforeAcceptanceAndExitRejectsUnacceptedContract",
+          "Status": "Passed",
+          "Duration": 0.6257839,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.GuildPlayModeTests.UnacceptedPlayerMovesAndIsStoppedByWalls",
+          "Status": "Passed",
+          "Duration": 1.2305103,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.BlastIsBlockedByWallButSoundStillWakesGuard",
+          "Status": "Passed",
+          "Duration": 1.0216768,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.DeferredThrowKeepsHeldSoundAndIsNotAdvertised",
+          "Status": "Passed",
+          "Duration": 0.8251953,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.DiningDoorVisualsRemainAlignedWhenOpened",
+          "Status": "Passed",
+          "Duration": 0.9112968,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.DoorInjectionWaitsThreeSecondsBeforeGuardHearsIt",
+          "Status": "Passed",
+          "Duration": 4.0255092,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.ExploratoryGuardedStealthFullEscape",
+          "Status": "Passed",
+          "Duration": 59.2726416,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.ExtractionMutesWholeRelationAndBlocksSecondCharge",
+          "Status": "Passed",
+          "Duration": 0.9604782,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.GroundCollisionDetonatesBeforeDeadline",
+          "Status": "Passed",
+          "Duration": 1.4997972,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.GuardAppearanceWalksWhenInvestigatingSound",
+          "Status": "Passed",
+          "Duration": 1.1823854,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.GuardContactImmediatelyRestartsWholeContract",
+          "Status": "Passed",
+          "Duration": 1.5923936,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.HeldTimeoutStunsAndRestoresWithoutFailing",
+          "Status": "Passed",
+          "Duration": 0.8912245,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.InjectionAllowsIndependentOutputsAndRestoresOnDecay",
+          "Status": "Passed",
+          "Duration": 4.3406289,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.ManorCanBeTraversedOnFootThroughBothLocks",
+          "Status": "Passed",
+          "Duration": 2.9315429,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.ManorProgressionUsesBothKeysThenSealAndExit",
+          "Status": "Passed",
+          "Duration": 0.8290496,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.ObjectiveRequiresTheftAndExitThenRestartClearsEverything",
+          "Status": "Passed",
+          "Duration": 1.472679,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.OnlyHigherGradeRetargetsAndShortSoundIsInvestigatedUntilArrival",
+          "Status": "Passed",
+          "Duration": 1.6864812,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.PanicIgnoresSightSoundAndRestunUntilRecovery",
+          "Status": "Passed",
+          "Duration": 1.2932584,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.PauseFreezesDeadlineAndContractDoesNot",
+          "Status": "Passed",
+          "Duration": 1.1198886,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.PitcherAcceptsDoorSoundAndRestoresItsSource",
+          "Status": "Passed",
+          "Duration": 12.2045951,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.ShortInputEventsStillInteractAndMovementAdvances",
+          "Status": "Passed",
+          "Duration": 1.1620682,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.SightTracksThenUsesLastVisiblePosition",
+          "Status": "Passed",
+          "Duration": 1.0323505,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.SilentDoorSoundCanBeCarriedOnFootToLureTheStudyGuard",
+          "Status": "Passed",
+          "Duration": 31.7849662,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.StudyHasTwoConnectionsAndDiningRequiresStudyKey",
+          "Status": "Passed",
+          "Duration": 0.9043891,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.ManorPlayModeTests.ThrowKeepsDeadlineAndExplodesOnceInAir",
+          "Status": "Passed",
+          "Duration": 1.1881896,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.SoundConceptPlayModeTests.ActiveContinuousSoundStopsAtCurrentPositionWhenNoLongerAudible",
+          "Status": "Passed",
+          "Duration": 4.5478057,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.SoundConceptPlayModeTests.HelmetsSeatAroundActualHeadGeometry",
+          "Status": "Passed",
+          "Duration": 0.929919,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.SoundConceptPlayModeTests.InaccessibleInstantSoundIsCheckedAtReachableDoorEdge",
+          "Status": "Passed",
+          "Duration": 1.8917704,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.SoundConceptPlayModeTests.InjectedSoundKeepsItsOriginalClipAndThreeSecondDelay",
+          "Status": "Passed",
+          "Duration": 4.1113882,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.SoundConceptPlayModeTests.LoudSealPickupAlertsTheNearbyGuard",
+          "Status": "Passed",
+          "Duration": 0.96179,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.SoundConceptPlayModeTests.SealCanBeStolenSilentlyAndStudyOffersTwoLureLocations",
+          "Status": "Passed",
+          "Duration": 0.8543007,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.SoundConceptPlayModeTests.SelfClosingDoorWaitsForPassageAndRespectsSilence",
+          "Status": "Passed",
+          "Duration": 1.1896285,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.SoundConceptPlayModeTests.ShortSoundIsInvestigatedUntilArrival",
+          "Status": "Passed",
+          "Duration": 3.1697765,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.SoundConceptPlayModeTests.SoundObjectsHaveOutlinesAndVisionIsOccludedByWalls",
+          "Status": "Passed",
+          "Duration": 3.9949948,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "SoundThief.Tests.SoundConceptPlayModeTests.WallAndClosedDoorReduceReachWithoutChangingGrade",
+          "Status": "Passed",
+          "Duration": 0.9471328,
+          "Message": null,
+          "StackTrace": null
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\SoundThief"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

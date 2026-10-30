@@ -20,6 +20,7 @@ namespace SoundThief
         public float CurrentSpeed => Slow ? Mission.rules.carrySpeed : Mission.rules.walkSpeed;
         CharacterController controller;
         float pitch, gravitySpeed, stunUntil;
+        float connectionUntil;
         LineRenderer connection;
         Material lineMaterial;
         InputActionMap actions;
@@ -87,7 +88,7 @@ namespace SoundThief
                 if (accept || interact) Mission.Accept();
                 return;
             }
-            if (!Mission.CanAct) return;
+            if (!Mission.CanAct) { connection.enabled = false; return; }
             // Deadline stays in game time; explicit pause is the only time freeze.
             if (IsStunned) { Target = null; connection.enabled = false; return; }
             if (Mouse.current != null && Cursor.lockState == CursorLockMode.Locked)
@@ -122,7 +123,7 @@ namespace SoundThief
                 if (hit.collider.transform.IsChildOf(transform) || hit.distance >= nearest) continue;
                 nearest = hit.distance; Target = hit.collider.GetComponentInParent<ThiefInteractable>();
             }
-            connection.enabled = Target && Target.relation;
+            connection.enabled = Target && Target.relation && Time.time < connectionUntil;
             if (connection.enabled)
             {
                 connection.SetPosition(0, view.transform.position + view.transform.right * 0.25f - view.transform.up * 0.18f + view.transform.forward * 0.3f);
@@ -136,16 +137,17 @@ namespace SoundThief
             if (Target.kind == InteractionKind.Door && !Target.CanUnlock(this)) { Mission.Notify("문에 필요한 아이템을 먼저 찾아야 관계를 연결할 수 있습니다."); return false; }
             Held = Target.relation.Extract(Mission.rules);
             if (Held == null) { Mission.Notify("이 관계의 소리가 아직 돌아오지 않았습니다."); return false; }
+            connectionUntil = Time.time + .3f;
             Mission.RecordExtraction();
-            Mission.Notify("소리를 들고 있습니다. 느린 보폭과 남은 시간을 확인하세요.");
+            Mission.Notify(Target.relation.Label + " 소리를 훔쳤습니다. 이 관계는 무음입니다. Q로 다른 곳에 옮길 수 있습니다.");
             return true;
         }
         public bool TryInject()
         {
             if (IsStunned || !Mission.CanAct || Held == null || !Target || !Target.emitter) return false;
             if (!Target.emitter.Inject(Held, Mission.World)) { Mission.Notify("이미 소리가 출력 중인 대상입니다."); return false; }
-            Held = null; Mission.RecordInjection();
-            Mission.Notify("소리를 주입했습니다. 출력이 끝나면 원래 관계의 소리가 돌아옵니다.");
+            Held = null; connectionUntil = Time.time + .3f; Mission.RecordInjection();
+            Mission.Notify("소리를 주입했습니다. 3초 후 출력되며, 출력이 끝나면 원래 관계의 소리가 돌아옵니다.");
             return true;
         }
         public bool TryThrow()
@@ -187,7 +189,7 @@ namespace SoundThief
         }
         public void ResetPracticeState()
         {
-            Held?.Finish(); Held = null; stunUntil = 0;
+            Held?.Finish(); Held = null; stunUntil = connectionUntil = 0;
             Inventory.Clear(); Target = null;
             if (connection) connection.enabled = false;
         }

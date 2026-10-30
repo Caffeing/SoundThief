@@ -1,0 +1,61 @@
+{
+  "success": true,
+  "command": "command script eval_file",
+  "data": {
+    "command": "script eval_file",
+    "parameters": {
+      "file": "C:\\Users\\User\\Desktop\\sound_thief_wiki\\.taehyeon-integration\\verify-adoption-stage.cs"
+    },
+    "result": {
+      "output": null,
+      "diagnostics": [],
+      "success": true,
+      "result": {
+        "scene": "Assets/Scenes/ManorPrototype.unity",
+        "dirty": false,
+        "missingScripts": 0,
+        "missingMaterials": [],
+        "missingMeshes": [],
+        "missingSkinnedMeshes": [],
+        "badShaders": [],
+        "validation": [],
+        "stageRules": "ManorStealthRules",
+        "injectionPolicy": "taehyeon shared fixed three-second delay",
+        "returnToGuildOnSuccess": true,
+        "guildScenePath": "Assets/Scenes/Guild.unity",
+        "navMesh": "ManorTaehyeonIntegratedNavMesh",
+        "guards": [
+          {
+            "name": "중앙 홀 경비",
+            "startsAwake": false,
+            "patrolPoints": 0
+          },
+          {
+            "name": "서재 순찰 경비",
+            "startsAwake": true,
+            "patrolPoints": 3
+          },
+          {
+            "name": "식당 경비",
+            "startsAwake": false,
+            "patrolPoints": 0
+          }
+        ],
+        "buildScenes": [
+          "Assets/Scenes/Guild.unity",
+          "Assets/Scenes/Stages/FrameworkExample.unity",
+          "Assets/Scenes/ManorPrototype.unity",
+          "Assets/Scenes/SampleScene.unity",
+          "Assets/Scenes/Stages/StageTemplate.unity"
+        ]
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\SoundThief"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

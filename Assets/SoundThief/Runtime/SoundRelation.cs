@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace SoundThief
 {
-    // Serialized values 0..5 belong to the shared stage prefabs. Do not reorder.
     public enum InteractionKind { Key = 0, Door = 1, Resonator = 2, Treasure = 3, Exit = 4, Collectible = 5, ContractBoard = 6, GuildExit = 7, PracticeReset = 8 }
 
     public sealed class SoundRelation : MonoBehaviour
     {
         public string firstMedium = "손", secondMedium = "금속";
         [Range(1, 3)] public int grade = 2;
+        public AudioClip soundClip;
         public bool IsMuted { get; private set; }
         public string Label => firstMedium + " ↔ " + secondMedium;
         public SoundCharge Extract(SoundRules rules)
@@ -20,7 +20,7 @@ namespace SoundThief
         public void Restore() => IsMuted = false;
         public void MakeNoise(SoundWorld world)
         {
-            if (!IsMuted) world.Pulse(transform.position, grade, null);
+            if (!IsMuted) world.Pulse(transform.position, grade, null, soundClip);
         }
     }
 

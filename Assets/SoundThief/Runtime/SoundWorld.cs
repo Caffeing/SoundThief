@@ -23,20 +23,57 @@ namespace SoundThief
                 clip.SetData(samples, 0); tones.Add(grade, clip);
             }
         }
-        public void Pulse(Vector3 position, int grade, SoundEmitter source)
+        public float HearingMultiplier(Vector3 from, Vector3 to)
+        {
+            if (from.y < .3f) from += Vector3.up * .9f;
+            var delta = to - from;
+            var visited = new HashSet<int>(); float multiplier = 1;
+            foreach (var hit in Physics.RaycastAll(from, delta.normalized, delta.magnitude, 1 << 8, QueryTriggerInteraction.Ignore))
+            {
+                var door = hit.collider.GetComponentInParent<ThiefInteractable>();
+                if (door && door.kind == InteractionKind.Door)
+                {
+                    // Only test the source door, and avoid ClosestPoint on non-convex meshes.
+                    bool supportsClosest = !(hit.collider is MeshCollider mesh) || mesh.convex;
+                    if (supportsClosest ? (hit.collider.ClosestPoint(from) - from).sqrMagnitude < .0004f : hit.distance < .02f) continue;
+                    if (!door.IsOpen && visited.Add(door.GetInstanceID())) multiplier *= rules.closedDoorHearingMultiplier;
+                    continue;
+                }
+                var barrier = hit.collider.GetComponentInParent<SoundBarrier>();
+                if (barrier && visited.Add(barrier.GetInstanceID())) multiplier *= barrier.rangeMultiplier;
+            }
+            return multiplier;
+        }
+        public bool CanHear(Vector3 from, Vector3 listener, int grade, out float proximity)
+        {
+            float reach = Mathf.Max(.01f, grade * rules.hearingPerGrade * HearingMultiplier(from, listener + Vector3.up * 1.4f));
+            float distance = Vector3.Distance(from, listener);
+            proximity = Mathf.Clamp01(1 - distance / reach);
+            return grade > 0 && distance <= reach;
+        }
+        public void Pulse(Vector3 position, int grade, SoundEmitter source, AudioClip clip = null)
         {
             foreach (var guard in Guards) if (guard) guard.Hear(position, grade, source);
-            if (tones.TryGetValue(grade, out var clip))
-            {
-                var soundObject = new GameObject("Positional sound"); soundObject.transform.SetParent(transform); soundObject.transform.position = position;
-                var feedback = soundObject.AddComponent<AudioSource>();
-                feedback.spatialBlend = 1; feedback.minDistance = 1; feedback.maxDistance = rules.hearingPerGrade * grade;
-                feedback.PlayOneShot(clip);
-                Destroy(soundObject, clip.length + 0.1f);
-            }
+            if (source && source.SoundClip) clip = source.SoundClip;
+            if (!clip) tones.TryGetValue(grade, out clip);
+            PlaySound(position, grade, clip);
             var ring = new GameObject("Sound pulse").AddComponent<SoundRing>();
             ring.transform.SetParent(transform);
             ring.Init(position, grade, false);
+        }
+        public void PlaySound(Vector3 position, int grade, AudioClip clip, float volume = 1)
+        {
+            if (clip)
+            {
+                var soundObject = new GameObject("Positional sound"); soundObject.transform.SetParent(transform); soundObject.transform.position = position;
+                var feedback = soundObject.AddComponent<AudioSource>();
+                float transmission = player && player.view ? HearingMultiplier(position, player.view.transform.position) : 1;
+                feedback.spatialBlend = 1; feedback.minDistance = .5f; feedback.maxDistance = Mathf.Max(.6f, rules.hearingPerGrade * grade * transmission);
+                feedback.rolloffMode = AudioRolloffMode.Linear;
+                feedback.volume = volume * Mathf.Sqrt(transmission);
+                feedback.PlayOneShot(clip);
+                Destroy(soundObject, clip.length + 0.1f);
+            }
         }
         public void Blast(Vector3 position, int grade, bool stunPlayer)
         {
@@ -51,7 +88,7 @@ namespace SoundThief
             ring.transform.SetParent(transform);
             ring.Init(position, grade, true);
         }
-        // Only level geometry (layer 8) blocks sight and shock. Hearing deliberately ignores it.
+        // Shock and sight use physical occlusion. Hearing attenuates authored barriers separately.
         public static bool Blocked(Vector3 from, Vector3 to) => Physics.Linecast(from, to, 1 << 8, QueryTriggerInteraction.Ignore);
         public void ClearFeedback()
         {

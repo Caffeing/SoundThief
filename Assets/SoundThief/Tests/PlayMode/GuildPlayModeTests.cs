@@ -17,7 +17,7 @@ namespace SoundThief.Tests
         PlayModeInputScope input;
         SoundRules testRules, originalRules;
         static readonly GuardState[] ResetStates = { GuardState.Sleeping, GuardState.InvestigatingSound, GuardState.Chasing,
-            GuardState.LastSeen, GuardState.Alert, GuardState.Returning, GuardState.Stunned, GuardState.Panic };
+            GuardState.LastSeen, GuardState.Alert, GuardState.Returning, GuardState.Stunned, GuardState.Panic, GuardState.Patrolling };
         void MovePlayer(Vector3 position)
         {
             var controller = player.GetComponent<CharacterController>(); controller.enabled = false;
@@ -93,8 +93,10 @@ namespace SoundThief.Tests
             var agent = guard.GetComponent<UnityEngine.AI.NavMeshAgent>();
             guard.Hear(home + Vector3.back, 3, output.emitter);
             typeof(GuardAgent).GetProperty("State").SetValue(guard, state);
-            foreach (string timer in new[] { "wakeStimulus", "stateUntil", "soundUntil", "lastStimulus" })
+            foreach (string timer in new[] { "wakeStimulus", "stateUntil", "lastStimulus" })
                 typeof(GuardAgent).GetField(timer, BindingFlags.Instance | BindingFlags.NonPublic).SetValue(guard, Time.time + 100);
+            typeof(GuardAgent).GetField("continuousSound", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(guard, true);
+            typeof(GuardAgent).GetField("patrolWaiting", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(guard, true);
             guard.statusLabel.text = "!!";
             agent.Warp(home + Vector3.back); agent.isStopped = false; agent.SetDestination(home + Vector3.back * 4);
             MovePlayer(new Vector3(-8, 0.05f, -3.8f)); yield return null;
@@ -115,9 +117,11 @@ namespace SoundThief.Tests
             Assert.That(guard.Goal, Is.EqualTo(home)); Assert.That(guard.ReactingGrade, Is.Zero);
             Assert.That(agent.hasPath, Is.False); Assert.That(agent.velocity.sqrMagnitude, Is.LessThan(0.001f));
             Assert.That(guard.statusLabel.text, Is.EqualTo("zzz"));
-            foreach (string timer in new[] { "wakeStimulus", "stateUntil", "soundUntil", "lastStimulus" })
+            foreach (string timer in new[] { "wakeStimulus", "stateUntil", "lastStimulus" })
                 Assert.That((float)typeof(GuardAgent).GetField(timer, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(guard), Is.Zero, timer);
             Assert.That(typeof(GuardAgent).GetField("listening", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(guard), Is.Null);
+            Assert.That((bool)typeof(GuardAgent).GetField("continuousSound", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(guard), Is.False);
+            Assert.That((bool)typeof(GuardAgent).GetField("patrolWaiting", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(guard), Is.False);
             guard.enabled = true; guard.Hear(home, 3, null);
             Assert.That(guard.Stun(), Is.False, "Lobby play must not reactivate training NPC judgements.");
             yield return null; Assert.That(guard.State, Is.EqualTo(GuardState.Sleeping));
@@ -166,6 +170,44 @@ namespace SoundThief.Tests
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo(MissionDirector.StageScene));
             Assert.That(stage.isGuild, Is.False); Assert.That(stage.Accepted && stage.CanAct, Is.True);
             Assert.That(stage.player.Held, Is.Null);
+        }
+        [UnityTest]
+        public IEnumerator PracticeInjectionUsesTaehyeonDelayAndReleasesTheHand()
+        {
+            var source = Resonator(0); var target = Resonator(1);
+            Aim(source, source.transform.position - Vector3.forward * 1.5f - Vector3.up * 1.15f);
+            Assert.That(player.TryExtract(), Is.True);
+            var charge = player.Held;
+            Aim(target, target.transform.position - Vector3.forward * 1.5f - Vector3.up * 1.15f);
+            Assert.That(player.TryInject(), Is.True);
+            Assert.That(player.Held, Is.Null);
+            Assert.That(player.CurrentSpeed, Is.EqualTo(mission.rules.walkSpeed));
+            Assert.That(target.emitter.Pending, Is.True);
+            Assert.That(source.relation.IsMuted, Is.True);
+            yield return new WaitForSeconds(2.8f);
+            Assert.That(target.emitter.Pending, Is.True, "Practice must not retain the HMM immediate-output exception.");
+            yield return new WaitForSeconds(.4f);
+            Assert.That(target.emitter.Pending, Is.False);
+            Assert.That(target.emitter.Active, Is.True);
+            Assert.That(target.emitter.CurrentGrade, Is.EqualTo(charge.Grade));
+            mission.practice.ResetPractice();
+            yield return null;
+            Assert.That(source.relation.IsMuted || target.emitter.Active, Is.False);
+        }
+        [UnityTest]
+        public IEnumerator PracticeConnectionOnlyFlashesWhenUsingTheAbility()
+        {
+            var source = Resonator(0);
+            var position = source.transform.position - Vector3.forward * 1.5f - Vector3.up * 1.15f;
+            Aim(source, position);
+            var connection = player.GetComponent<LineRenderer>();
+            Assert.That(connection.enabled, Is.False, "Merely aiming must not show the old permanent guild connection.");
+            Assert.That(player.TryExtract(), Is.True);
+            Aim(source, position);
+            Assert.That(connection.enabled, Is.True);
+            yield return new WaitForSeconds(.4f);
+            Aim(source, position);
+            Assert.That(connection.enabled, Is.False);
         }
         [UnityTest]
         public IEnumerator PracticeUsesSharedRulesAndResetPreservesContract()

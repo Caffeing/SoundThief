@@ -191,6 +191,7 @@ namespace SoundThief.Tests
             var stage = Object.FindFirstObjectByType<MissionDirector>(); stage.player.enabled = false;
             foreach (var guard in stage.World.Guards) guard.enabled = false;
             Assert.That(stage.returnToGuildOnSuccess, Is.True);
+            Assert.That(stage.World.Guards.Any(g => g.startsAwake && g.patrolPoints.Length > 0), Is.True);
             stage.Complete(); Assert.That(stage.Completed, Is.False); Assert.That(stage.ReturnToGuild(), Is.False);
             var treasure = Object.FindObjectsByType<ThiefInteractable>(FindObjectsSortMode.None).First(i=>i.kind==InteractionKind.Treasure);
             treasure.Interact(stage.player); Assert.That(stage.Completed, Is.False);
