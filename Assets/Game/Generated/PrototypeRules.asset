@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea9c470ed9ea7664287dd6db38a51e44, type: 3}
+  m_Name: PrototypeRules
+  m_EditorClassIdentifier: Assembly-CSharp::SoundThief.SoundRules
+  throwingEnabled: 0
+  holdSeconds:
+  - 30
+  - 24
+  - 12
+  walkSpeed: 4
+  carrySpeed: 1.5
+  interactDistance: 2.8
+  injectionHold: 4
+  decayStep: 2
+  pulseInterval: 0.7
+  playerStun: 2
+  guardStun: 3
+  panicSeconds: 4
+  hearingPerGrade: 6
+  blastPerGrade: 2
+  closedDoorHearingMultiplier: 0.55
+  sightRange: 10
+  sightAngle: 80
+  guardSpeed: 2.2
+  guardChaseSpeed: 3.5
+  wakeThreshold: 2.5
+  alertSeconds: 4

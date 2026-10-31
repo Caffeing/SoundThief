@@ -81,7 +81,7 @@
 
 ## 5. 구현 구조
 
-`Assets/SoundThief/Runtime/`에 게임 코드를 두고 `Assets/SoundThief/Editor/`에는 저택 생성·검증 도구를 둔다. 샘플 씬과 기존 사용자 변경은 보존한다. 새 `Assets/Scenes/ManorPrototype.unity`에서 개발한다.
+`Assets/Game/Runtime/`에 게임 코드를 두고 `Assets/Game/Editor/`에는 저택 생성·검증 도구를 둔다. 샘플 씬과 기존 사용자 변경은 보존한다. 새 `Assets/Scenes/ManorPrototype.unity`에서 개발한다.
 
 - `SoundRules`: 인스펙터 조절 가능한 등급·시간·거리 설정.
 - `SoundRelation`: 두 매개체·원래 등급·무음 소유권. `SoundCharge`가 복구 책임을 갖는다.

@@ -6,7 +6,7 @@
 2. `Sound Thief > Stage > Install Foundation In Current Scene`을 실행한다. StageSystems와 PlayerRig, 씬 전용 StageDefinition이 생성되고 빌드 목록에 추가된다. 중복 설치는 거부한다.
 3. StageSystems의 StageContext에서 생성된 설정을 확인한다. StageDefinition의 stageId(팀 전체 고유값), title, briefing, requiredItemIds, objectiveText, exitText를 작성한다. startImmediately를 켜면 씬 직접 실행도 바로 플레이할 수 있다.
 4. PlayerRig를 시작 위치에 놓고 바닥·벽·가림막을 배치한다. 프로젝트 레이어 **8**은 소리 폭발과 시야를 가리는 지형이다. 플레이어·상호작용 물체는 기본 레이어를 사용한다. 일반 청각은 벽을 통과한다.
-5. `Assets/SoundThief/Prefabs/`에서 필요한 물체를 드래그한다. 아래 설정을 맞춘다.
+5. `Assets/Game/Prefabs/`에서 필요한 물체를 드래그한다. 아래 설정을 맞춘다.
 6. 경비를 쓰는 씬은 AI Navigation의 NavMeshSurface로 이동 가능한 바닥을 굽는다. 문에는 carving NavMeshObstacle이 포함된다. 경비 발 위치를 NavMesh 위에 놓는다.
 7. `Sound Thief > Stage > Validate Current Scene`을 실행해 오류를 고친 후 저장하고 Play한다. 목표물을 모두 모으고 출구 F, R 재시작까지 확인한다.
 
@@ -38,7 +38,7 @@ R 및 경비 접촉은 **MissionDirector가 속한 씬 경로**를 다시 로드
 
 씬에서 독립적으로 배치하는 가구·아이템은 외형, 상호작용체, 충돌체를 같은 상위 객체에 묶고 그 상위 객체를 이동한다. 상호작용체의 충돌 범위는 실제 메시 위치에 맞추며 중복 충돌체가 아이템 조준을 가리지 않게 한다. 여러 외형이 하나의 벽·바닥 충돌체를 공유하는 구조는 개별 이동 대상으로 간주하지 않는다. 가구 충돌 위치를 변경하면 해당 스테이지의 NavMesh를 다시 굽고 문 및 경비 이동을 확인한다.
 
-공통 담당 영역은 `Assets/SoundThief/Runtime`, `Editor`, `Prefabs`, 공통 SoundRules다. 스테이지 담당은 자기 씬 폴더, StageDefinition, 미술·배치·NavMesh를 수정한다. 공통 프리팹을 직접 덮어쓰기보다 변형 프리팹 또는 씬 인스턴스 설정을 사용한다. .meta를 함께 커밋하고 다른 팀원 씬을 같은 파일로 합치지 않는다.
+공통 담당 영역은 `Assets/Game/Runtime`, `Editor`, `Prefabs`, 공통 SoundRules다. 스테이지 담당은 자기 씬 폴더, StageDefinition, 미술·배치·NavMesh를 수정한다. 공통 프리팹을 직접 덮어쓰기보다 변형 프리팹 또는 씬 인스턴스 설정을 사용한다. .meta를 함께 커밋하고 다른 팀원 씬을 같은 파일로 합치지 않는다.
 
 공통 동작 변경이 필요하면 개별 씬에서 코드를 복사하지 말고 공통 담당과 인터페이스를 조정한다. 정식 외형은 프리팹의 시각 자식을 교체하되 플레이어 CharacterController, 문 힌지/장애물, 대상 Collider와 관계/출력 참조를 유지한다.
 

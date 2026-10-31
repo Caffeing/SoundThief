@@ -4159,6 +4159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &66872803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14922,6 +14923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &234174207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16104,6 +16106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &251349184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23411,6 +23414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &388274216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42841,6 +42845,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &693734568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45438,6 +45443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &730596952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61209,6 +61215,7 @@ MonoBehaviour:
   world: {fileID: 84108676}
   statusLabel: {fileID: 648671860}
   startsAwake: 0
+  deferNavigationUntilStart: 1
   stayAwakeAfterFirstWake: 0
   patrolPoints: []
   patrolWaitSeconds: 2
@@ -61220,7 +61227,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 992267950}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.35
   m_Speed: 3.5
@@ -68521,6 +68528,10 @@ PrefabInstance:
       propertyPath: world
       value: 
       objectReference: {fileID: 84108676}
+    - target: {fileID: 1501786099710142478, guid: 6c578f0473f4cc5478892c152b3cc2e8, type: 3}
+      propertyPath: deferNavigationUntilStart
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2837259259572307313, guid: 6c578f0473f4cc5478892c152b3cc2e8, type: 3}
       propertyPath: m_Name
       value: "\uC2DD\uB2F9 \uACBD\uBE44"
@@ -68567,6 +68578,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4665471673154549097, guid: 6c578f0473f4cc5478892c152b3cc2e8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918875592150895614, guid: 6c578f0473f4cc5478892c152b3cc2e8, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -76444,6 +76459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &1206687853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85632,6 +85648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &1344833563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93281,6 +93298,171 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5614299067267252863, guid: 3581c583b0eafd44a9e7e3d62facc0a6, type: 3}
   m_PrefabInstance: {fileID: 1476146468}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1476273600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1476273602}
+  - component: {fileID: 1476273601}
+  m_Layer: 0
+  m_Name: "\uC18C\uB9AC \uC804\uB2EC \uAD6C\uC5ED"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1476273601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476273600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b25c3bff5be4ad43b25eef7a321e02c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.RoomSoundPropagation
+  world: {fileID: 84108676}
+  regions:
+  - name: "\uC9C4\uC785 \uB300\uAE30\uC2E4"
+    min: {x: -16, y: -3}
+    max: {x: 16, y: 6}
+  - name: "\uC911\uC559 \uD640"
+    min: {x: -9, y: 6}
+    max: {x: 9, y: 29}
+  - name: "\uC11C\uC7AC"
+    min: {x: -16, y: 6}
+    max: {x: -9, y: 24}
+  - name: "\uC11C\uC7AC \uBCBD\uAC10"
+    min: {x: -22, y: 15}
+    max: {x: -16, y: 24}
+  - name: "\uC2DD\uB2F9"
+    min: {x: 9, y: 6}
+    max: {x: 16, y: 24}
+  - name: "\uC2DD\uB2F9 \uBCBD\uAC10"
+    min: {x: 16, y: 6}
+    max: {x: 22, y: 15}
+  - name: "\uC11C\uCABD \uD6C4\uBA74"
+    min: {x: -16, y: 24}
+    max: {x: -9, y: 29}
+  - name: "\uB3D9\uCABD \uD6C4\uBA74"
+    min: {x: 9, y: 24}
+    max: {x: 16, y: 29}
+  connections:
+  - name: "\uC9C4\uC785 \uB300\uAE30\uC2E4 \u2194 \uC911\uC559 \uD640"
+    regionA: 0
+    regionB: 1
+    point: {x: -1, y: 1, z: 6}
+    wall: 0
+    door: {fileID: 1266311369}
+  - name: "\uC9C4\uC785 \uB300\uAE30\uC2E4 \u2194 \uC11C\uC7AC"
+    regionA: 0
+    regionB: 2
+    point: {x: -12, y: 1, z: 6}
+    wall: 1
+    door: {fileID: 0}
+  - name: "\uC9C4\uC785 \uB300\uAE30\uC2E4 \u2194 \uC2DD\uB2F9"
+    regionA: 0
+    regionB: 4
+    point: {x: 12, y: 1, z: 6}
+    wall: 1
+    door: {fileID: 0}
+  - name: "\uC911\uC559 \uD640 \u2194 \uC11C\uC7AC"
+    regionA: 1
+    regionB: 2
+    point: {x: -9, y: 1, z: 10.5}
+    wall: 0
+    door: {fileID: 0}
+  - name: "\uC911\uC559 \uD640 \u2194 \uC11C\uC7AC"
+    regionA: 1
+    regionB: 2
+    point: {x: -9, y: 1, z: 19.5}
+    wall: 0
+    door: {fileID: 0}
+  - name: "\uC911\uC559 \uD640 \u2194 \uC11C\uC7AC"
+    regionA: 1
+    regionB: 2
+    point: {x: -9, y: 1, z: 15}
+    wall: 1
+    door: {fileID: 0}
+  - name: "\uC911\uC559 \uD640 \u2194 \uC2DD\uB2F9"
+    regionA: 1
+    regionB: 4
+    point: {x: 9, y: 1, z: 11.5}
+    wall: 0
+    door: {fileID: 704844410}
+  - name: "\uC911\uC559 \uD640 \u2194 \uC2DD\uB2F9"
+    regionA: 1
+    regionB: 4
+    point: {x: 9, y: 1, z: 20.5}
+    wall: 0
+    door: {fileID: 1532980527}
+  - name: "\uC911\uC559 \uD640 \u2194 \uC2DD\uB2F9"
+    regionA: 1
+    regionB: 4
+    point: {x: 9, y: 1, z: 15}
+    wall: 1
+    door: {fileID: 0}
+  - name: "\uC11C\uC7AC \u2194 \uC11C\uC7AC \uBCBD\uAC10"
+    regionA: 2
+    regionB: 3
+    point: {x: -16, y: 1, z: 19.5}
+    wall: 0
+    door: {fileID: 0}
+  - name: "\uC2DD\uB2F9 \u2194 \uC2DD\uB2F9 \uBCBD\uAC10"
+    regionA: 4
+    regionB: 5
+    point: {x: 16, y: 1, z: 10.5}
+    wall: 0
+    door: {fileID: 0}
+  - name: "\uC11C\uC7AC \u2194 \uC11C\uCABD \uD6C4\uBA74"
+    regionA: 2
+    regionB: 6
+    point: {x: -12, y: 1, z: 24}
+    wall: 1
+    door: {fileID: 0}
+  - name: "\uC2DD\uB2F9 \u2194 \uB3D9\uCABD \uD6C4\uBA74"
+    regionA: 4
+    regionB: 7
+    point: {x: 12, y: 1, z: 24}
+    wall: 1
+    door: {fileID: 0}
+  - name: "\uC911\uC559 \uD640 \u2194 \uC11C\uCABD \uD6C4\uBA74"
+    regionA: 1
+    regionB: 6
+    point: {x: -9, y: 1, z: 26.5}
+    wall: 0
+    door: {fileID: 0}
+  - name: "\uC911\uC559 \uD640 \u2194 \uB3D9\uCABD \uD6C4\uBA74"
+    regionA: 1
+    regionB: 7
+    point: {x: 9, y: 1, z: 26.5}
+    wall: 0
+    door: {fileID: 0}
+  closedBoundaryCost: 12
+  closedBoundaryGain: 0.25
+  openRouteExtraDistance: 0
+  traceSignals: 0
+--- !u!4 &1476273602
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476273600}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1476600090
 GameObject:
   m_ObjectHideFlags: 0
@@ -98781,6 +98963,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &1569805417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110347,6 +110530,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1501786099710142478, guid: 6c578f0473f4cc5478892c152b3cc2e8, type: 3}
+      propertyPath: deferNavigationUntilStart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1501786099710142478, guid: 6c578f0473f4cc5478892c152b3cc2e8, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1678969121}
@@ -110404,6 +110591,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4665471673154549097, guid: 6c578f0473f4cc5478892c152b3cc2e8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918875592150895614, guid: 6c578f0473f4cc5478892c152b3cc2e8, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4918875592150895614, guid: 6c578f0473f4cc5478892c152b3cc2e8, type: 3}
@@ -120576,6 +120767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &1940179353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124151,6 +124343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &1990182069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130270,6 +130463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c64397c5481dca48b060cf76da06683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.SoundEmitter
+  injectionDelaySeconds: 3
 --- !u!114 &2036402350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136541,3 +136735,4 @@ SceneRoots:
   - {fileID: 286333900}
   - {fileID: 54268319}
   - {fileID: 1427946125}
+  - {fileID: 1476273602}

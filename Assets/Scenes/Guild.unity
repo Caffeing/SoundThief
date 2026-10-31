@@ -41679,9 +41679,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: SoundThief.Runtime::SoundThief.PlayerFootsteps
   clip: {fileID: 8300000, guid: d7c618fcb4a743b4d98e4a56192fe88b, type: 3}
-  walkingVolume: 0.42
-  crouchingVolume: 0.12
-  carryingVolume: 0.28
+  walkingVolume: 0.3
+  crouchingVolume: 0.1
+  carryingVolume: 0.2
   walkingStepDistance: 1.5
   crouchingStepDistance: 0.85
 --- !u!1001 &1191775704
@@ -54422,6 +54422,7 @@ MonoBehaviour:
   world: {fileID: 1834094708}
   statusLabel: {fileID: 1721509690}
   startsAwake: 0
+  deferNavigationUntilStart: 1
   stayAwakeAfterFirstWake: 0
   patrolPoints: []
   patrolWaitSeconds: 2
@@ -54433,7 +54434,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1537219570}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.35
   m_Speed: 3.5
@@ -72633,14 +72634,14 @@ MonoBehaviour:
     title: "\uC900\uBE44 \uC911\uC778 \uC758\uB8B0"
     description: "\uC0C8\uB85C\uC6B4 \uC758\uB8B0\uB97C \uC900\uBE44\uD558\uACE0
       \uC788\uC2B5\uB2C8\uB2E4."
-    scenePath: Assets/Scenes/Stages/Stage2.unity
+    scenePath: Assets/Scenes/Stages/Stage2/Stage2.unity
     available: 1
     nonRepeatable: 0
   - definition: {fileID: 11400000, guid: 9afaf027707a341469537fd2b4c56147, type: 2}
     title: "\uC900\uBE44 \uC911\uC778 \uC758\uB8B0"
     description: "\uC0C8\uB85C\uC6B4 \uC758\uB8B0\uB97C \uC900\uBE44\uD558\uACE0
       \uC788\uC2B5\uB2C8\uB2E4."
-    scenePath: Assets/Scenes/Stages/PostalDepot/PostalDepot.unity
+    scenePath: Assets/Scenes/Stages/Stage3/PostalDepot.unity
     available: 1
     nonRepeatable: 0
 --- !u!1 &2090743438

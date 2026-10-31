@@ -1,7 +1,7 @@
 # 우편 분류소 HMM 통합
 
 - 원본: origin/gganwoor 1ae53e882f5f770e54df0367e6d819b4fd570fc9. 해당 스테이지 폴더 60개 파일만 가져왔다. LFS 원본은 SHA-256과 크기를 확인했다.
-- 번호: 스테이지 3. 경로: Assets/Scenes/Stages/PostalDepot/PostalDepot.unity. 기존 Stage1·Stage2는 유지한다.
+- 번호: 스테이지 3. 경로: Assets/Scenes/Stages/Stage3/PostalDepot.unity. 기존 Stage1·Stage2는 유지한다.
 - 길드 세 번째 준비 중 항목을 실제 우편 의뢰로 교체했다. 수락 후 출구 F 출발, 목표 완료 후 기존 길드 문 앞 복귀, 완료 표시를 연결했다. Stage1 nonRepeatable=true 유지, Stage2/3=false.
 - HMM ManorStealthRules를 복제한 우편 전용 규칙을 사용한다. 주입 대기는 3초이며 Stage2의 즉시 주입을 변경하지 않는다.
 - HMM 발소리·경비 모델/시야/발소리·조준 윤곽선·관계 음원/앰비언스·소리 스캔을 바인딩했다. 원본 맵과 구운 NavMesh를 다시 만들지 않았다.

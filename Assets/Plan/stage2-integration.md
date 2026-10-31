@@ -4,7 +4,7 @@
 
 ## 결과
 
-- 실제 의뢰 씬: `Assets/Scenes/Stages/Stage2.unity`. 제목 **두 경비의 보관실**, stageId `stage-02`. 원본 JinHo 씬은 `Assets/JinHo/Scenes/JinHo.unity`에 보존한다.
+- 실제 의뢰 씬: `Assets/Scenes/Stages/Stage2/Stage2.unity`. 제목 **두 경비의 보관실**, stageId `stage-02`. 원본 JinHo 씬은 `Assets/Game/Stages/Stage2/Scenes/JinHo.unity`에 보존한다.
 - Stage2Definition·Stage2Rules와 Stage2NavMesh 복사본을 분리했다. 규칙은 현재 HMM 저택 설정을 복제하며 원본 맵 배치·크기·이동망을 재생성하지 않는다.
 - 길드에 두 번째 실제 의뢰를 등록하고 공유 빌드 씬 목록에 Stage2를 추가했다. 수락 후 출구 출발, 성공 후 길드 문 복귀, 완료 이력을 그대로 사용한다. Stage1은 재수락 불가, Stage2는 기본 재수락 가능이다.
 - 기존 이동 발소리 스크립트가 참조하던 `footstep_concrete_000.ogg`가 이전 가져오기에서 누락돼 있었다. taehyeon의 원음·meta를 가져오고 길드·Stage1·Stage2 플레이어 각각 한 개의 PlayerFootsteps에 연결했다. 실제 이동 거리·웅크리기·운반에 따른 기존 피드백을 사용하며 경비 조사 Pulse를 추가하지 않는다.
